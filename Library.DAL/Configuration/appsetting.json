@@ -1,0 +1,6 @@
+{
+  "ConnectionString": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=34bf9703DHL333;SearchPath=library;"
+  },
+  "TableSchema": "library"
+}
