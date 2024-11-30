@@ -7,8 +7,10 @@ namespace Library.BL.Service
 {
     public class UserService(RepositoryManager repositoryManager) : 
         IGetService<User>, 
-        IModificationService<UserDto>,
-        IUpdateEntity<UpdateUserDto>
+        IAddEntity<UserDto>,
+        IDeleteEntity<UserDto>,
+        IUpdateService<UserPersonalInfoDto>,  // Реализация интерфейса для UserPersonalInfoDto
+        IUpdateService<UserContactInfoDto>   // Реализация интерфейса для UserContactInfoDto
     {
         private readonly RepositoryManager _repositoryManager = repositoryManager;
 
@@ -22,47 +24,54 @@ namespace Library.BL.Service
             _repositoryManager.ModificationRepository.AddEntity<UserDto>(SqlQuery.AddUser, userDto, true);
 
         public bool DeleteEntity(Dictionary<string, object> param) =>
-            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.UserTableName, param);
+            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, param);
 
         public bool DeleteEntity(UserDto userDto) =>
-            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.UserTableName, userDto);
+            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, userDto);
 
-        public bool UpdateEntity(UpdateUserDto userProfileDto)
+        public bool UpdateEntity(UserPersonalInfoDto entity) => UpdatePersonalInfo(entity);
+
+        public bool UpdateEntity(UserContactInfoDto entity) => UpdateContactInfo(entity);
+
+        private bool UpdatePersonalInfo(UserPersonalInfoDto personalInfo)
         {
-            //Надо изменить 
-
-
-            // Сбор параметров для обновления
             var updateParams = new Dictionary<string, object>
             {
-                ["id"] = userProfileDto.Id
+                ["id"] = personalInfo.Id
             };
 
-            if (!string.IsNullOrWhiteSpace(userProfileDto.Surname))
-                updateParams["surname"] = userProfileDto.Surname;
+            if (!string.IsNullOrWhiteSpace(personalInfo.Surname))
+                updateParams["surname"] = personalInfo.Surname;
 
-            if (!string.IsNullOrWhiteSpace(userProfileDto.Name))
-                updateParams["name"] = userProfileDto.Name;
+            if (!string.IsNullOrWhiteSpace(personalInfo.Name))
+                updateParams["name"] = personalInfo.Name;
 
-            if (!string.IsNullOrWhiteSpace(userProfileDto.Patronymic))
-                updateParams["patronymic"] = userProfileDto.Patronymic;
+            if (!string.IsNullOrWhiteSpace(personalInfo.Patronymic))
+                updateParams["patronymic"] = personalInfo.Patronymic;
 
-            if (!string.IsNullOrWhiteSpace(userProfileDto.Phone))
-                updateParams["phone"] = userProfileDto.Phone;
+            if (updateParams.Count <= 1) return false;
 
-            if (!string.IsNullOrWhiteSpace(userProfileDto.Email))
-                updateParams["email"] = userProfileDto.Email;
-
-            if (!string.IsNullOrWhiteSpace(userProfileDto.Password))
-                updateParams["password"] = userProfileDto.Password; // Хешируем пароль перед обновлением
-
-            // Если нечего обновлять
-            if (updateParams.Count == 0)
-                return false;
-
-            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(SqlQuery.UserTableName, updateParams);
+            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(SqlQuery.NamePersonTable, updateParams);
         }
-    
+
+        private bool UpdateContactInfo(UserContactInfoDto contactInfo)
+        {
+            var updateParams = new Dictionary<string, object>
+            {
+                ["id"] = contactInfo.Id
+            };
+
+            if (!string.IsNullOrWhiteSpace(contactInfo.Phone))
+                updateParams["phone"] = contactInfo.Phone;
+
+            if (!string.IsNullOrWhiteSpace(contactInfo.Email))
+                updateParams["email"] = contactInfo.Email;
+
+            if (updateParams.Count <= 1) return false;
+
+            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(SqlQuery.NameUsersTable, updateParams);
+        }
+
     }
 }
  

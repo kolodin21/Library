@@ -9,12 +9,7 @@ namespace Library.DAL.Repositories
 {
     public class GetRepository(IMessageLogger logger) : BaseRepository(logger),IGetRepository
     {
-        /// <summary>
-        /// Получение всех объектов из таблицы
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sqlQuery"></param>
-        /// <returns></returns>
+        #region GetAll
         public IEnumerable<T>? GetAllEntity<T>(string sqlQuery) where T : class
         {
             return ExecuteQuery(connection =>
@@ -31,7 +26,23 @@ namespace Library.DAL.Repositories
                 }
             });
         }
-
+        
+        public IEnumerable<T>? GetAllEntity<T>(string sqlQuery, Func<SqlMapper.GridReader, IEnumerable<T>> mapFunction) where T : class
+        {
+            return ExecuteQuery(connection =>
+            {
+                try
+                {
+                    using var multi = connection.QueryMultiple(sqlQuery);
+                    return mapFunction(multi);
+                }
+                catch (NpgsqlException e)
+                {
+                    Logger.Log(e.Message);
+                    return null;
+                }
+            });
+        }
 
         public object? GetAllEntity(string sql, Type type)
         {
@@ -43,6 +54,10 @@ namespace Library.DAL.Repositories
             return method?.Invoke(this, [sql]);
         }
 
+        #endregion
+
+        #region GetByParam
+
         public object? GetEntityByParam(string sql, Type type, Dictionary<string, object> parameters)
         {
             var method = GetType()
@@ -53,13 +68,6 @@ namespace Library.DAL.Repositories
             return method?.Invoke(this, [sql, parameters]);
         }
 
-        /// <summary>
-        /// Получение объекта по определенным параметрам
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sqlQuery"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
         public T? GetEntityByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
             try
@@ -69,17 +77,10 @@ namespace Library.DAL.Repositories
 
                 return ExecuteQuery(connection =>
                 {
-                    var dynamicParams = new DynamicParameters();
-
-                    // Формируем условия WHERE, добавляя параметры из словаря
-                    foreach (var param in parameters)
-                    {
-                        sqlQuery += $" AND {param.Key} = @{param.Key}";
-                        dynamicParams.Add(param.Key, param.Value);
-                    }
+                    var dynamicParams = DynamicParameters<T>(sqlQuery, parameters, out var finalQuery);
                     try
                     {
-                        var result = connection.QuerySingleOrDefault<T>(sqlQuery, dynamicParams);
+                        var result = connection.QuerySingleOrDefault<T>(finalQuery, dynamicParams);
                         return result;
                     }
                     catch (NpgsqlException e)
@@ -92,17 +93,82 @@ namespace Library.DAL.Repositories
             catch (ArgumentException ex)
             {
                 // Логирование или обработка ошибки
-                logger.Log($"Argument Exception: {ex.Message}");
+                Logger.Log($"Argument Exception: {ex.Message}");
+                throw;
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"Unexpected Error: {e.Message}");
                 throw;
             }
         }
 
-        /// <summary>
-        /// Получение имен и их типов всех колонок в таблице
-        /// 
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns>Возвращает кортеж </returns>
+        public T? GetEntityByParam<T>(string sqlQuery, Dictionary<string, object> parameters,Func<SqlMapper.GridReader, T> mapFunction) where T : class
+        {
+            if (parameters == null || parameters.Count == 0)
+                throw new ArgumentException("Parameters cannot be null or empty", nameof(parameters));
+
+            return ExecuteQuery(connection =>
+            {
+                var dynamicParams = DynamicParameters<T>(sqlQuery, parameters, out var finalQuery);
+
+                try
+                {
+                    // Выполняем запрос с мульти-маппингом
+                    using var multi = connection.QueryMultiple(finalQuery, dynamicParams);
+                    return mapFunction(multi);
+                }
+                catch (NpgsqlException e)
+                {
+                    Logger.Log($"Database Error: {e.Message}");
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    Logger.Log($"Unexpected Error: {e.Message}");
+                    throw;
+                }
+            });
+        }
+
+        private static DynamicParameters DynamicParameters<T>(string sqlQuery, Dictionary<string, object> parameters, out string finalQuery)
+            where T : class
+        {
+            var dynamicParams = new DynamicParameters(); 
+            var whereClause = " WHERE 1=1"; // Базовый WHERE для добавления условий
+
+            // Формируем WHERE-условия и добавляем параметры
+            foreach (var param in parameters)
+            {
+                whereClause += $" AND {param.Key} = @{param.Key}";
+                dynamicParams.Add(param.Key, param.Value);
+            }
+
+            // Финальный SQL-запрос
+            finalQuery = sqlQuery + whereClause;
+            return dynamicParams;
+        }
+
+        #endregion
+        private TResult? ExecuteMultiQuery<TResult>(
+            NpgsqlConnection connection,
+            string sqlQuery,
+            Func<SqlMapper.GridReader, TResult> mapFunction)
+        {
+            try
+            {
+                using var multi = connection.QueryMultiple(sqlQuery);
+                return mapFunction(multi);
+            }
+            catch (NpgsqlException e)
+            {
+                Logger.Log(e.Message);
+                return default;
+            }
+        }
+
+        #region Methods
+
         public IEnumerable<(string ColumnName, string DataType)> GetColumnNames(string query)
         {
             string schema = DatabaseConfig.DatabaseSchema;
@@ -158,5 +224,6 @@ namespace Library.DAL.Repositories
             var match = Regex.Match(sqlQuery, @"(?<=\bFROM\s)\w+", RegexOptions.IgnoreCase);
             return match.Value;
         }
+        #endregion
     }
 }

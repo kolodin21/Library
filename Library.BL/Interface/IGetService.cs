@@ -1,4 +1,6 @@
-﻿namespace Library.BL.Interface
+﻿using Dapper;
+
+namespace Library.BL.Interface
 {
     public interface IGetService<out T>
     {

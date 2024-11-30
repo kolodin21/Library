@@ -10,21 +10,24 @@ var logger = new ConsoleLogger();
 var serviceManager = new ServiceManager(logger);
 
 //var users = serviceManager.UserService.GetAllEntities();
-var books = serviceManager.BookService.GetAllEntities();
-Print(books);
+//var books = serviceManager.BookService.GetAllEntities();
+//Print(books);
 
-//var param = new Dictionary<string, object>()
-//{
-//    {"id",26}
-//};
-
-var newDto = new UpdateUserDto
+var param = new Dictionary<string, object>()
 {
-    Id = 1,
-    Surname = "Иванов"
+    {"quantity",13}
 };
 
-serviceManager.UserService.UpdateEntity(newDto);
+var book = serviceManager.BookService.GetEntityByParam(param);
+Console.WriteLine(book);
+//var newDto = new UserPersonalInfoDto
+//{
+//    Id = 1,
+//    Surname = "Колодин"
+//};
+
+//serviceManager.UserService.UpdateEntity(newDto);
+
 //var userByParam = serviceManager.UserService.GetUserByParam(param);
 
 //Console.WriteLine(userByParam);
@@ -48,11 +51,11 @@ serviceManager.UserService.UpdateEntity(newDto);
 //    { "id", 5 },
 //};
 
-var param1 = new Dictionary<string, object>()
-{
-    { "surname", "Алексеев" },
-    { "id",5 }
-};
+//var param1 = new Dictionary<string, object>()
+//{
+//    { "surname", "Алексеев" },
+//    { "id",5 }
+//};
 
 
 //serviceManager.UserService.AddUser(userDto);

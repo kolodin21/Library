@@ -1,5 +1,7 @@
-﻿using Library.DAL.Repositories;
+﻿using Library.BL.Interface;
+using Library.DAL.Repositories;
 using Library.Common;
+using Library.BL.ModelsDTO;
 
 namespace Library.BL.Service
 {
@@ -19,6 +21,8 @@ namespace Library.BL.Service
 
             UserService = new UserService(repositoryManager);
             BookService = new BookService(repositoryManager);
+
+           
         }
     }
 }
