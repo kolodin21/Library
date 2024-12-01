@@ -30,4 +30,6 @@
         public required  Publisher Publisher { get; set; }
         public required Condition  Condition{ get; set; }
     }
+    //Todo
+    //Изменить класс 
 }

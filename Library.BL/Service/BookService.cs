@@ -30,15 +30,6 @@ namespace Library.BL.Service
                 });
 
 
-
-
-
-
-
-
-
-
-
         private static IEnumerable<Book> MultiGetBooks(SqlMapper.GridReader multi)
         {
             var books = multi.Read<Book, Author, Publisher, Condition, Book>(
@@ -53,5 +44,8 @@ namespace Library.BL.Service
             return books;
         }
     }
+    //Todo
+    // Сделать также как с userService
+    
 
 }
