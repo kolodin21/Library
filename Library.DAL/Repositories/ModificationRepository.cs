@@ -119,7 +119,7 @@ namespace Library.DAL.Repositories
                 Logger.Log($"Error in DeleteEntityByIdProcedure: {ex.Message}");
                 throw;
             }
-        }
+        } //Fixme
 
         /// <summary>
         /// Удаление объекта на основе динамических параметров.
@@ -155,6 +155,7 @@ namespace Library.DAL.Repositories
                 throw;
             }
         }
+
         public bool DeleteEntityDynamic<T>(string tableName, T entity)
         {
             try

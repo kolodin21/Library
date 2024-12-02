@@ -15,11 +15,15 @@ var serviceManager = new ServiceManager(logger);
 
 var param = new Dictionary<string, object>()
 {
-    {"quantity",13}
+    {"name","Иван"}
 };
+var books = serviceManager.UserService.GetEntitiesByParam(param);
+//Console.WriteLine(books);
+Print(books);
 
-var book = serviceManager.BookService.GetEntityByParam(param);
-Console.WriteLine(book);
+//var book = serviceManager.BookService.GetSingleEntityByParam(param);
+//Console.WriteLine(user);
+
 //var newDto = new UserPersonalInfoDto
 //{
 //    Id = 1,

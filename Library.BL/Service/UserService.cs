@@ -14,14 +14,27 @@ namespace Library.BL.Service
     {
         private readonly RepositoryManager _repositoryManager = repositoryManager;
 
+        #region IGetService
+
         public IEnumerable<User>? GetAllEntities() =>
             _repositoryManager.GetDataRepository.GetAllEntity<User>(SqlQuery.GetAllUsers);
 
-        public User? GetEntityByParam(Dictionary<string, object> param) =>
-            _repositoryManager.GetDataRepository.GetEntityByParam<User>(SqlQuery.GetUserByParam, param);
+        public User? GetSingleEntityByParam(Dictionary<string, object> param) =>
+            _repositoryManager.GetDataRepository.GetSingleEntityByParam<User>(SqlQuery.GetUserByParam, param);
+
+        public IEnumerable<User>? GetEntitiesByParam(Dictionary<string, object> param) =>
+            _repositoryManager.GetDataRepository.GetEntitiesByParam<User>(SqlQuery.GetUserByParam, param);
+
+        #endregion
+
+        #region IAddEntity
 
         public bool AddEntity(UserDto userDto) =>
             _repositoryManager.ModificationRepository.AddEntity<UserDto>(SqlQuery.AddUser, userDto, true);
+
+        #endregion
+
+        #region IDeleteEntity
 
         public bool DeleteEntity(Dictionary<string, object> param) =>
             _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, param);
@@ -29,10 +42,11 @@ namespace Library.BL.Service
         public bool DeleteEntity(UserDto userDto) =>
             _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, userDto);
 
+        #endregion
+
+        #region IUpdateService
+
         public bool UpdateEntity(UserPersonalInfoDto entity) => UpdatePersonalInfo(entity);
-
-        public bool UpdateEntity(UserContactInfoDto entity) => UpdateContactInfo(entity);
-
         private bool UpdatePersonalInfo(UserPersonalInfoDto personalInfo)
         {
             var updateParams = new Dictionary<string, object>
@@ -54,6 +68,8 @@ namespace Library.BL.Service
             return _repositoryManager.ModificationRepository.UpdateEntityDynamic(SqlQuery.NamePersonTable, updateParams);
         }
 
+
+        public bool UpdateEntity(UserContactInfoDto entity) => UpdateContactInfo(entity);
         private bool UpdateContactInfo(UserContactInfoDto contactInfo)
         {
             var updateParams = new Dictionary<string, object>
@@ -71,6 +87,8 @@ namespace Library.BL.Service
 
             return _repositoryManager.ModificationRepository.UpdateEntityDynamic(SqlQuery.NameUsersTable, updateParams);
         }
+
+        #endregion
 
     }
 }

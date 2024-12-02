@@ -15,6 +15,8 @@ namespace Library.BL.Interface
         /// </summary>
         /// <param name="param">Параметры для поиска сущности в виде словаря.</param>
         /// <returns>Объект сущности или null, если сущность не найдена.</returns>
-        T? GetEntityByParam(Dictionary<string, object> param);
+        T? GetSingleEntityByParam(Dictionary<string, object> param);
+
+        IEnumerable<T>? GetEntitiesByParam(Dictionary<string, object> param);
     }
 }

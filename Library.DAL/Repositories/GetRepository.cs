@@ -1,15 +1,25 @@
-﻿using Dapper;
+﻿using System.Collections;
+using System.Diagnostics;
+using Dapper;
 using Npgsql;
 using System.Text.RegularExpressions;
 using Library.Common;
 using Library.DAL.Configuration;
 using Library.DAL.Interface;
+using Library.DAL.Models;
 
 namespace Library.DAL.Repositories
 {
     public class GetRepository(IMessageLogger logger) : BaseRepository(logger),IGetRepository
     {
         #region GetAll
+
+        /// <summary>
+        /// Выполняет SQL-запрос для получения всех сущностей типа <typeparamref name="T"/> из базы данных.
+        /// </summary>
+        /// <typeparam name="T">Тип сущности, который будет возвращен в результате выполнения запроса.</typeparam>
+        /// <param name="sqlQuery">SQL-запрос, который будет выполнен для получения данных.</param>
+        /// <returns>Коллекция сущностей типа <typeparamref name="T"/>, или <c>null</c> в случае ошибки выполнения запроса.</returns>
         public IEnumerable<T>? GetAllEntity<T>(string sqlQuery) where T : class
         {
             return ExecuteQuery(connection =>
@@ -27,22 +37,22 @@ namespace Library.DAL.Repositories
             });
         }
         
-        public IEnumerable<T>? GetAllEntity<T>(string sqlQuery, Func<SqlMapper.GridReader, IEnumerable<T>> mapFunction) where T : class
-        {
-            return ExecuteQuery(connection =>
-            {
-                try
-                {
-                    using var multi = connection.QueryMultiple(sqlQuery);
-                    return mapFunction(multi);
-                }
-                catch (NpgsqlException e)
-                {
-                    Logger.Log(e.Message);
-                    return null;
-                }
-            });
-        }
+        //public IEnumerable<T>? GetAllEntity<T>(string sqlQuery, Func<SqlMapper.GridReader, IEnumerable<T>> mapFunction) where T : class
+        //{
+        //    return ExecuteQuery(connection =>
+        //    {
+        //        try
+        //        {
+        //            using var multi = connection.QueryMultiple(sqlQuery);
+        //            return mapFunction(multi);
+        //        }
+        //        catch (NpgsqlException e)
+        //        {
+        //            Logger.Log(e.Message);
+        //            return null;
+        //        }
+        //    });
+        //}
 
         public object? GetAllEntity(string sql, Type type)
         {
@@ -58,17 +68,73 @@ namespace Library.DAL.Repositories
 
         #region GetByParam
 
-        public object? GetEntityByParam(string sql, Type type, Dictionary<string, object> parameters)
-        {
-            var method = GetType()
-                .GetMethods()
-                .FirstOrDefault(m =>m is {Name: nameof(GetEntityByParam), IsGenericMethod: true})
-                ?.MakeGenericMethod(type);
+        //Todo
+        //public object? GetEntityByParam(string sql, Type type, Dictionary<string, object> parameters)
+        //{
+        //    var method = GetType()
+        //        .GetMethods()
+        //        .FirstOrDefault(m =>m is {Name: nameof(GetSingleEntityByParam), IsGenericMethod: true})
+        //        ?.MakeGenericMethod(type);
 
-            return method?.Invoke(this, [sql, parameters]);
+        //    return method?.Invoke(this, [sql, parameters]);
+        //}
+
+        /// <summary>
+        /// Выполняет SQL-запрос для получения одного объекта типа <typeparamref name="T"/> на основе переданных параметров.
+        /// </summary>
+        /// <typeparam name="T">Тип объекта, который будет возвращен в результате выполнения запроса.</typeparam>
+        /// <param name="sqlQuery">SQL-запрос для выполнения.</param>
+        /// <param name="parameters">Словарь параметров, которые передаются в запрос.</param>
+        /// <returns>Объект типа <typeparamref name="T"/>, если найден, иначе null.</returns>
+        public T? GetSingleEntityByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
+        {
+            return ExecuteWithParameters(
+                nameof(GetSingleEntityByParam),
+                sqlQuery,
+                parameters,
+                (connection, dynamicParams, finalQuery) =>
+                {
+                    var result = GetMethod<T>(nameof(GetSingleEntityByParam), finalQuery, dynamicParams, connection).Invoke();
+                    return result as T;
+                }
+            );
         }
 
-        public T? GetEntityByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
+        /// <summary>
+        /// Выполняет SQL-запрос для получения коллекции объектов типа <typeparamref name="T"/> на основе переданных параметров.
+        /// </summary>
+        /// <typeparam name="T">Тип объектов, которые будут возвращены в результате выполнения запроса.</typeparam>
+        /// <param name="sqlQuery">SQL-запрос для выполнения.</param>
+        /// <param name="parameters">Словарь параметров, которые передаются в запрос.</param>
+        /// <returns>Коллекция объектов типа <typeparamref name="T"/>, если найдены, иначе null.</returns>
+        public IEnumerable<T>? GetEntitiesByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
+        {
+            return ExecuteWithParameters(
+                nameof(GetEntitiesByParam),
+                sqlQuery,
+                parameters,
+                (connection, dynamicParams, finalQuery) =>
+                {
+                    var result = GetMethod<T>(nameof(GetEntitiesByParam), finalQuery, dynamicParams, connection).Invoke();
+                    return result as IEnumerable<T>; // Приведение результата
+                }
+            );
+        }
+
+        #endregion
+
+        #region MethodsByGetByParam
+
+        /// <summary>
+        /// Обрабатывает выполнение SQL-запроса с параметрами и делегатом для возврата результата.
+        /// </summary>
+        /// <typeparam name="T">Тип объекта, который должен быть возвращен в результате выполнения запроса.</typeparam>
+        /// <param name="methodName">Имя метода, который вызывается (для логирования и диагностики).</param>
+        /// <param name="sqlQuery">SQL-запрос для выполнения.</param>
+        /// <param name="parameters">Словарь параметров, которые передаются в запрос.</param>
+        /// <param name="executeQuery">Делегат, который выполняет запрос и возвращает результат.</param>
+        /// <returns>Результат выполнения запроса типа <typeparamref name="T"/>, или null, если произошла ошибка.</returns>
+        private T? ExecuteWithParameters<T>(string methodName, string sqlQuery, Dictionary<string, object> parameters, Func<NpgsqlConnection, DynamicParameters, string, T?> executeQuery) where T : class
         {
             try
             {
@@ -77,95 +143,78 @@ namespace Library.DAL.Repositories
 
                 return ExecuteQuery(connection =>
                 {
-                    var dynamicParams = DynamicParameters<T>(sqlQuery, parameters, out var finalQuery);
                     try
                     {
-                        var result = connection.QuerySingleOrDefault<T>(finalQuery, dynamicParams);
-                        return result;
+                        var dynamicParams = DynamicParameters<T>(sqlQuery, parameters, out var finalQuery);
+                        return executeQuery(connection, dynamicParams, finalQuery);
                     }
                     catch (NpgsqlException e)
                     {
-                        Logger.Log(e.Message);
+                        Logger.Log($"Database Error in {methodName}: {e.Message}");
                         return null;
                     }
                 });
             }
             catch (ArgumentException ex)
             {
-                // Логирование или обработка ошибки
-                Logger.Log($"Argument Exception: {ex.Message}");
+                Logger.Log($"Argument Exception in {methodName}: {ex.Message}");
                 throw;
             }
             catch (Exception e)
             {
-                Logger.Log($"Unexpected Error: {e.Message}");
+                Logger.Log($"Unexpected Error in {methodName}: {e.Message}");
                 throw;
             }
         }
 
-        public T? GetEntityByParam<T>(string sqlQuery, Dictionary<string, object> parameters,Func<SqlMapper.GridReader, T> mapFunction) where T : class
+        /// <summary>
+        /// Создает делегат для выполнения SQL-запроса, в зависимости от типа возвращаемых данных (один объект или коллекция).
+        /// </summary>
+        /// <typeparam name="T">Тип объекта или коллекции объектов, которые будут возвращены.</typeparam>
+        /// <param name="methodName">Имя метода, для которого выбирается запрос.</param>
+        /// <param name="finalQuery">SQL-запрос, который нужно выполнить.</param>
+        /// <param name="dynamicParams">Параметры, которые передаются в запрос.</param>
+        /// <param name="connection">Соединение с базой данных.</param>
+        /// <returns>Делегат, который выполняет запрос и возвращает результат.</returns>
+        private static Func<object> GetMethod<T>(string methodName, string finalQuery, DynamicParameters dynamicParams, NpgsqlConnection connection)
         {
-            if (parameters == null || parameters.Count == 0)
-                throw new ArgumentException("Parameters cannot be null or empty", nameof(parameters));
-
-            return ExecuteQuery(connection =>
+            return methodName switch
             {
-                var dynamicParams = DynamicParameters<T>(sqlQuery, parameters, out var finalQuery);
+                "GetSingleEntityByParam" =>
+                    () => connection.QuerySingleOrDefault<T>(finalQuery, dynamicParams),
 
-                try
-                {
-                    // Выполняем запрос с мульти-маппингом
-                    using var multi = connection.QueryMultiple(finalQuery, dynamicParams);
-                    return mapFunction(multi);
-                }
-                catch (NpgsqlException e)
-                {
-                    Logger.Log($"Database Error: {e.Message}");
-                    return null;
-                }
-                catch (Exception e)
-                {
-                    Logger.Log($"Unexpected Error: {e.Message}");
-                    throw;
-                }
-            });
+                "GetEntitiesByParam" =>
+                    () => connection.Query<T>(finalQuery, dynamicParams),
+
+                _ => throw new ArgumentException("Invalid method name", nameof(methodName))
+            };
         }
-
+        
+        /// <summary>
+        /// Формирует параметры для SQL-запроса с учетом переданных значений.
+        /// </summary>
+        /// <typeparam name="T">Тип, который используется в контексте выполнения запроса.</typeparam>
+        /// <param name="sqlQuery">Исходный SQL-запрос, к которому будут добавлены условия.</param>
+        /// <param name="parameters">Словарь параметров, которые должны быть добавлены в запрос.</param>
+        /// <param name="finalQuery">Итоговый SQL-запрос с добавленными параметрами.</param>
+        /// <returns>Экземпляр <see cref="DynamicParameters"/>, содержащий все параметры для выполнения запроса.</returns>
         private static DynamicParameters DynamicParameters<T>(string sqlQuery, Dictionary<string, object> parameters, out string finalQuery)
             where T : class
         {
             var dynamicParams = new DynamicParameters(); 
-            var whereClause = " WHERE 1=1"; // Базовый WHERE для добавления условий
-
             // Формируем WHERE-условия и добавляем параметры
             foreach (var param in parameters)
             {
-                whereClause += $" AND {param.Key} = @{param.Key}";
+                sqlQuery += $" AND {param.Key} = @{param.Key}";
                 dynamicParams.Add(param.Key, param.Value);
             }
 
             // Финальный SQL-запрос
-            finalQuery = sqlQuery + whereClause;
+            finalQuery = sqlQuery;
             return dynamicParams;
         }
 
         #endregion
-        private TResult? ExecuteMultiQuery<TResult>(
-            NpgsqlConnection connection,
-            string sqlQuery,
-            Func<SqlMapper.GridReader, TResult> mapFunction)
-        {
-            try
-            {
-                using var multi = connection.QueryMultiple(sqlQuery);
-                return mapFunction(multi);
-            }
-            catch (NpgsqlException e)
-            {
-                Logger.Log(e.Message);
-                return default;
-            }
-        }
 
         #region Methods
 

@@ -10,42 +10,27 @@ namespace Library.BL.Service
     {
         private readonly RepositoryManager _repositoryManager = repositoryManager;
 
-        public IEnumerable<Book>? GetAllEntities()
-        {
-            return _repositoryManager.GetDataRepository.GetAllEntity<Book>(
-                SqlQuery.GetAllBooks,
-                multi =>
-                {
-                    var books =  MultiGetBooks(multi);
-                    return books;
-                });
-        }
+        #region IGetService
 
-        public Book? GetEntityByParam(Dictionary<string, object> param) =>
-            _repositoryManager.GetDataRepository.GetEntityByParam<Book>(SqlQuery.GetBook, param,
-                multi =>
-                {
-                    var books = MultiGetBooks(multi);
-                    return books.FirstOrDefault()!;
-                });
+        public IEnumerable<Book>? GetAllEntities() =>
+            _repositoryManager.GetDataRepository.GetAllEntity<Book>(SqlQuery.GetBooks);
+
+        public Book? GetSingleEntityByParam(Dictionary<string, object> param) =>
+            _repositoryManager.GetDataRepository.GetSingleEntityByParam<Book>(SqlQuery.GetBookByParam, param);
+
+        public IEnumerable<Book>? GetEntitiesByParam(Dictionary<string, object> param) =>
+            _repositoryManager.GetDataRepository.GetEntitiesByParam<Book>(SqlQuery.GetBookByParam, param);
+
+        #endregion
 
 
-        private static IEnumerable<Book> MultiGetBooks(SqlMapper.GridReader multi)
-        {
-            var books = multi.Read<Book, Author, Publisher, Condition, Book>(
-                (book, author, publisher, condition) =>
-                {
-                    book.Author = author;
-                    book.Publisher = publisher;
-                    book.Condition = condition;
-                    return book;
-                },
-                splitOn: "Author_Id,Publisher_Id,Condition_Id"); // Разделяем сущности по указанным столбцам);
-            return books;
-        }
+
+
     }
     //Todo
-    // Сделать также как с userService
+    // Добавить остальные интерфейсы 
+    // Добавить классы BookDto
+    // Добавить комментарии в классы
     
 
 }
