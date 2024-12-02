@@ -31,6 +31,6 @@ namespace Library.DAL.Repositories
                 Logger.Log(e.Message);
                 return default; // Например, для bool это будет false, для объектов — null
             }
-        }
+        }///////////////////
     }
 }
