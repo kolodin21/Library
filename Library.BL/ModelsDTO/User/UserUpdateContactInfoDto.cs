@@ -1,6 +1,6 @@
-﻿namespace Library.BL.ModelsDTO
+﻿namespace Library.BL.ModelsDTO.UserDto.UserDto
 {
-    public class UserContactInfoDto
+    public class UserUpdateContactInfoDto
     {
         public int Id { get; set; }
         public string? Phone { get; set; }

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using Library.BL;
 using Library.BL.ModelsDTO;
+using Library.BL.ModelsDTO.BookDto;
+using Library.BL.ModelsDTO.User;
 using Library.BL.Service;
 using Library.Common;
 
@@ -17,14 +19,14 @@ var param = new Dictionary<string, object>()
 {
     {"name","Иван"}
 };
-var books = serviceManager.UserService.GetEntitiesByParam(param);
+//var books = serviceManager.UserService.GetEntitiesByParam(param);
 //Console.WriteLine(books);
-Print(books);
+//Print(books);
 
 //var book = serviceManager.BookService.GetSingleEntityByParam(param);
 //Console.WriteLine(user);
 
-//var newDto = new UserPersonalInfoDto
+//var newDto = new UserUpdatePersonalInfoDto
 //{
 //    Id = 1,
 //    Surname = "Колодин"
@@ -37,18 +39,33 @@ Print(books);
 //Console.WriteLine(userByParam);
 
 
-//var userDto = new UserDto(
+//var userDto = new UserAddDto(
 //    "Andreev",
-//    "Ale", 
+//    "Ale",
 //    "ich",
 //    "petrov",
-//    "supersessword123", 
+//    "supersessword123",
 //    "petrov@example.com",
 //    "+79018234567");
 
+var book = new BookAddDto(
+    "Тест",
+    1,
+    1842,
+    3,
+    4,
+    12
+    );
+
+serviceManager.BookService.AddEntity(book);
+
+var bookUpdate = new BookUpdateInfoDto{Id = 1,Quantity = 15};
+
+serviceManager.BookService.UpdateEntity(bookUpdate);
+
 //serviceManager.UserService.DeleteEntity(param);
 
-//logger.Log(serviceManager.UserService.ExecuteEntity(userDto) ? "Успешно" : "Не успешно");
+//logger.Log(serviceManager.UserService.AddEntity(userDto) ? "Успешно" : "Не успешно");
 
 //var param = new Dictionary<string, object>()
 //{

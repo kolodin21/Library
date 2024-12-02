@@ -218,61 +218,33 @@ namespace Library.DAL.Repositories
 
         #region Methods
 
-        public IEnumerable<(string ColumnName, string DataType)> GetColumnNames(string query)
+        public IEnumerable<string>? GetColumnNames(string tableName, string sqlQuery)
         {
             string schema = DatabaseConfig.DatabaseSchema;
-            string tableName = GetTableName(query);
-
-            // Запрос для получения названий колонок и их типов
-            string sqlQuery = @"
-                    SELECT 
-                        a.attname AS column_name,
-                        t.typname AS data_type
-                    FROM 
-                        pg_catalog.pg_attribute a
-                    JOIN 
-                        pg_catalog.pg_type t ON a.atttypid = t.oid
-                    WHERE 
-                        a.attrelid = (
-                            SELECT oid 
-                            FROM pg_catalog.pg_class
-                            WHERE relname = @TableName
-                              AND relnamespace = (
-                                  SELECT oid 
-                                  FROM pg_catalog.pg_namespace 
-                                  WHERE nspname = @SchemaName
-                              )
-                        )
-                    AND a.attnum > 0 
-                    AND NOT a.attisdropped;";
 
             try
             {
-                return ExecuteQuery<IEnumerable<(string ColumnName, string DataType)>>(connection =>
+                return ExecuteQuery(connection =>
                 {
-                    connection.Query<(string ColumnName, string DataType)>(
+                    var result = connection.Query<string>(
                         sqlQuery,
-                        new
-                        {
-                            TableName = tableName, SchemaName = schema
-
-                        });
-
-                    return null;
+                        new { TableName = tableName, SchemaName = schema }
+                    );
+                    return result;
                 });
             }
             catch (NpgsqlException e)
             {
                 Logger.Log(e.Message);
-                return [];
+                return Array.Empty<string>(); // Возвращаем пустой массив.
             }
         }
 
-        private static string GetTableName(string sqlQuery)
-        {
-            var match = Regex.Match(sqlQuery, @"(?<=\bFROM\s)\w+", RegexOptions.IgnoreCase);
-            return match.Value;
-        }
+        //private static string GetTableName(string sqlQuery)
+        //{
+        //    var match = Regex.Match(sqlQuery, @"(?<=\bFROM\s)\w+", RegexOptions.IgnoreCase);
+        //    return match.Value;
+        //}
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Library.BL.Interface;
-using Library.BL.ModelsDTO;
+using Library.BL.ModelsDTO.User;
+using Library.BL.ModelsDTO.UserDto.UserDto;
 using Library.DAL.Models;
 using Library.DAL.Repositories;
 
@@ -7,10 +8,10 @@ namespace Library.BL.Service
 {
     public class UserService(RepositoryManager repositoryManager) : 
         IGetService<User>, 
-        IAddEntity<UserDto>,
-        IDeleteEntity<UserDto>,
-        IUpdateService<UserPersonalInfoDto>,  // Реализация интерфейса для UserPersonalInfoDto
-        IUpdateService<UserContactInfoDto>   // Реализация интерфейса для UserContactInfoDto
+        IAddEntity<UserAddDto>,
+        IDeleteEntity<UserAddDto>,
+        IUpdateService<UserUpdatePersonalInfoDto>,  // Реализация интерфейса для UserUpdatePersonalInfoDto
+        IUpdateService<UserUpdateContactInfoDto>   // Реализация интерфейса для UserUpdateContactInfoDto
     {
         private readonly RepositoryManager _repositoryManager = repositoryManager;
 
@@ -29,8 +30,8 @@ namespace Library.BL.Service
 
         #region IAddEntity
 
-        public bool AddEntity(UserDto userDto) =>
-            _repositoryManager.ModificationRepository.AddEntity<UserDto>(SqlQuery.AddUser, userDto, true);
+        public bool AddEntity(UserAddDto userAddDto) =>
+            _repositoryManager.ModificationRepository.AddEntity<UserAddDto>(SqlQuery.AddUser, userAddDto, true);
 
         #endregion
 
@@ -39,29 +40,29 @@ namespace Library.BL.Service
         public bool DeleteEntity(Dictionary<string, object> param) =>
             _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, param);
 
-        public bool DeleteEntity(UserDto userDto) =>
-            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, userDto);
+        public bool DeleteEntity(UserAddDto userAddDto) =>
+            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, userAddDto);
 
         #endregion
 
         #region IUpdateService
 
-        public bool UpdateEntity(UserPersonalInfoDto entity) => UpdatePersonalInfo(entity);
-        private bool UpdatePersonalInfo(UserPersonalInfoDto personalInfo)
+        public bool UpdateEntity(UserUpdatePersonalInfoDto entity) => UpdatePersonalInfo(entity);
+        private bool UpdatePersonalInfo(UserUpdatePersonalInfoDto updatePersonalInfo)
         {
             var updateParams = new Dictionary<string, object>
             {
-                ["id"] = personalInfo.Id
+                ["id"] = updatePersonalInfo.Id
             };
 
-            if (!string.IsNullOrWhiteSpace(personalInfo.Surname))
-                updateParams["surname"] = personalInfo.Surname;
+            if (!string.IsNullOrWhiteSpace(updatePersonalInfo.Surname))
+                updateParams["surname"] = updatePersonalInfo.Surname;
 
-            if (!string.IsNullOrWhiteSpace(personalInfo.Name))
-                updateParams["name"] = personalInfo.Name;
+            if (!string.IsNullOrWhiteSpace(updatePersonalInfo.Name))
+                updateParams["name"] = updatePersonalInfo.Name;
 
-            if (!string.IsNullOrWhiteSpace(personalInfo.Patronymic))
-                updateParams["patronymic"] = personalInfo.Patronymic;
+            if (!string.IsNullOrWhiteSpace(updatePersonalInfo.Patronymic))
+                updateParams["patronymic"] = updatePersonalInfo.Patronymic;
 
             if (updateParams.Count <= 1) return false;
 
@@ -69,19 +70,19 @@ namespace Library.BL.Service
         }
 
 
-        public bool UpdateEntity(UserContactInfoDto entity) => UpdateContactInfo(entity);
-        private bool UpdateContactInfo(UserContactInfoDto contactInfo)
+        public bool UpdateEntity(UserUpdateContactInfoDto entity) => UpdateContactInfo(entity);
+        private bool UpdateContactInfo(UserUpdateContactInfoDto updateContactInfo)
         {
             var updateParams = new Dictionary<string, object>
             {
-                ["id"] = contactInfo.Id
+                ["id"] = updateContactInfo.Id
             };
 
-            if (!string.IsNullOrWhiteSpace(contactInfo.Phone))
-                updateParams["phone"] = contactInfo.Phone;
+            if (!string.IsNullOrWhiteSpace(updateContactInfo.Phone))
+                updateParams["phone"] = updateContactInfo.Phone;
 
-            if (!string.IsNullOrWhiteSpace(contactInfo.Email))
-                updateParams["email"] = contactInfo.Email;
+            if (!string.IsNullOrWhiteSpace(updateContactInfo.Email))
+                updateParams["email"] = updateContactInfo.Email;
 
             if (updateParams.Count <= 1) return false;
 

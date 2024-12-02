@@ -1,6 +1,6 @@
-﻿namespace Library.BL.ModelsDTO
+﻿namespace Library.BL.ModelsDTO.User
 {
-    public class UserDto(string surname, string name, string? patronymic, string login, string password, string email, string phone)
+    public class UserAddDto(string surname, string name, string? patronymic, string login, string password, string email, string phone)
     {
         public string Surname { get; set; } = surname;
         public string Name { get; set; } = name;
