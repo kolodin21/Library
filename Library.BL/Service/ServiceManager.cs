@@ -2,27 +2,34 @@
 using Library.DAL.Repositories;
 using Library.Common;
 using Library.BL.ModelsDTO;
+using Library.BL.ModelsDTO.BookDto;
+using Library.BL.ModelsDTO.User;
+using Library.DAL.Models;
+using Library.BL.ModelsDTO.UserDto.UserDto;
 
 namespace Library.BL.Service
 {
+    public interface IUserService : 
+        IGetService<User>, 
+        IAddEntity<UserAddDto>, 
+        IDeleteEntity<UserAddDto>, 
+        IUpdateService<UserUpdatePersonalInfoDto> , 
+        IUpdateService<UserUpdateContactInfoDto> { }
+
+    public interface IBookService : 
+        IGetService<Book>, 
+        IAddEntity<BookAddDto>, 
+        IUpdateService<BookUpdateInfoDto> { }
+
     public class ServiceManager
     {
-        public UserService UserService { get; }
-        public BookService BookService { get; }
+        public IUserService UserService { get; }
+        public IBookService BookService { get; }
 
-        public ServiceManager(IMessageLogger logger)
+        public ServiceManager(IUserService userService, IBookService bookService)
         {
-            // Создаем конкретные реализации репозиториев
-            var getRepository = new GetRepository(logger);
-            var cudRepository = new ModificationRepository(logger);
-
-            // Передаем их в RepositoryManager
-            var repositoryManager = new RepositoryManager(getRepository, cudRepository);
-
-            UserService = new UserService(repositoryManager);
-            BookService = new BookService(repositoryManager);
-
-           
+            UserService = userService;
+            BookService = bookService;
         }
     }
 }

@@ -3,16 +3,19 @@ using Library.BL.Interface;
 using Library.BL.ModelsDTO.BookDto;
 using Library.DAL.Models;
 using Library.DAL.Repositories;
-using static Library.BL.SqlQuery;
 
 namespace Library.BL.Service
 {
-    public class BookService(RepositoryManager repositoryManager) :
-        IGetService<Book>,
-        IAddEntity<BookAddDto>,
-        IUpdateService<BookUpdateInfoDto>
+    public class BookService : IBookService
     {
-        private readonly RepositoryManager _repositoryManager = repositoryManager;
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly ISqlQueryBookService _sqlQueryProvider;
+
+        public BookService(IRepositoryManager repositoryManager, ISqlQueryBookService sqlQueryProvider)
+        {
+            _repositoryManager = repositoryManager;
+            _sqlQueryProvider = sqlQueryProvider;
+        }
 
         #region IGetService
 
@@ -40,12 +43,12 @@ namespace Library.BL.Service
         {
             // Получаем имена колонок таблицы
             var columnNames =
-                _repositoryManager.GetDataRepository.GetColumnNames(NameBookTable,
-                    GetColumnAndTypeTable);
+                _repositoryManager.GetDataRepository.GetColumnNames(_sqlQueryProvider.NameBookTable,
+                    _sqlQueryProvider.GetColumnAndTypeTable);
 
             var updateParams = GetDynamicUpdateParams(updateBookInfo, columnNames!); 
             
-            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(NameBookTable, updateParams);
+            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlQueryProvider.NameBookTable, updateParams);
         }
 
         #endregion

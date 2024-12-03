@@ -6,42 +6,44 @@ using Library.DAL.Repositories;
 
 namespace Library.BL.Service
 {
-    public class UserService(RepositoryManager repositoryManager) : 
-        IGetService<User>, 
-        IAddEntity<UserAddDto>,
-        IDeleteEntity<UserAddDto>,
-        IUpdateService<UserUpdatePersonalInfoDto>,  // Реализация интерфейса для UserUpdatePersonalInfoDto
-        IUpdateService<UserUpdateContactInfoDto>   // Реализация интерфейса для UserUpdateContactInfoDto
+    public class UserService: IUserService
     {
-        private readonly RepositoryManager _repositoryManager = repositoryManager;
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly ISqlQueryUserService _sqlQueryProvider;
+
+        public UserService(IRepositoryManager repositoryManager, ISqlQueryUserService sqlQueryProvider)
+        {
+            _repositoryManager = repositoryManager;
+            _sqlQueryProvider = sqlQueryProvider;
+        }
 
         #region IGetService
 
         public IEnumerable<User>? GetAllEntities() =>
-            _repositoryManager.GetDataRepository.GetAllEntity<User>(SqlQuery.GetAllUsers);
+            _repositoryManager.GetDataRepository.GetAllEntity<User>(_sqlQueryProvider.GetAllUsers);
 
         public User? GetSingleEntityByParam(Dictionary<string, object> param) =>
-            _repositoryManager.GetDataRepository.GetSingleEntityByParam<User>(SqlQuery.GetUserByParam, param);
+            _repositoryManager.GetDataRepository.GetSingleEntityByParam<User>(_sqlQueryProvider.GetUserByParam, param);
 
         public IEnumerable<User>? GetEntitiesByParam(Dictionary<string, object> param) =>
-            _repositoryManager.GetDataRepository.GetEntitiesByParam<User>(SqlQuery.GetUserByParam, param);
+            _repositoryManager.GetDataRepository.GetEntitiesByParam<User>(_sqlQueryProvider.GetUserByParam, param);
 
         #endregion
 
         #region IAddEntity
 
         public bool AddEntity(UserAddDto userAddDto) =>
-            _repositoryManager.ModificationRepository.AddEntity<UserAddDto>(SqlQuery.AddUser, userAddDto, true);
+            _repositoryManager.ModificationRepository.AddEntity<UserAddDto>(_sqlQueryProvider.AddUser, userAddDto, true);
 
         #endregion
 
         #region IDeleteEntity
 
         public bool DeleteEntity(Dictionary<string, object> param) =>
-            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, param);
+            _repositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlQueryProvider.NameUsersTable, param);
 
         public bool DeleteEntity(UserAddDto userAddDto) =>
-            _repositoryManager.ModificationRepository.DeleteEntityDynamic(SqlQuery.NameUsersTable, userAddDto);
+            _repositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlQueryProvider.NameUsersTable, userAddDto);
 
         #endregion
 
@@ -66,7 +68,7 @@ namespace Library.BL.Service
 
             if (updateParams.Count <= 1) return false;
 
-            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(SqlQuery.NamePersonTable, updateParams);
+            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlQueryProvider.NamePersonTable, updateParams);
         }
 
 
@@ -86,7 +88,7 @@ namespace Library.BL.Service
 
             if (updateParams.Count <= 1) return false;
 
-            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(SqlQuery.NameUsersTable, updateParams);
+            return _repositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlQueryProvider.NameUsersTable, updateParams);
         }
 
         #endregion

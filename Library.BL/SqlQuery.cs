@@ -1,30 +1,45 @@
 ﻿namespace Library.BL
 {
-    public static class SqlQuery
+
+    public interface ISqlQueryUserService
     {
-        #region User
-        public static string GetAllUsers => @"SELECT * FROM view_users";
+        public string GetAllUsers { get; }
+        public string GetUserByParam { get; }
+        public string AddUser { get; }
+        public string DeleteUser { get; }
+        public string NamePersonTable { get; }
+        public string NameUsersTable { get; }
+    }
 
-        public static string GetUserByParam => @"SELECT * FROM view_users WHERE 1=1";
+    public  class SqlQueryUserProvider : ISqlQueryUserService
+    {
+        public string GetAllUsers => @"SELECT * FROM view_users";
+        public  string GetUserByParam => @"SELECT * FROM view_users WHERE 1=1";
+        public string AddUser => @"addUser";
+        public string DeleteUser => @"deleteUser";
+        public string NamePersonTable => @"table_persons";
+        public string NameUsersTable => @"table_users";
+    }
 
-        public static string AddUser => @"addUser";
+    public interface ISqlQueryBookService
+    {
+        public string GetBooks { get; }
+        public string GetBookByParam { get; }
+        public  string AddBook { get; }
+        public string NameBookTable { get; }
+    }
 
-        public static string DeleteUser => @"deleteUser";
-
-        public static string NamePersonTable => @"table_persons";
-
-        public static string NameUsersTable => @"table_users";
-
-        //public static string DeleteAuthorByParam => @"DELETE FROM table_author WHERE ";
-        #endregion
+    public class SqlQueryBookProvider : ISqlQueryBookService
+    {
+    //public static string DeleteAuthorByParam => @"DELETE FROM table_author WHERE ";
 
         #region Book
 
-        public static string GetBooks => @"SELECT * FROM view_books_v2 ";
-        public static string GetBookByParam => @"SELECT * FROM view_books_v2 WHERE 1=1";
+        public string GetBooks => @"SELECT * FROM view_books_v2 ";
+        public string GetBookByParam => @"SELECT * FROM view_books_v2 WHERE 1=1";
 
-        public static string AddBook => @"addBook";
-        public static string NameBookTable => @"table_books";
+        public string AddBook => @"addBook";
+        public string NameBookTable => @"table_books";
 
         #endregion
 

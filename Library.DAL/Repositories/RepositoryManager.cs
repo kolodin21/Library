@@ -3,10 +3,22 @@ using Library.DAL.Interface;
 
 namespace Library.DAL.Repositories
 {
-    public class RepositoryManager(IGetRepository getRepository, IModificationRepository modificationRepository)
+    public interface IRepositoryManager
+    {
+        IGetRepository GetDataRepository { get; }
+        IModificationRepository ModificationRepository { get; }
+    }
+
+    public class RepositoryManager : IRepositoryManager
     {
         // Репозитории
-        public IGetRepository GetDataRepository { get; } = getRepository;
-        public IModificationRepository ModificationRepository { get; } = modificationRepository;
+        public IGetRepository GetDataRepository { get; } 
+        public IModificationRepository ModificationRepository { get; } 
+
+        public RepositoryManager(IGetRepository getDataRepository, IModificationRepository modificationRepository)
+        {
+            GetDataRepository = getDataRepository;
+            ModificationRepository = modificationRepository;
+        }
     }
 }

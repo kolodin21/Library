@@ -5,15 +5,40 @@ using Library.BL.ModelsDTO.BookDto;
 using Library.BL.ModelsDTO.User;
 using Library.BL.Service;
 using Library.Common;
+using Library.DAL.Interface;
+using Library.DAL.Repositories;
+using Microsoft.Extensions.DependencyInjection;
+
+// Создание контейнера DI
+var services = new ServiceCollection();
+
+// Регистрация репозиториев
+services.AddScoped<IGetRepository, GetRepository>();
+services.AddScoped<IModificationRepository, ModificationRepository>();
+services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+services.AddSingleton<ISqlQueryUserService, SqlQueryUserProvider>();
+services.AddSingleton<ISqlQueryBookService, SqlQueryBookProvider>();
+
+// Регистрация сервисов
+services.AddScoped<IUserService, UserService>();
+services.AddScoped<IBookService, BookService>();
+services.AddScoped<ServiceManager>();
+
+// Регистрация логгера
+services.AddScoped<IMessageLogger, ConsoleLogger>();
+
+// Построение провайдера
+var serviceProvider = services.BuildServiceProvider();
+
+// Получение ServiceManager
+var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 
 
-var logger = new ConsoleLogger();
 
-var serviceManager = new ServiceManager(logger);
-
-//var users = serviceManager.UserService.GetAllEntities();
+var users = serviceManager.UserService.GetAllEntities();
 //var books = serviceManager.BookService.GetAllEntities();
-//Print(books);
+Print(users);
 
 var param = new Dictionary<string, object>()
 {
@@ -48,20 +73,20 @@ var param = new Dictionary<string, object>()
 //    "petrov@example.com",
 //    "+79018234567");
 
-var book = new BookAddDto(
-    "Тест",
-    1,
-    1842,
-    3,
-    4,
-    12
-    );
+//var book = new BookAddDto(
+//    "Тест",
+//    1,
+//    1842,
+//    3,
+//    4,
+//    12
+//    );
 
-serviceManager.BookService.AddEntity(book);
+//serviceManager.BookService.AddEntity(book);
 
-var bookUpdate = new BookUpdateInfoDto{Id = 1,Quantity = 15};
+//var bookUpdate = new BookUpdateInfoDto{Id = 1,Quantity = 15};
 
-serviceManager.BookService.UpdateEntity(bookUpdate);
+//serviceManager.BookService.UpdateEntity(bookUpdate);
 
 //serviceManager.UserService.DeleteEntity(param);
 
