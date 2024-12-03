@@ -33,20 +33,23 @@ namespace Library.BL.Service
 
         #endregion
 
-        #region IAddEntity
+        #region IAddService
 
         public bool AddEntity(UserAddDto userAddDto) =>
             RepositoryManager.ModificationRepository.AddEntity<UserAddDto>(_sqlQueryProvider.Add, userAddDto, true);
 
         #endregion
 
-        #region IDeleteEntity
+        #region IDeleteService
 
-        public bool DeleteEntity(Dictionary<string, object> param) =>
-            RepositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlQueryProvider.Delete, param);
+        //public bool DeleteEntity(Dictionary<string, object> param) =>
+        //    RepositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlQueryProvider.Delete, param);
 
-        public bool DeleteEntity(UserAddDto userAddDto) =>
-            RepositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlQueryProvider.Delete, userAddDto);
+        //public bool DeleteEntity(UserAddDto userAddDto) =>
+        //    RepositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlQueryProvider.Delete, userAddDto);
+
+        public bool DeleteEntity(int id) =>
+            RepositoryManager.ModificationRepository.DeleteEntityByIdProcedure(_sqlQueryProvider.Delete, id);
 
         #endregion
 
@@ -55,22 +58,6 @@ namespace Library.BL.Service
         public bool UpdateEntity(UserUpdatePersonalInfoDto entity) => UpdatePersonalInfo(entity);
         private bool UpdatePersonalInfo(UserUpdatePersonalInfoDto updatePersonalInfo)
         {
-            //var updateParams = new Dictionary<string, object>
-            //{
-            //    ["id"] = updatePersonalInfo.Id
-            //};
-
-            //if (!string.IsNullOrWhiteSpace(updatePersonalInfo.Surname))
-            //    updateParams["surname"] = updatePersonalInfo.Surname;
-
-            //if (!string.IsNullOrWhiteSpace(updatePersonalInfo.Name))
-            //    updateParams["name"] = updatePersonalInfo.Name;
-
-            //if (!string.IsNullOrWhiteSpace(updatePersonalInfo.Patronymic))
-            //    updateParams["patronymic"] = updatePersonalInfo.Patronymic;
-
-            //if (updateParams.Count <= 1) return false;
-
             // Получаем имена колонок таблицы
             var columnNames =
                 RepositoryManager.GetDataRepository.GetColumnNames(_sqlQueryProvider.NamePersonTable,
@@ -88,20 +75,7 @@ namespace Library.BL.Service
         public bool UpdateEntity(UserUpdateContactInfoDto entity) => UpdateContactInfo(entity);
         private bool UpdateContactInfo(UserUpdateContactInfoDto updateContactInfo)
         {
-            //var updateParams = new Dictionary<string, object>
-            //{
-            //    ["id"] = updateContactInfo.Id
-            //};
-
-            //if (!string.IsNullOrWhiteSpace(updateContactInfo.Phone))
-            //    updateParams["phone"] = updateContactInfo.Phone;
-
-            //if (!string.IsNullOrWhiteSpace(updateContactInfo.Email))
-            //    updateParams["email"] = updateContactInfo.Email;
-
-            //if (updateParams.Count <= 1) return false;
-
-
+            
             // Получаем имена колонок таблицы
             var columnNames =
                 RepositoryManager.GetDataRepository.GetColumnNames(_sqlQueryProvider.NameUserTable,

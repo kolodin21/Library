@@ -20,6 +20,7 @@
     public interface ISqlQueryBookService : ISqlQueryCommonService
     {
         public string NameBookTable { get; }
+        public string NameLibraryBookTable { get; }
         public string GetAllAuthor { get; }
         public string GetAllPublisher { get; }
         public string GetAllConditions { get; }
@@ -64,8 +65,8 @@
         public string GetAll => @"SELECT * FROM view_books_v2";
         public string GetByParam => @"SELECT * FROM view_books_v2 WHERE 1=1";
         public string Add => @"addBook";
-        public string Delete => @"table_books";//Fixme ==========================================
-
+        public string Delete => @"deleteBook";
+        public string NameLibraryBookTable => @"table_library_books";
         public string NameBookTable => @"table_books";
         public string GetAllAuthor => @"SELECT * FROM table_author";
         public string GetAllPublisher => @"SELECT * FROM table_publishers";

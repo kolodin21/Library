@@ -9,6 +9,9 @@ namespace Library.DAL.Repositories
 {
     public class ModificationRepository(IMessageLogger logger) : BaseRepository(logger), IModificationRepository
     {
+
+        #region Add
+
         /// <summary>
         /// Добавление объекта в базу данных.
         /// </summary>
@@ -48,6 +51,9 @@ namespace Library.DAL.Repositories
                 return false;
             }
         }
+        #endregion
+
+        #region Update
 
         /// <summary>
         /// Обновление объекта на основе динамических параметров.
@@ -84,6 +90,10 @@ namespace Library.DAL.Repositories
                     SET {setClause} 
                     WHERE id = @id";
         }
+
+        #endregion
+
+        #region Delete
 
         /// <summary>
         /// Удаление объекта по ID через хранимую процедуру.
@@ -177,7 +187,7 @@ namespace Library.DAL.Repositories
                 return false;
             }
         }
-
+        #endregion
     }
 }
 

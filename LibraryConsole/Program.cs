@@ -34,13 +34,19 @@ var serviceProvider = services.BuildServiceProvider();
 // Получение ServiceManager
 var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 
-//var param = new Dictionary<string, object>();
+var newUser = new UserUpdatePersonalInfoDto
+{
+    Id = 5,
+    Patronymic = "Денисович"
+};
+
+serviceManager.UserService.UpdateEntity(newUser);
 
 //serviceManager.UserService.DeleteEntity(param);
 
-var users = serviceManager.UserService.GetAllEntities();
-////var books = serviceManager.BookService.GetAllEntities();
-Print(users);
+//var users = serviceManager.UserService.GetAllEntities();
+//////var books = serviceManager.BookService.GetAllEntities();
+//Print(users);
 
 //{
 //    {"name","Иван"}

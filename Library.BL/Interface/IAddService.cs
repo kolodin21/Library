@@ -1,6 +1,6 @@
 ﻿namespace Library.BL.Interface
 {
-    public interface IAddEntity<in T>
+    public interface IAddService<in T>
     {
         bool AddEntity(T entity);
     }

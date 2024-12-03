@@ -33,17 +33,18 @@ namespace Library.BL.Service
 
         #endregion
 
-        #region IAddEntity
+        #region IAddService
 
         public bool AddEntity(BookAddDto bookAddDto) =>
             RepositoryManager.ModificationRepository.AddEntity<BookAddDto>(_sqlQueryProvider.Add, bookAddDto, true);
 
         #endregion
 
-        #region IDeleteEntity
+        #region IDeleteService
 
-
-
+        public bool DeleteEntity(int id) =>
+            RepositoryManager.ModificationRepository.DeleteEntityByIdProcedure(_sqlQueryProvider.Delete, id);
+        
         #endregion
 
         #region IUpdateService
