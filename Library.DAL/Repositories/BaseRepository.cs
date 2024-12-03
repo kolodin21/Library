@@ -5,13 +5,13 @@ using Npgsql;
 
 namespace Library.DAL.Repositories
 {
-    public class BaseRepository
+    public abstract class BaseRepository
     {
         protected readonly IMessageLogger Logger;
 
         protected BaseRepository(IMessageLogger logger)
         {
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Logger = logger;
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
         }
 
@@ -29,7 +29,30 @@ namespace Library.DAL.Repositories
             catch (NpgsqlException e)
             {
                 Logger.Log(e.Message);
-                return default; // Например, для bool это будет false, для объектов — null
+                return default; 
+            }
+        }
+
+        protected bool IsNullFields<T>(T entity, string methodName)
+        {
+            if (entity is null)
+            {
+                Logger.Log($"Method {methodName}: entity is null.");
+                return true;
+            }
+
+            switch (entity)
+            {
+                case string str when string.IsNullOrWhiteSpace(str):
+                    Logger.Log($"Method {methodName}: string entity is empty or whitespace.");
+                    return true;
+
+                case Dictionary<string, object> dictionary when dictionary.Count == 0:
+                    Logger.Log($"Method {methodName}: dictionary entity is empty.");
+                    return true;
+
+                default:
+                    return false;
             }
         }
     }

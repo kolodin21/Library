@@ -1,73 +1,74 @@
 ﻿namespace Library.BL
 {
-
-    public interface ISqlQueryUserService
+    public interface ISqlQueryBaseService
     {
-        public string GetAllUsers { get; }
-        public string GetUserByParam { get; }
-        public string AddUser { get; }
-        public string DeleteUser { get; }
+        public string GetColumnAndTypeTable { get; }
+    }
+    public interface ISqlQueryCommonService : ISqlQueryBaseService
+    {
+        public string GetAll { get; }
+        public string GetByParam { get; }
+        public string Add { get; }
+        public string Delete { get; }
+    }
+    public interface ISqlQueryUserService : ISqlQueryCommonService 
+    {
+        public string NameUserTable{ get; }
         public string NamePersonTable { get; }
-        public string NameUsersTable { get; }
     }
 
-    public  class SqlQueryUserProvider : ISqlQueryUserService
+    public interface ISqlQueryBookService : ISqlQueryCommonService
     {
-        public string GetAllUsers => @"SELECT * FROM view_users";
-        public  string GetUserByParam => @"SELECT * FROM view_users WHERE 1=1";
-        public string AddUser => @"addUser";
-        public string DeleteUser => @"deleteUser";
-        public string NamePersonTable => @"table_persons";
-        public string NameUsersTable => @"table_users";
-    }
-
-    public interface ISqlQueryBookService
-    {
-        public string GetBooks { get; }
-        public string GetBookByParam { get; }
-        public  string AddBook { get; }
         public string NameBookTable { get; }
+        public string GetAllAuthor { get; }
+        public string GetAllPublisher { get; }
+        public string GetAllConditions { get; }
     }
 
-    public class SqlQueryBookProvider : ISqlQueryBookService
+
+    public abstract class SqlQueryBaseProvider : ISqlQueryBaseService
     {
-    //public static string DeleteAuthorByParam => @"DELETE FROM table_author WHERE ";
+        public string GetColumnAndTypeTable =>
+            @"
+                 SELECT 
+                a.attname AS column_name
+            FROM 
+                pg_catalog.pg_attribute a
+            WHERE 
+                a.attrelid = (
+                    SELECT oid 
+                    FROM pg_catalog.pg_class
+                    WHERE relname = @TableName
+                      AND relnamespace = (
+                          SELECT oid 
+                          FROM pg_catalog.pg_namespace 
+                          WHERE nspname = @SchemaName
+                      )
+                )
+            AND a.attnum > 0 
+            AND NOT a.attisdropped;";
+    }
 
-        #region Book
+    public class SqlQueryUserProvider : SqlQueryBaseProvider,ISqlQueryUserService
+    {
+        public string GetAll => @"SELECT * FROM view_users";
+        public string GetByParam => @"SELECT * FROM view_users WHERE 1=1";
+        public string Add => @"addUser";
+        public string Delete => @"deleteUser";
 
-        public string GetBooks => @"SELECT * FROM view_books_v2 ";
-        public string GetBookByParam => @"SELECT * FROM view_books_v2 WHERE 1=1";
+        public string NameUserTable => @"table_users";
+        public string NamePersonTable => @"table_persons";
+    }
+    public class SqlQueryBookProvider : SqlQueryBaseProvider, ISqlQueryBookService
+    {
+        public string GetAll => @"SELECT * FROM view_books_v2";
+        public string GetByParam => @"SELECT * FROM view_books_v2 WHERE 1=1";
+        public string Add => @"addBook";
+        public string Delete => @"table_books";//Fixme ==========================================
 
-        public string AddBook => @"addBook";
         public string NameBookTable => @"table_books";
-
-        #endregion
-
-        public static string GetAllAuthor => @"SELECT * FROM table_author";
-        public static string GetAllPublisher => @"SELECT * FROM table_publishers";
-        public static string GetAllConditions => @"SELECT * FROM table_conditions";
-
-        //================================================================================//
-
-
-        // Запрос для получения названий колонок и их типов
-        public static string GetColumnAndTypeTable => @"
-                     SELECT 
-                    a.attname AS column_name
-                FROM 
-                    pg_catalog.pg_attribute a
-                WHERE 
-                    a.attrelid = (
-                        SELECT oid 
-                        FROM pg_catalog.pg_class
-                        WHERE relname = @TableName
-                          AND relnamespace = (
-                              SELECT oid 
-                              FROM pg_catalog.pg_namespace 
-                              WHERE nspname = @SchemaName
-                          )
-                    )
-                AND a.attnum > 0 
-                AND NOT a.attisdropped;";
+        public string GetAllAuthor => @"SELECT * FROM table_author";
+        public string GetAllPublisher => @"SELECT * FROM table_publishers";
+        public string GetAllConditions => @"SELECT * FROM table_conditions";
     }
 }

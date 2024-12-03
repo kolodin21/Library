@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using Dapper;
+﻿using Dapper;
 using Npgsql;
-using System.Text.RegularExpressions;
 using Library.Common;
 using Library.DAL.Configuration;
 using Library.DAL.Interface;
-using Library.DAL.Models;
 
 namespace Library.DAL.Repositories
 {
     public class GetRepository(IMessageLogger logger) : BaseRepository(logger),IGetRepository
     {
+        
+        
         #region GetAll
 
         /// <summary>
@@ -54,15 +52,15 @@ namespace Library.DAL.Repositories
         //    });
         //}
 
-        public object? GetAllEntity(string sql, Type type)
-        {
-            var method = GetType()
-                .GetMethods()
-                .FirstOrDefault(m => m is { Name: nameof(GetAllEntity), IsGenericMethod: true })
-                ?.MakeGenericMethod(type);
+        //public object? GetAllEntity(string sql, Type type)
+        //{
+        //    var method = GetType()
+        //        .GetMethods()
+        //        .FirstOrDefault(m => m is { Name: nameof(GetAllEntity), IsGenericMethod: true })
+        //        ?.MakeGenericMethod(type);
 
-            return method?.Invoke(this, [sql]);
-        }
+        //    return method?.Invoke(this, [sql]);
+        //}
 
         #endregion
 
@@ -88,16 +86,29 @@ namespace Library.DAL.Repositories
         /// <returns>Объект типа <typeparamref name="T"/>, если найден, иначе null.</returns>
         public T? GetSingleEntityByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            return ExecuteWithParameters(
-                nameof(GetSingleEntityByParam),
-                sqlQuery,
-                parameters,
-                (connection, dynamicParams, finalQuery) =>
-                {
-                    var result = GetMethod<T>(nameof(GetSingleEntityByParam), finalQuery, dynamicParams, connection).Invoke();
-                    return result as T;
-                }
-            );
+            var method = nameof(ExecuteWithParameters);
+            if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
+                return null;
+            try
+            {
+
+                return ExecuteWithParameters(
+                    nameof(GetSingleEntityByParam),
+                    sqlQuery,
+                    parameters,
+                    (connection, dynamicParams, finalQuery) =>
+                    {
+                        var result = GetMethod<T>(nameof(GetSingleEntityByParam), finalQuery, dynamicParams, connection)
+                            .Invoke();
+                        return result as T;
+                    }
+                );
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"Unexpected Error in {method}: {e.Message}");
+                return null;
+            }
         }
 
         /// <summary>
@@ -109,18 +120,29 @@ namespace Library.DAL.Repositories
         /// <returns>Коллекция объектов типа <typeparamref name="T"/>, если найдены, иначе null.</returns>
         public IEnumerable<T>? GetEntitiesByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            return ExecuteWithParameters(
-                nameof(GetEntitiesByParam),
-                sqlQuery,
-                parameters,
-                (connection, dynamicParams, finalQuery) =>
-                {
-                    var result = GetMethod<T>(nameof(GetEntitiesByParam), finalQuery, dynamicParams, connection).Invoke();
-                    return result as IEnumerable<T>; // Приведение результата
-                }
-            );
+            var method = nameof(ExecuteWithParameters);
+            if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
+                return null;
+            try
+            {
+                return ExecuteWithParameters(
+                    nameof(GetEntitiesByParam),
+                    sqlQuery,
+                    parameters,
+                    (connection, dynamicParams, finalQuery) =>
+                    {
+                        var result = GetMethod<T>(nameof(GetEntitiesByParam), finalQuery, dynamicParams, connection)
+                            .Invoke();
+                        return result as IEnumerable<T>; // Приведение результата
+                    }
+                );
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"Unexpected Error in {method}: {e.Message}");
+                return null;
+            }
         }
-
         #endregion
 
         #region MethodsByGetByParam
@@ -134,18 +156,15 @@ namespace Library.DAL.Repositories
         /// <param name="parameters">Словарь параметров, которые передаются в запрос.</param>
         /// <param name="executeQuery">Делегат, который выполняет запрос и возвращает результат.</param>
         /// <returns>Результат выполнения запроса типа <typeparamref name="T"/>, или null, если произошла ошибка.</returns>
-        private T? ExecuteWithParameters<T>(string methodName, string sqlQuery, Dictionary<string, object> parameters, Func<NpgsqlConnection, DynamicParameters, string, T?> executeQuery) where T : class
+        private T? ExecuteWithParameters<T>(string methodName, string sqlQuery, Dictionary<string, object>? parameters, Func<NpgsqlConnection, DynamicParameters, string, T?> executeQuery) where T : class
         {
             try
             {
-                if (parameters == null || parameters.Count == 0)
-                    throw new ArgumentException("Parameters cannot be null or empty", nameof(parameters));
-
                 return ExecuteQuery(connection =>
                 {
                     try
                     {
-                        var dynamicParams = DynamicParameters<T>(sqlQuery, parameters, out var finalQuery);
+                        var dynamicParams = DynamicParameters<T>(sqlQuery, parameters!, out var finalQuery);
                         return executeQuery(connection, dynamicParams, finalQuery);
                     }
                     catch (NpgsqlException e)
@@ -155,15 +174,10 @@ namespace Library.DAL.Repositories
                     }
                 });
             }
-            catch (ArgumentException ex)
-            {
-                Logger.Log($"Argument Exception in {methodName}: {ex.Message}");
-                throw;
-            }
             catch (Exception e)
             {
                 Logger.Log($"Unexpected Error in {methodName}: {e.Message}");
-                throw;
+                return null;
             }
         }
 
@@ -176,8 +190,9 @@ namespace Library.DAL.Repositories
         /// <param name="dynamicParams">Параметры, которые передаются в запрос.</param>
         /// <param name="connection">Соединение с базой данных.</param>
         /// <returns>Делегат, который выполняет запрос и возвращает результат.</returns>
-        private static Func<object> GetMethod<T>(string methodName, string finalQuery, DynamicParameters dynamicParams, NpgsqlConnection connection)
+        private static Func<object?> GetMethod<T>(string methodName, string finalQuery, DynamicParameters dynamicParams, NpgsqlConnection connection)
         {
+            if (finalQuery == null) throw new ArgumentNullException(nameof(finalQuery));
             return methodName switch
             {
                 "GetSingleEntityByParam" =>
@@ -208,7 +223,6 @@ namespace Library.DAL.Repositories
                 sqlQuery += $" AND {param.Key} = @{param.Key}";
                 dynamicParams.Add(param.Key, param.Value);
             }
-
             // Финальный SQL-запрос
             finalQuery = sqlQuery;
             return dynamicParams;
@@ -221,6 +235,10 @@ namespace Library.DAL.Repositories
         public IEnumerable<string>? GetColumnNames(string tableName, string sqlQuery)
         {
             string schema = DatabaseConfig.DatabaseSchema;
+            var method = nameof(GetColumnNames);
+
+            if (IsNullFields(tableName, method) || IsNullFields(sqlQuery, method) || IsNullFields(schema, method))
+                return null;
 
             try
             {
@@ -239,12 +257,6 @@ namespace Library.DAL.Repositories
                 return Array.Empty<string>(); // Возвращаем пустой массив.
             }
         }
-
-        //private static string GetTableName(string sqlQuery)
-        //{
-        //    var match = Regex.Match(sqlQuery, @"(?<=\bFROM\s)\w+", RegexOptions.IgnoreCase);
-        //    return match.Value;
-        //}
         #endregion
     }
 }

@@ -19,7 +19,7 @@ namespace Library.BL.Service
     public interface IBookService : 
         IGetService<Book>, 
         IAddEntity<BookAddDto>, 
-        IUpdateService<BookUpdateInfoDto> { }
+        IUpdateService<BookUpdateInfoDto> =asdasd{ }
 
     public class ServiceManager
     {

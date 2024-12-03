@@ -34,19 +34,22 @@ var serviceProvider = services.BuildServiceProvider();
 // Получение ServiceManager
 var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 
+//var param = new Dictionary<string, object>();
 
+//serviceManager.UserService.DeleteEntity(param);
 
 var users = serviceManager.UserService.GetAllEntities();
-//var books = serviceManager.BookService.GetAllEntities();
+////var books = serviceManager.BookService.GetAllEntities();
 Print(users);
 
-var param = new Dictionary<string, object>()
-{
-    {"name","Иван"}
-};
-//var books = serviceManager.UserService.GetEntitiesByParam(param);
+//{
+//    {"name","Иван"}
+//};
+//.UserService.GetSingleEntityByParam(param);
+
 //Console.WriteLine(books);
 //Print(books);
+
 
 //var book = serviceManager.BookService.GetSingleEntityByParam(param);
 //Console.WriteLine(user);
