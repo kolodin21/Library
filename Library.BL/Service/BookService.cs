@@ -10,12 +10,12 @@ namespace Library.BL.Service
     {
         #region Constructor
 
-        private readonly ISqlQueryBookService _sqlQueryProvider;
+        private readonly ISqlBookService _sqlProvider;
 
-        public BookService(IRepositoryManager repositoryManager, ISqlQueryBookService sqlQueryProvider) 
+        public BookService(IRepositoryManager repositoryManager, ISqlBookService sqlProvider) 
             :base(repositoryManager)
         {
-            _sqlQueryProvider = sqlQueryProvider;
+            _sqlProvider = sqlProvider;
         }
             
         #endregion
@@ -23,27 +23,27 @@ namespace Library.BL.Service
         #region IGetService
 
         public IEnumerable<Book>? GetAllEntities() =>
-            RepositoryManager.GetDataRepository.GetAllEntity<Book>(_sqlQueryProvider.GetAll);
-
-        public Book? GetSingleEntityByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetSingleEntityByParam<Book>(_sqlQueryProvider.GetByParam, param);
+            RepositoryManager.GetDataRepository.GetAllEntity<Book>(_sqlProvider.GetAll);
 
         public IEnumerable<Book>? GetEntitiesByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetEntitiesByParam<Book>(_sqlQueryProvider.GetByParam, param);
+            RepositoryManager.GetDataRepository.GetEntitiesByParam<Book>(_sqlProvider.GetByParam, param);
+
+        public Book? GetSingleEntityByParam(Dictionary<string, object> param) =>
+            RepositoryManager.GetDataRepository.GetSingleEntityByParam<Book>(_sqlProvider.GetByParam, param);
 
         #endregion
 
         #region IAddService
 
         public bool AddEntity(BookAddDto bookAddDto) =>
-            RepositoryManager.ModificationRepository.AddEntity<BookAddDto>(_sqlQueryProvider.Add, bookAddDto, true);
+            RepositoryManager.ModificationRepository.AddEntity<BookAddDto>(_sqlProvider.Add, bookAddDto, true);
 
         #endregion
 
         #region IDeleteService
 
         public bool DeleteEntity(int id) =>
-            RepositoryManager.ModificationRepository.DeleteEntityByIdProcedure(_sqlQueryProvider.Delete, id);
+            RepositoryManager.ModificationRepository.DeleteEntityByIdProcedure(_sqlProvider.Delete, id);
         
         #endregion
 
@@ -53,12 +53,12 @@ namespace Library.BL.Service
         {
             // Получаем имена колонок таблицы
             var columnNames =
-                RepositoryManager.GetDataRepository.GetColumnNames(_sqlQueryProvider.NameBookTable,
-                    _sqlQueryProvider.GetColumnAndTypeTable);
+                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.NameBookTable,
+                    _sqlProvider.GetColumnAndTypeTable);
 
             var updateParams = GetDynamicUpdateParams(updateBookInfo, columnNames!); 
             
-            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlQueryProvider.NameBookTable, updateParams);
+            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.NameBookTable, updateParams);
         }
 
         #endregion

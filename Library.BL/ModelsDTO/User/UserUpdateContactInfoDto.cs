@@ -1,4 +1,4 @@
-﻿namespace Library.BL.ModelsDTO.UserDto.UserDto
+﻿namespace Library.BL.ModelsDTO.User
 {
     public class UserUpdateContactInfoDto
     {

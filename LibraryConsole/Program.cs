@@ -2,12 +2,15 @@
 using Library.BL;
 using Library.BL.ModelsDTO;
 using Library.BL.ModelsDTO.BookDto;
-using Library.BL.ModelsDTO.User;
+using Library.BL.ModelsDTO.TakeReturn;
 using Library.BL.Service;
 using Library.Common;
 using Library.DAL.Interface;
 using Library.DAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+
+
+#region DI
 
 // Создание контейнера DI
 var services = new ServiceCollection();
@@ -17,12 +20,15 @@ services.AddScoped<IGetRepository, GetRepository>();
 services.AddScoped<IModificationRepository, ModificationRepository>();
 services.AddScoped<IRepositoryManager, RepositoryManager>();
 
-services.AddSingleton<ISqlQueryUserService, SqlQueryUserProvider>();
-services.AddSingleton<ISqlQueryBookService, SqlQueryBookProvider>();
+services.AddSingleton<ISqlUserService, SqlUserProvider>();
+services.AddSingleton<ISqlBookService, SqlBookProvider>();
+services.AddSingleton<ISqlTakeReturnBookProvider, SqlTakeReturnBookProvider>();
 
 // Регистрация сервисов
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<IBookService, BookService>();
+services.AddScoped<ITakeReturnBookService, TakeReturnBookService>();
+
 services.AddScoped<ServiceManager>();
 
 // Регистрация логгера
@@ -33,14 +39,37 @@ var serviceProvider = services.BuildServiceProvider();
 
 // Получение ServiceManager
 var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
+#endregion
 
-var newUser = new UserUpdatePersonalInfoDto
+
+
+var takeReturn =  serviceManager.TakeReturnBookService.GetAllEntities();
+
+List<TakeReturnBookDto> books = [];
+
+foreach ( var book in takeReturn)
 {
-    Id = 5,
-    Patronymic = "Денисович"
-};
+    var takeBook = new TakeReturnBookDto
+    {
+        NameAuthor = book.NameAuthor,
+        TitleBook = book.TitleBook,
+        DateIssuance = book.DateIssuance,
+        DateReturn = book.DateReturn
 
-serviceManager.UserService.UpdateEntity(newUser);
+    };
+    books.Add(takeBook);
+}
+
+Print(books);
+
+//var param = new Dictionary<string, object>()
+//{
+//    { "login", "kolodin21" },
+//    { "password", "978509qq" }
+//};
+
+//var user = serviceManager.UserService.GetSingleEntityByParam(param);
+//Console.WriteLine(user);
 
 //serviceManager.UserService.DeleteEntity(param);
 

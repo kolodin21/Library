@@ -8,8 +8,6 @@ namespace Library.DAL.Repositories
 {
     public class GetRepository(IMessageLogger logger) : BaseRepository(logger),IGetRepository
     {
-        
-        
         #region GetAll
 
         /// <summary>
