@@ -42,10 +42,8 @@ services.AddScoped<ServiceManager>();
 
 // Регистрация логгера
 services.AddScoped<IMessageLogger, ConsoleLogger>();
-
 // Построение провайдера
 var serviceProvider = services.BuildServiceProvider();
-
 // Получение ServiceManager
 var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 #endregion
