@@ -1,6 +1,6 @@
 ﻿namespace Library.BL.Interface;
 
-public interface IUpdateService<in T> where T : class
+public interface IUpdateService<T> 
 {
     bool UpdateEntity(T entity);
 }

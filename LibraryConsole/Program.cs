@@ -2,10 +2,12 @@
 using Library.BL;
 using Library.BL.ModelsDTO;
 using Library.BL.ModelsDTO.BookDto;
+using Library.BL.ModelsDTO.Others;
 using Library.BL.ModelsDTO.TakeReturn;
 using Library.BL.Service;
 using Library.Common;
 using Library.DAL.Interface;
+using Library.DAL.Models;
 using Library.DAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,16 +22,23 @@ services.AddScoped<IGetRepository, GetRepository>();
 services.AddScoped<IModificationRepository, ModificationRepository>();
 services.AddScoped<IRepositoryManager, RepositoryManager>();
 
-services.AddSingleton<ISqlUserService, SqlUserProvider>();
-services.AddSingleton<ISqlBookService, SqlBookProvider>();
+services.AddSingleton<ISqlUserProvider, SqlUserProvider>();
+services.AddSingleton<ISqlBookProvider, SqlBookProvider>();
 services.AddSingleton<ISqlTakeReturnBookProvider, SqlTakeReturnBookProvider>();
+services.AddSingleton<ISqlProvider<Author>, SqlAuthorProvider>();
+services.AddSingleton<ISqlProvider<Publisher>, SqlPublisherProvider>();
+services.AddSingleton<ISqlProvider<Condition>, SqlConditionProvider>();
 
 // Регистрация сервисов
-services.AddScoped<IUserService, UserService>();
-services.AddScoped<IBookService, BookService>();
-services.AddScoped<ITakeReturnBookService, TakeReturnBookService>();
-
+services.AddScoped<UserService>();
+services.AddScoped<BookService>();
+services.AddScoped<TakeReturnBookService>();
+services.AddScoped<AuthorService>();
+services.AddScoped<ConditionService>();
+services.AddScoped<PublisherService>();
 services.AddScoped<ServiceManager>();
+
+//Подумать как объеденить 3 одинаковых сервиса и наверное реализовать их в интерфейсе 
 
 // Регистрация логгера
 services.AddScoped<IMessageLogger, ConsoleLogger>();
@@ -41,26 +50,42 @@ var serviceProvider = services.BuildServiceProvider();
 var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 #endregion
 
+//var take = new ReturnBookDto
+//{
+//    UserId = 1,
+//    BookId = 4,
+//    DateReturn = DateTime.Now
+//};
 
+//var dateRussianFormat = DateTime.UtcNow.Date.ToString("yyyy-MM-dd");
+//Console.WriteLine(dateRussianFormat);
 
-var takeReturn =  serviceManager.TakeReturnBookService.GetAllEntities();
+//serviceManager.TakeReturnBookService.AddEntity(take);
 
-List<TakeReturnBookDto> books = [];
-
-foreach ( var book in takeReturn)
+var newAuthor = new Author()
 {
-    var takeBook = new TakeReturnBookDto
-    {
-        NameAuthor = book.NameAuthor,
-        TitleBook = book.TitleBook,
-        DateIssuance = book.DateIssuance,
-        DateReturn = book.DateReturn
+    Id = 12,
+    Name = "Колодин"
+};
 
-    };
-    books.Add(takeBook);
-}
+serviceManager.AuthorService.DeleteEntity(newAuthor);
 
-Print(books);
+var author = serviceManager.AuthorService.GetAllEntities();
+
+Print(author);
+
+//foreach (var book in takeReturn)
+//{
+//    var takeBook = new TakeReturnBookDto
+//    {
+//        NameAuthor = book.NameAuthor,
+//        TitleBook = book.TitleBook,
+//        DateIssuance = book.DateIssuance,
+//        DateReturn = book.DateReturn
+
+//    };
+//    books.Add(takeBook);
+//}
 
 //var param = new Dictionary<string, object>()
 //{

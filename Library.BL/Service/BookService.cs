@@ -1,6 +1,4 @@
-﻿using Dapper;
-using Library.BL.Interface;
-using Library.BL.ModelsDTO.BookDto;
+﻿using Library.BL.ModelsDTO.BookDto;
 using Library.DAL.Models;
 using Library.DAL.Repositories;
 
@@ -10,9 +8,9 @@ namespace Library.BL.Service
     {
         #region Constructor
 
-        private readonly ISqlBookService _sqlProvider;
+        private readonly ISqlBookProvider _sqlProvider;
 
-        public BookService(IRepositoryManager repositoryManager, ISqlBookService sqlProvider) 
+        public BookService(IRepositoryManager repositoryManager, ISqlBookProvider sqlProvider) 
             :base(repositoryManager)
         {
             _sqlProvider = sqlProvider;
@@ -20,7 +18,7 @@ namespace Library.BL.Service
             
         #endregion
 
-        #region IGetService
+        #region IGetAllService
 
         public IEnumerable<Book>? GetAllEntities() =>
             RepositoryManager.GetDataRepository.GetAllEntity<Book>(_sqlProvider.GetAll);
@@ -53,12 +51,12 @@ namespace Library.BL.Service
         {
             // Получаем имена колонок таблицы
             var columnNames =
-                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.NameBookTable,
+                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.MainNameTable,
                     _sqlProvider.GetColumnAndTypeTable);
 
             var updateParams = GetDynamicUpdateParams(updateBookInfo, columnNames!); 
             
-            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.NameBookTable, updateParams);
+            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.MainNameTable, updateParams);
         }
 
         #endregion

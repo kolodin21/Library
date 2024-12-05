@@ -9,8 +9,8 @@ namespace Library.BL.Service
 
         #region Constructor
 
-        private readonly ISqlUserService _sqlProvider;
-        public UserService(IRepositoryManager repositoryManager, ISqlUserService sqlProvider): 
+        private readonly ISqlUserProvider _sqlProvider;
+        public UserService(IRepositoryManager repositoryManager, ISqlUserProvider sqlProvider): 
             base(repositoryManager)
         {
             _sqlProvider = sqlProvider;
@@ -18,7 +18,7 @@ namespace Library.BL.Service
         
         #endregion
 
-        #region IGetService
+        #region GetService
 
         public IEnumerable<User>? GetAllEntities() =>
             RepositoryManager.GetDataRepository.GetAllEntity<User>(_sqlProvider.GetAll);
@@ -30,14 +30,14 @@ namespace Library.BL.Service
 
         #endregion
 
-        #region IAddService
+        #region AddService
 
         public bool AddEntity(UserAddDto userAddDto) =>
             RepositoryManager.ModificationRepository.AddEntity<UserAddDto>(_sqlProvider.Add, userAddDto, true);
 
         #endregion
 
-        #region IDeleteService
+        #region DeleteService
 
         //public bool DeleteEntity(Dictionary<string, object> param) =>
         //    RepositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlProvider.Delete, param);
@@ -50,7 +50,7 @@ namespace Library.BL.Service
 
         #endregion
 
-        #region IUpdateService
+        #region UpdateService
 
         public bool UpdateEntity(UserUpdatePersonalInfoDto entity) => UpdatePersonalInfo(entity);
         private bool UpdatePersonalInfo(UserUpdatePersonalInfoDto updatePersonalInfo)
@@ -75,7 +75,7 @@ namespace Library.BL.Service
             
             // Получаем имена колонок таблицы
             var columnNames =
-                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.NameUserTable,
+                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.MainNameTable,
                     _sqlProvider.GetColumnAndTypeTable);
 
             if (columnNames is null)
@@ -83,10 +83,9 @@ namespace Library.BL.Service
 
             var updateParams = GetDynamicUpdateParams(updateContactInfo, columnNames);
 
-            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.NameUserTable, updateParams!);
+            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.MainNameTable, updateParams!);
         }
 
         #endregion
     }
 }
- 

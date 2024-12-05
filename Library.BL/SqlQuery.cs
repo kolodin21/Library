@@ -1,38 +1,43 @@
-﻿namespace Library.BL
+﻿using Library.DAL.Models;
+
+namespace Library.BL
 {
-    public interface ISqlBaseService
+    #region Interface
+    public interface ISqlBaseProvider
     {
         public string GetColumnAndTypeTable { get; }
     }
-    public interface ISqlCommonService : ISqlBaseService
+
+    public interface ISqlDelete
+    {
+        public string Delete { get; }
+    }
+
+    public interface ISqlProvider<T> : ISqlBaseProvider
     {
         public string GetAll { get; }
         public string GetByParam { get; }
         public string Add { get; }
-        public string Delete { get; }
+        public string MainNameTable { get; }
     }
-    public interface ISqlUserService : ISqlCommonService 
+
+    //-------------------------------------//
+    public interface ISqlUserProvider : ISqlProvider<User>,ISqlDelete
     {
-        public string NameUserTable{ get; }
         public string NamePersonTable { get; }
     }
 
-    public interface ISqlBookService : ISqlCommonService
+    public interface ISqlTakeReturnBookProvider : ISqlProvider<TakeReturnBooks>
     {
-        public string NameBookTable { get; }
-        public string NameLibraryBookTable { get; }
-        //public string GetAllAuthor { get; }
-        //public string GetAllPublisher { get; }
-        //public string GetAllConditions { get; }
+        public string ReturnBook { get; }
     }
 
-    public interface ISqlTakeReturnBookProvider : ISqlCommonService
-    {
-        public string NameTakeReturnTable { get; }
-        public string Return { get; }
-    }
+    public interface ISqlBookProvider : ISqlProvider<Book>, ISqlDelete{}
 
-    public abstract class SqlBaseProvider : ISqlBaseService
+    #endregion
+
+    #region Class
+    public abstract class SqlBaseProvider : ISqlBaseProvider
     {
         public string GetColumnAndTypeTable =>
             @"
@@ -55,38 +60,57 @@
             AND NOT a.attisdropped;";
     }
 
-    public class SqlUserProvider : SqlBaseProvider,ISqlUserService
+    public class SqlUserProvider : SqlBaseProvider, ISqlUserProvider
     {
         public string GetAll => @"SELECT * FROM view_users";
         public string GetByParam => @"SELECT * FROM view_users WHERE 1=1";
         public string Add => @"addUser";
         public string Delete => @"deleteUser";
-
-        public string NameUserTable => @"table_users";
+        public string MainNameTable => @"table_users";
         public string NamePersonTable => @"table_persons";
     }
-    public class SqlBookProvider : SqlBaseProvider, ISqlBookService
+
+    public class SqlBookProvider : SqlBaseProvider, ISqlBookProvider
     {
         public string GetAll => @"SELECT * FROM view_books_v2";
         public string GetByParam => @"SELECT * FROM view_books_v2 WHERE 1=1";
         public string Add => @"addBook";
         public string Delete => @"deleteBook";
-        public string NameLibraryBookTable => @"table_library_books";
-        public string NameBookTable => @"table_books";
-        //public string GetAllAuthor => @"SELECT * FROM table_author";
-        //public string GetAllPublisher => @"SELECT * FROM table_publishers";
-        //public string GetAllConditions => @"SELECT * FROM table_conditions";
+        public string MainNameTable => @"table_books";
     }
 
     public class SqlTakeReturnBookProvider : SqlBaseProvider, ISqlTakeReturnBookProvider
     {
         public string GetAll => @"SELECT * FROM view_issuance_return_books";
-
         public string GetByParam => @"SELECT * FROM table_issuance_return_books WHERE 1=1";
         public string Add => @"takeBook";
-        public string Return => @"returnBook";
-        public string Delete => throw new NotImplementedException();
-        public string NameTakeReturnTable => @"table_issuance_return_books";
-
+        public string ReturnBook => @"returnBook";
+        public string MainNameTable => @"table_issuance_return_books";
     }
+
+    public class SqlAuthorProvider : SqlBaseProvider,ISqlProvider<Author>
+    {
+        public string GetAll => @"SELECT * FROM table_author";
+        public string GetByParam => @"SELECT * FROM table_author WHERE 1=1";
+        public string Add => @"addAuthor";
+        public string MainNameTable => @"table_author";
+    }
+
+    public class SqlPublisherProvider : SqlBaseProvider, ISqlProvider<Publisher>
+    {
+        public string GetAll => @"SELECT * FROM table_publishers";
+        public string GetByParam => @"SELECT * FROM table_publishers WHERE 1=1";
+        public string Add => @"addPublisher";
+        public string MainNameTable => @"table_publishers";
+    }
+
+    public class SqlConditionProvider : SqlBaseProvider, ISqlProvider<Condition>
+    {
+        public string GetAll => @"SELECT * FROM table_conditions";
+        public string GetByParam => @"SELECT * FROM table_conditions WHERE 1=1";
+        public string Add => @"addCondition";
+        public string MainNameTable =>@"table_conditions";
+    }
+
+    #endregion
 }
