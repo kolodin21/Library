@@ -48,7 +48,7 @@ namespace Library.BL.Service
 
         #endregion
 
-        #region AddService
+        #region AddReturnService
 
         public bool AddEntity(TakeBookDto takeBook) =>
             RepositoryManager.ModificationRepository.AddEntity(_sqlProvider.Add, takeBook, true);

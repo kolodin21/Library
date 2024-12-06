@@ -14,7 +14,9 @@ namespace Library.BL.Service
         }
         #endregion
 
-        #region GesService
+        #region GetService
+
+        
 
         public IEnumerable<Publisher>? GetAllEntities() =>
             RepositoryManager.GetDataRepository.GetAllEntity<Publisher>(_sqlProvider.GetAll);
