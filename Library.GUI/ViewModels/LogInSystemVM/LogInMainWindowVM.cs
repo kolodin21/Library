@@ -34,6 +34,5 @@ namespace Library.GUI.ViewModels.LogInSystemVM
         {
             Application.Current.Shutdown();
         }
-
     }
 }

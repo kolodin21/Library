@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Стиль для кнопки -->
-    <Style TargetType="Button">
+    <Style x:Key="ButtonMenuStyle" TargetType="Button">
         <Setter Property="Background" Value="LightBlue" />
         <Setter Property="Foreground" Value="Black" />
         <Setter Property="FontSize" Value="16" />
@@ -21,16 +21,18 @@
     </Style>
 
     <!-- Стиль для Label-->
-    <Style TargetType="Label">
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-    </Style>
-
-    <Style x:Key="Heading" TargetType="Label">
+    <Style x:Key="LabelMenuStyle" TargetType="Label">
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="Heading" TargetType="Label">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <!-- Стиль для выравнивания по центу-->
@@ -38,5 +40,10 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
+
+    <Style x:Key="TextBoxMenu" TargetType="TextBox">
+        <Setter Property="Margin" Value="20"/>
+    </Style>
+
 
 </ResourceDictionary>

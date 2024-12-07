@@ -9,6 +9,7 @@ namespace Library.GUI
     /// </summary>
     public partial class App : Application
     {
+        
     }
 
 }

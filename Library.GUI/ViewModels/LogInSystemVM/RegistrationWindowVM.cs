@@ -1,6 +1,10 @@
-﻿namespace Library.GUI.ViewModels.LogInSystemVM
+﻿using Library.GUI.ViewModels.CommonClasses;
+
+namespace Library.GUI.ViewModels.LogInSystemVM
 {
-    class RegistrationWindowVM
+    class RegistrationWindowVM : ViewModelBase
     {
+
+
     }
 }

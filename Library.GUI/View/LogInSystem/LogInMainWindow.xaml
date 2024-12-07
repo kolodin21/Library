@@ -18,20 +18,23 @@
 
         <Label Content="Библиотека"  
                HorizontalAlignment="Center" 
-               Height="40"/>
+               Height="40"
+               Style="{StaticResource Heading}"/>
 
         <Label Content="Вход в систему" 
-           HorizontalAlignment="Center" 
-           VerticalAlignment="Center"/>
+           Style="{StaticResource LabelMenuStyle}"/>
 
         <Button Content="Войти" 
-                Command="{Binding LoginCommand}"/>
+                Command="{Binding LoginCommand}"
+                Style="{StaticResource ButtonMenuStyle}"/>
 
         <Button Content="Зарегистрироваться" 
-                Command="{Binding RegistrationCommand}"/>
+                Command="{Binding RegistrationCommand}"
+                Style="{StaticResource ButtonMenuStyle}"/>
 
         <Button Content="Выход"
-                Command="{Binding ExitCommand}"/>
+                Command="{Binding ExitCommand}"
+                Style="{StaticResource ButtonMenuStyle}"/>
     </StackPanel>
 
 </Window>
