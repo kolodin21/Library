@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace Lilbrary.GUI
+namespace Library.GUI
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -60,13 +60,13 @@ var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 
 //serviceManager.TakeReturnBookService.AddEntity(take);
 
-var newAuthor = new Author()
-{
-    Id = 12,
-    Name = "Колодин"
-};
+//var newAuthor = new Author()
+//{
+//    Id = 12,
+//    Name = "Колодин"
+//};
 
-serviceManager.AuthorService.DeleteEntity(newAuthor);
+//serviceManager.AuthorService.DeleteEntity(newAuthor);
 
 var author = serviceManager.AuthorService.GetAllEntities();
 
