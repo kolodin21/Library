@@ -14,7 +14,7 @@
         <vm:AuthorizationWindowVM />
     </Window.DataContext>
 
-    <!--<Grid>
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
@@ -24,9 +24,9 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-        </Grid.RowDefinitions>-->
+        </Grid.RowDefinitions>
 
-        <!--<Label 
+        <Label 
             Grid.Row="0" 
             Grid.Column="0" 
             Grid.ColumnSpan="2" 
@@ -51,41 +51,18 @@
             Content="Пароль"
             Style="{StaticResource LabelMenuStyle}"/>
 
-        <TextBox 
-            Grid.Column="1"
-            Grid.Row="2"
-            Text="{Binding Password}"
-            Style="{StaticResource TextBoxMenu}"/>
 
         <Button Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"
                 Content="Войти" 
-             Command="{Binding EnterCommand}"
-             Style="{StaticResource ButtonMenuStyle}"
-             Width="250"/>-->
-   
+                Command="{Binding EnterCommand}"
+                Style="{StaticResource ButtonMenuStyle}"
+                Width="250"/>
 
-    <StackPanel Orientation="Vertical">
+        <PasswordBox  Grid.Column="1"
+                      Grid.Row="2"
+                      c:PasswordBoxAssistant.Password="{Binding Password,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      c:PasswordBoxAssistant.BindPassword="True" 
+                      Style="{StaticResource PasswordBoxStyle}"/>
 
-        <Label 
-               Content="Авторизация в системе" 
-               Style="{StaticResource Heading}"
-             />
-
-        <c:InputControl 
-            Label="Логин"
-            InputText="{Binding Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-        <c:InputControl 
-            Label="Пароль"
-            InputText="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-        <Button 
-                Content="Войти" 
-                Command="{Binding EnterCommand}"/>
-    </StackPanel>
-    <!--добавить password box и выровнить столбцы и понять почему не отображается InputControl-->  
-
-    
-
-    <!--</Grid>-->
+    </Grid>
 </Window>

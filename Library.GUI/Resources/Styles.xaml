@@ -1,49 +1,62 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Стиль для кнопки -->
-    <Style x:Key="ButtonMenuStyle" TargetType="Button">
-        <Setter Property="Background" Value="LightBlue" />
-        <Setter Property="Foreground" Value="Black" />
+    <!-- Базовый стиль для всех кнопок -->
+    <Style x:Key="BaseButtonStyle" TargetType="Button">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Padding" Value="10" />
         <Setter Property="Margin" Value="10" />
-    </Style>
-
-    <!-- Стиль для кнопки с ключом  -->
-    <Style x:Key="ButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="BurlyWood" />
         <Setter Property="Foreground" Value="Black" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Padding" Value="10" />
-        <Setter Property="Margin" Value="10"/> 
-        <!--<Setter Property="HorizontalAlignment" Value="Center"/>-->
     </Style>
 
-    <!-- Стиль для Label-->
-    <Style x:Key="LabelMenuStyle" TargetType="Label">
-        <Setter Property="FontSize" Value="18"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
+    <!-- Стиль для кнопки меню, наследует базовый стиль -->
+    <Style x:Key="ButtonMenuStyle" TargetType="Button"
+           BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Background" Value="LightBlue" />
+    </Style>
+
+    <!-- Стиль для другой кнопки, наследует базовый стиль -->
+    <Style x:Key="ButtonStyle" TargetType="Button" 
+           BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Background" Value="BurlyWood" />
+    </Style>
+
+    <!-- Базовый стиль для всех Label -->
+    <Style x:Key="BaseLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="Heading" TargetType="Label">
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+    <!-- Стиль для заголовка, наследует базовый стиль -->
+    <Style x:Key="LabelMenuStyle" TargetType="Label"
+           BasedOn="{StaticResource BaseLabelStyle}">
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <!-- Стиль для выравнивания по центу-->
+    <!-- Стиль для другого Label -->
+    <Style x:Key="Heading" TargetType="Label" 
+           BasedOn="{StaticResource BaseLabelStyle}">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="Medium" />
+    </Style>
+
+    <!-- Стиль для выравнивания по центру -->
     <Style x:Key="CenteredAlignmentStyle" TargetType="FrameworkElement">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="TextBoxMenu" TargetType="TextBox">
-        <Setter Property="Margin" Value="20"/>
+    <!-- Общий базовый стиль для TextBox и PasswordBox -->
+    <Style x:Key="BaseInputStyle" TargetType="Control">
+        <Setter Property="Margin" Value="20" />
+        <Setter Property="FontSize" Value="20" />
     </Style>
 
+    <!-- Стиль для TextBox, наследует базовый стиль -->
+    <Style x:Key="TextBoxMenu" TargetType="TextBox" BasedOn="{StaticResource BaseInputStyle}" />
+
+    <!-- Стиль для PasswordBox, наследует базовый стиль -->
+    <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource BaseInputStyle}" />
 
 </ResourceDictionary>

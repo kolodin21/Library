@@ -71,6 +71,9 @@ namespace Library.GUI.ViewModels
             ServiceManager = serviceProvider.GetRequiredService<ServiceManager>();
             Logger = serviceProvider.GetRequiredService<IMessageLogger>();
             #endregion
+
+            //TODO
+            // Перенести DI в App.cs
         }
 
         protected Dictionary<string, object?> ConvertToDictionary(params Expression<Func<object?>>[] expressions)

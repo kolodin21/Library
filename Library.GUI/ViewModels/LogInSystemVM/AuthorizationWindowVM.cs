@@ -1,6 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using Library.GUI.Configuration;
+using Library.GUI.View.Admin;
+using Library.GUI.View.User;
 using Library.GUI.ViewModels.CommonClasses;
+using static Library.GUI.ViewModels.CommonClasses.WindowManager;
 
 namespace Library.GUI.ViewModels.LogInSystemVM
 {
@@ -29,12 +33,26 @@ namespace Library.GUI.ViewModels.LogInSystemVM
         }
 
         private void ExecEnter(object? parameter = null)
-        { 
-          var param = ConvertToDictionary(() => Login,() =>Password );
+        {
+            if (AdminConfig.Login == Login && AdminConfig.Password == Password)
+            {
+                var adminWindow = new AdminWindow();
+                OpenNewWindow(adminWindow);
+            }
+            else
+            {
+                var param = ConvertToDictionary(() => Login, () => Password);
 
-          var user = ServiceManager.UserService.GetSingleEntityByParam(param!);
+                var user = ServiceManager.UserService.GetSingleEntityByParam(param!);
+                //TODO
+                //Создать сервисы для инкапсуляции запросов в GUI
 
-          Logger.Log(user != null ? "Пользователь найден" : "Такого пользователя нет");
+                if (user is null)
+                    return;
+
+                var userWindow = new UserWindow();
+                OpenNewWindow(userWindow);
+            }
         }
 
         private bool CanExecEnter(object? parameter = null)
