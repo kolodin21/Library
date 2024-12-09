@@ -3,11 +3,11 @@
 namespace Library.GUI.View.LogInSystem
 {
     /// <summary>
-    /// Логика взаимодействия для LogInMainWindow.xaml
+    /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class LogInMainWindow : Window
+    public partial class MainWindow : Window
     {
-        public LogInMainWindow()
+        public MainWindow()
         {
             InitializeComponent();
         }

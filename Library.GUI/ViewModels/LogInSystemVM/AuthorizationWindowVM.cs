@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Library.GUI.Configuration;
 using Library.GUI.View.Admin;
 using Library.GUI.View.User;
@@ -29,8 +28,9 @@ namespace Library.GUI.ViewModels.LogInSystemVM
 
         public AuthorizationWindowVM()
         {
-            EnterCommand = new RelayCommand(ExecEnter,CanExecEnter);
+            EnterCommand = new RelayCommand(ExecEnter, CanExecEnter);
         }
+       
 
         private void ExecEnter(object? parameter = null)
         {
@@ -44,8 +44,9 @@ namespace Library.GUI.ViewModels.LogInSystemVM
                 var param = ConvertToDictionary(() => Login, () => Password);
 
                 var user = ServiceManager.UserService.GetSingleEntityByParam(param!);
+
                 //TODO
-                //Создать сервисы для инкапсуляции запросов в GUI
+                // Создать сервисы для инкапсуляции запросов в GUI
 
                 if (user is null)
                     return;
