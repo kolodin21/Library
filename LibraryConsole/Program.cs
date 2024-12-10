@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Library.BL;
+using Library.BL.Models;
 using Library.BL.ModelsDTO;
 using Library.BL.ModelsDTO.BookDto;
 using Library.BL.ModelsDTO.Others;
@@ -7,7 +8,6 @@ using Library.BL.ModelsDTO.TakeReturn;
 using Library.BL.Service;
 using Library.Common;
 using Library.DAL.Interface;
-using Library.DAL.Models;
 using Library.DAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 

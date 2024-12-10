@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Npgsql;
 using Library.Common;
+using Npgsql;
 using Library.DAL.Configuration;
 using Library.DAL.Interface;
 

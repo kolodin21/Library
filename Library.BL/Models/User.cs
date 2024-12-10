@@ -1,4 +1,4 @@
-﻿namespace Library.DAL.Models
+﻿namespace Library.BL.Models
 {
     public record User
     {

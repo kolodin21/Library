@@ -1,6 +1,6 @@
 ﻿using Library.BL.ModelsDTO.Others;
-using Library.DAL.Models;
 using Library.DAL.Repositories;
+using Library.BL.Models;
 
 namespace Library.BL.Service
 {

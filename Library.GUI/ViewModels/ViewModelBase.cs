@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using Library.BL.Service;
 using Library.Common;
 
@@ -66,11 +65,4 @@ namespace Library.GUI.ViewModels
         }
     }
 
-    public class WpfLogger : IMessageLogger
-    {
-        public void Log(string message)
-        {
-            MessageBox.Show(message);
-        }
-    }
 }

@@ -3,7 +3,7 @@ using Library.BL.ModelsDTO.BookDto;
 using Library.BL.ModelsDTO.Others;
 using Library.BL.ModelsDTO.TakeReturn;
 using Library.BL.ModelsDTO.User;
-using Library.DAL.Models;
+using Library.BL.Models;
 
 namespace Library.BL.Service
 {

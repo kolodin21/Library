@@ -1,6 +1,6 @@
 ﻿using Library.BL.Interface;
 using Library.BL.ModelsDTO.TakeReturn;
-using Library.DAL.Models;
+using Library.BL.Models;
 using Library.DAL.Repositories;
 
 namespace Library.BL.Service

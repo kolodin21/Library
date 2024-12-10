@@ -1,6 +1,4 @@
-﻿using Library.DAL.Models;
-
-namespace Library.BL.ModelsDTO.BookDto
+﻿namespace Library.BL.ModelsDTO.BookDto
 {
     public class BookUpdateInfoDto
     {

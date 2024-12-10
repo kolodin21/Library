@@ -1,5 +1,5 @@
-﻿using Library.BL.ModelsDTO.BookDto;
-using Library.DAL.Models;
+﻿using Library.BL.Models;
+using Library.BL.ModelsDTO.BookDto;
 using Library.DAL.Repositories;
 
 namespace Library.BL.Service

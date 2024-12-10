@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Library.Common\Library.Common.csproj" />
+    <Reference Include="Library.Common">
+      <HintPath>..\Library.Common\bin\Debug\net8.0\Library.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

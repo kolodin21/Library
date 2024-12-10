@@ -1,4 +1,4 @@
-﻿using Library.DAL.Models;
+﻿using Library.BL.Models;
 
 namespace Library.BL
 {
