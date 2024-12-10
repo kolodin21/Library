@@ -34,7 +34,6 @@ namespace Library.BL.Service
         IUpdateService<BookUpdateInfoDto>,
         IDeleteServiceByIdProcedure { }
 
-
     public interface ITakeReturnBookService : 
         IGetService<TakeReturnBooks>,
         IAddService<TakeBookDto>,

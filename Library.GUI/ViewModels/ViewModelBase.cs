@@ -41,23 +41,26 @@ namespace Library.GUI.ViewModels
 
             foreach (var expression in expressions)
             {
-                if (expression.Body is MemberExpression member)
+                switch (expression.Body)
                 {
-                    var propertyName = member.Member.Name; // Имя свойства
-                    var propertyValue = expression.Compile().Invoke(); // Значение свойства
+                    case MemberExpression member:
+                    {
+                        var propertyName = member.Member.Name; // Имя свойства
+                        var propertyValue = expression.Compile().Invoke(); // Значение свойства
 
-                    result[propertyName] = propertyValue;
-                }
-                else if (expression.Body is UnaryExpression unary && unary.Operand is MemberExpression unaryMember)
-                {
-                    var propertyName = unaryMember.Member.Name; // Имя свойства
-                    var propertyValue = expression.Compile().Invoke(); // Значение свойства
+                        result[propertyName] = propertyValue;
+                        break;
+                    }
+                    case UnaryExpression unary when unary.Operand is MemberExpression unaryMember:
+                    {
+                        var propertyName = unaryMember.Member.Name; // Имя свойства
+                        var propertyValue = expression.Compile().Invoke(); // Значение свойства
 
-                    result[propertyName] = propertyValue;
-                }
-                else
-                {
-                    throw new ArgumentException("Expression must be a property access expression.");
+                        result[propertyName] = propertyValue;
+                        break;
+                    }
+                    default:
+                        throw new ArgumentException("Expression must be a property access expression.");
                 }
             }
 

@@ -3,23 +3,26 @@
 
     <!-- Базовый стиль для всех кнопок -->
     <Style x:Key="BaseButtonStyle" TargetType="Button">
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="10" />
         <Setter Property="Margin" Value="10" />
         <Setter Property="Foreground" Value="Black" />
     </Style>
 
-    <!-- Стиль для кнопки меню, наследует базовый стиль -->
+    <!-- Стиль для кнопки меню-->
     <Style x:Key="ButtonMenuStyle" TargetType="Button"
            BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="Background" Value="LightBlue" />
     </Style>
 
-    <!-- Стиль для другой кнопки, наследует базовый стиль -->
+    <!-- Стиль для другой кнопки -->
     <Style x:Key="ButtonStyle" TargetType="Button" 
            BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="Background" Value="BurlyWood" />
     </Style>
+
+    
+
 
     <!-- Базовый стиль для всех Label -->
     <Style x:Key="BaseLabelStyle" TargetType="Label">
@@ -28,7 +31,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <!-- Стиль для заголовка, наследует базовый стиль -->
+    <!-- Стиль для заголовка -->
     <Style x:Key="LabelMenuStyle" TargetType="Label"
            BasedOn="{StaticResource BaseLabelStyle}">
         <Setter Property="FontWeight" Value="Bold" />
@@ -53,10 +56,10 @@
         <Setter Property="FontSize" Value="20" />
     </Style>
 
-    <!-- Стиль для TextBox, наследует базовый стиль -->
+    <!-- Стиль для TextBox -->
     <Style x:Key="TextBoxMenu" TargetType="TextBox" BasedOn="{StaticResource BaseInputStyle}" />
 
-    <!-- Стиль для PasswordBox, наследует базовый стиль -->
+    <!-- Стиль для PasswordBox -->
     <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource BaseInputStyle}" />
 
 </ResourceDictionary>

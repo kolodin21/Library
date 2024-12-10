@@ -64,17 +64,6 @@ namespace Library.DAL.Repositories
 
         #region GetByParam
 
-        //Todo
-        //public object? GetEntityByParam(string sql, Type type, Dictionary<string, object> parameters)
-        //{
-        //    var method = GetType()
-        //        .GetMethods()
-        //        .FirstOrDefault(m =>m is {Name: nameof(GetSingleEntityByParam), IsGenericMethod: true})
-        //        ?.MakeGenericMethod(type);
-
-        //    return method?.Invoke(this, [sql, parameters]);
-        //}
-
         /// <summary>
         /// Выполняет SQL-запрос для получения одного объекта типа <typeparamref name="T"/> на основе переданных параметров.
         /// </summary>
@@ -123,7 +112,8 @@ namespace Library.DAL.Repositories
                 return null;
             try
             {
-                return ExecuteWithParameters(
+                return ExecuteWithParameters
+                (
                     nameof(GetEntitiesByParam),
                     sqlQuery,
                     parameters,

@@ -16,7 +16,6 @@ namespace Library.GUI
         {
             IServiceCollection services = new ServiceCollection();
 
-            // Регистрация логгера
             ConfigureServices(services);
 
             services.AddInfrastructure();
