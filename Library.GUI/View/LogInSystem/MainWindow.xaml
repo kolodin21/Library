@@ -25,7 +25,7 @@
            Style="{StaticResource LabelMenuStyle}"/>
 
         <Button Content="Войти" 
-                Command="{Binding LoginCommand}"
+                Command="{Binding OpenCommand}"
                 Style="{StaticResource ButtonMenuStyle}"/>
 
         <Button Content="Зарегистрироваться" 

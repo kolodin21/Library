@@ -34,9 +34,7 @@ namespace Library.GUI
         {
             services.AddSingleton<IMessageLogger, WpfLogger>();
             // Регистрация ViewModel
-            //services.AddScoped<MainWindowVM>();
-            //services.AddScoped<RegistrationWindow>();
-            //services.AddScoped<AuthorizationWindow>();
+           
         }
 
         public class WpfLogger : IMessageLogger

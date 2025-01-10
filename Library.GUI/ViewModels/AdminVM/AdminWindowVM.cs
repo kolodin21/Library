@@ -10,8 +10,8 @@ namespace Library.GUI.ViewModels.AdminVM
         public AdminWindowVM()
         {
             var users = ServiceManager.UserService.GetAllEntities();
-            Users = new ObservableCollection<User>(users);
 
+            Users = new ObservableCollection<User>(users);
         }
 
     }

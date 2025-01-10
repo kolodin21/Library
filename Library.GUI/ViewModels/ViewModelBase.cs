@@ -3,32 +3,14 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using Library.BL.Service;
 using Library.Common;
+using ReactiveUI;
 
 namespace Library.GUI.ViewModels
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : ReactiveObject
     {
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-
-            OnPropertyChanged(propertyName);
-
-            return true;
-        }
-        #endregion
-
         protected static IMessageLogger Logger { get; private set; } = null!;
         protected static ServiceManager ServiceManager { get; private set; } = null!;
-
         public static void Initialize(IMessageLogger logger, ServiceManager serviceManager)
         {
             Logger = logger;
