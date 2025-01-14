@@ -12,7 +12,9 @@
         <Window.DataContext>
             <vm:MainWindowVM/>
         </Window.DataContext>
-
+  
+    
+    
 
     <StackPanel Width="350" Height="300">
 
