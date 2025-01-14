@@ -5,6 +5,7 @@ namespace Library.GUI.ViewModels.AdminVM
 {
     class AdminWindowVM : ViewModelBase
     {
+        //Заглушка чтобы проверить работоспособность 
         public ObservableCollection<User> Users { get; set; }
 
         public AdminWindowVM()
