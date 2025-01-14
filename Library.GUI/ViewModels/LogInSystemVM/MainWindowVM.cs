@@ -11,41 +11,31 @@ namespace Library.GUI.ViewModels.LogInSystemVM
     // ReSharper disable once InconsistentNaming
     public class MainWindowVM : ViewModelBase
     {
-        public ICommand OpenCommand { get; set; }
-        public ReactiveCommand<Unit,Unit> LoginCommand { get; }
-        public ReactiveCommand<Unit, Unit> RegistrationCommand { get;  }
-        public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+        //public ReactiveCommand<Unit,Unit> LoginCommand { get; }
+        //public ReactiveCommand<Unit, Unit> RegistrationCommand { get;  }
+        //public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+
+        public ICommand LoginCommand { get;  }
+        public ICommand RegistrationCommand { get; }
+        public ICommand ExitCommand { get; }
         public MainWindowVM()
         {
-            //OpenCommand = new RelayCommand(ExecLogin);
-
-            LoginCommand = ReactiveCommand.Create(
-                ExecLogin,
-                outputScheduler: RxApp.MainThreadScheduler
-            );
-            RegistrationCommand = ReactiveCommand.Create(ExecRegistration);
-            ExitCommand = ReactiveCommand.Create(ExecExit);
+            LoginCommand = new RelayCommand(ExecLogin);
+            RegistrationCommand = new RelayCommand(ExecRegistration);
+            ExitCommand = new RelayCommand(ExecExit);
         }
-        //Todo разобраться как работает реактивные команды и как сделать так,чтобы они работали в одном потоке
 
-        private static void ExecLogin()
+        private static void ExecLogin(object? param = null)
         {
-            MessageBox.Show($"ExecLogin вызван из потока: {Thread.CurrentThread.ManagedThreadId}");
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                MessageBox.Show($"Dispatcher поток: {Application.Current.Dispatcher.Thread.ManagedThreadId}");
-                OpenNewWindow(new AuthorizationWindow());
-            });
+            OpenNewWindow(new AuthorizationWindow());
         }
 
-        private static void ExecRegistration()
+        private static void ExecRegistration(object? param = null)
         {
-            var registrationWindow = new RegistrationWindow();
-            OpenNewWindow(registrationWindow);
+            OpenNewWindow(new RegistrationWindow());
         }
 
-        private static void ExecExit()
+        private static void ExecExit(object? param = null)
         {
             Application.Current.Shutdown();
         }

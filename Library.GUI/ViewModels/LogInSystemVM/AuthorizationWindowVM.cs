@@ -14,20 +14,16 @@ namespace Library.GUI.ViewModels.LogInSystemVM
     {
         [Reactive] public string? Login { get; set; }
         [Reactive] public string? Password { get; set; }
-        public ReactiveCommand<Unit, Unit> EnterCommand { get; }
+
+        //public ReactiveCommand<Unit, Unit> EnterCommand { get; }
+
+        public ICommand EnterCommand { get; }
         public AuthorizationWindowVM()
         {
-            EnterCommand = ReactiveCommand.Create(
-                execute: ExecEnter,
-                canExecute: this.WhenAnyValue
-                (
-                    vm => vm.Login,
-                    vm => vm.Password,
-                    (login, password) => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password)
-                ));
+            EnterCommand = new RelayCommand(ExecEnter, CanExecEnter);
         }
         
-        private void ExecEnter()
+        private void ExecEnter(object? param = null)
         {
             if (AdminConfig.Login == Login && AdminConfig.Password == Password)
             {
@@ -36,9 +32,9 @@ namespace Library.GUI.ViewModels.LogInSystemVM
             }
             else
             {
-                var param = ConvertToDictionary(() => Login, () => Password);
+                var paramConvert = ConvertToDictionary(() => Login, () => Password);
 
-                var user = ServiceManager.UserService.GetSingleEntityByParam(param!);
+                var user = ServiceManager.UserService.GetSingleEntityByParam(paramConvert!);
 
                 //TODO
                 // Создать сервисы для инкапсуляции запросов в GUI
@@ -49,9 +45,9 @@ namespace Library.GUI.ViewModels.LogInSystemVM
                 //Тестовый вывод для проверки 
                 Logger.Log($"{user}");
 
-                var userWindow = new UserWindow();
-                OpenNewWindow(userWindow);
+                OpenNewWindow(new UserWindow());
             }
         }
+        private bool CanExecEnter(object? param = null) => !string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Password);
     }
 }
