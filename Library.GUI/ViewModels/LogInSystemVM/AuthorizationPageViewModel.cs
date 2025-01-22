@@ -10,7 +10,7 @@ using static Library.GUI.ViewModels.CommonClasses.WindowManager;
 
 namespace Library.GUI.ViewModels.LogInSystemVM
 {
-    class AuthorizationWindowVM : ViewModelBase
+    class AuthorizationPageViewModel : ViewModelBase
     {
         [Reactive] public string? Login { get; set; }
         [Reactive] public string? Password { get; set; }
@@ -18,7 +18,7 @@ namespace Library.GUI.ViewModels.LogInSystemVM
         //public ReactiveCommand<Unit, Unit> EnterCommand { get; }
 
         public ICommand EnterCommand { get; }
-        public AuthorizationWindowVM()
+        public AuthorizationPageViewModel()
         {
             EnterCommand = new RelayCommand(ExecEnter, CanExecEnter);
         }

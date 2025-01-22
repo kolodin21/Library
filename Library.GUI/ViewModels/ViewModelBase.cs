@@ -1,6 +1,9 @@
 ﻿using System.Linq.Expressions;
+using System.Windows;
+using System.Windows.Controls;
 using Library.BL.Service;
 using Library.Common;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 
 namespace Library.GUI.ViewModels
@@ -46,6 +49,17 @@ namespace Library.GUI.ViewModels
 
             return result;
         }
+
+
+
+        public event Action<UserControl>? ContentChanged;
+        protected void RaiseContentChanged(UserControl newContent)
+        {
+            ContentChanged?.Invoke(newContent);
+        }
+
+        protected T GetService<T>() =>
+            ((App)Application.Current).ServiceProvider.GetRequiredService<T>();
     }
 
 }

@@ -1,18 +1,14 @@
-﻿<Window  x:Class="Library.GUI.View.LogInSystem.AuthorizationWindow"
-         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+﻿<UserControl x:Class="Library.GUI.View.LogInSystem.AuthorizationPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:logInSystemVm="clr-namespace:Library.GUI.ViewModels.LogInSystemVM"
+             xmlns:components="clr-namespace:Library.GUI.Components"
+             Height="350" 
+             Width="400">
 
-         xmlns:vm="clr-namespace:Library.GUI.ViewModels.LogInSystemVM"
-         xmlns:c ="clr-namespace:Library.GUI.Components"
-        
-         Title="Авторизация" 
-         Height="350" 
-         Width="400"
-         WindowStartupLocation="CenterScreen">
-
-    <Window.DataContext>
-        <vm:AuthorizationWindowVM />
-    </Window.DataContext>
+    <UserControl.DataContext>
+        <logInSystemVm:AuthorizationPageViewModel/>
+    </UserControl.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -60,9 +56,9 @@
 
         <PasswordBox  Grid.Column="1"
                       Grid.Row="2"
-                      c:PasswordBoxAssistant.Password="{Binding Password,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      c:PasswordBoxAssistant.BindPassword="True" 
+                      components:PasswordBoxAssistant.Password="{Binding Password,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      components:PasswordBoxAssistant.BindPassword="True" 
                       Style="{StaticResource PasswordBoxStyle}"/>
 
     </Grid>
-</Window>
+</UserControl>
