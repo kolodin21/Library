@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="Library.GUI.View.LogInSystem.RegistrationPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:logInSystemVm="clr-namespace:Library.GUI.ViewModels.LogInSystemVM"
+             Height="350" 
+             Width="400">
+    <Grid>
+            
+    </Grid>
+</UserControl>

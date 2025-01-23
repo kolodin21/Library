@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Library.GUI.View.User.UserPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:userVm="clr-namespace:Library.GUI.ViewModels.UserVM"
+             Height="350" 
+             Width="400">
+
+    <UserControl.DataContext>
+        <userVm:UserPageViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+            
+    </Grid>
+
+</UserControl>

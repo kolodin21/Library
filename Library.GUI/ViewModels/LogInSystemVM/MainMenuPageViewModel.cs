@@ -16,11 +16,11 @@ namespace Library.GUI.ViewModels.LogInSystemVM
             // Реализация команд
             LoginCommand = ReactiveCommand.Create(() =>
                 RaiseContentChanged(GetService<AuthorizationPageView>()));
-        }
 
-        private static void ExecExit(object? param = null)
-        {
-            Application.Current.Shutdown();
+            RegistrationCommand = ReactiveCommand.Create(()=>
+                RaiseContentChanged(GetService<RegistrationPageView>()));
+
+            ExitCommand = ReactiveCommand.Create(ExecExit);
         }
     }
 }

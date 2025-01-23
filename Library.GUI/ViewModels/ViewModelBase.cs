@@ -10,14 +10,19 @@ namespace Library.GUI.ViewModels
 {
     public abstract class ViewModelBase : ReactiveObject
     {
+        //Логгер
         protected static IMessageLogger Logger { get; private set; } = null!;
+
+        //Сервис для работы с бизнес логикой 
         protected static ServiceManager ServiceManager { get; private set; } = null!;
+
         public static void Initialize(IMessageLogger logger, ServiceManager serviceManager)
         {
             Logger = logger;
             ServiceManager = serviceManager;
         }
 
+        //Преобразование свойств в Dictionary
         protected Dictionary<string, object?> ConvertToDictionary(params Expression<Func<object?>>[] expressions)
         {
             var result = new Dictionary<string, object?>();
@@ -50,16 +55,22 @@ namespace Library.GUI.ViewModels
             return result;
         }
 
-
-
+        //Событие для отображения нужной страницы
         public event Action<UserControl>? ContentChanged;
+
         protected void RaiseContentChanged(UserControl newContent)
         {
             ContentChanged?.Invoke(newContent);
         }
-
+        //Получение выбранной страницы
         protected T GetService<T>() =>
             ((App)Application.Current).ServiceProvider.GetRequiredService<T>();
+
+        //Закрытие приложения 
+        protected static void ExecExit()
+        {
+            Application.Current.Shutdown();
+        }
     }
 
 }

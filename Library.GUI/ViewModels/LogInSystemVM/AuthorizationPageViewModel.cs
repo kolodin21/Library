@@ -1,43 +1,37 @@
 ﻿using System.Reactive;
-using System.Windows.Input;
 using Library.GUI.Configuration;
 using Library.GUI.View.Admin;
 using Library.GUI.View.User;
-using Library.GUI.ViewModels.CommonClasses;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using static Library.GUI.ViewModels.CommonClasses.WindowManager;
 
 namespace Library.GUI.ViewModels.LogInSystemVM
 {
-    class AuthorizationPageViewModel : ViewModelBase
+    public class AuthorizationPageViewModel : ViewModelBase
     {
         [Reactive] public string? Login { get; set; }
         [Reactive] public string? Password { get; set; }
 
-        //public ReactiveCommand<Unit, Unit> EnterCommand { get; }
+        public ReactiveCommand<Unit, Unit> EnterCommand { get; }
 
-        public ICommand EnterCommand { get; }
         public AuthorizationPageViewModel()
         {
-            EnterCommand = new RelayCommand(ExecEnter, CanExecEnter);
+            EnterCommand = ReactiveCommand.Create(ExecEnter, CanExecEnter());
         }
         
-        private void ExecEnter(object? param = null)
+        private void ExecEnter()
         {
             if (AdminConfig.Login == Login && AdminConfig.Password == Password)
             {
-                var adminWindow = new AdminWindow();
-                OpenNewWindow(adminWindow);
+                RaiseContentChanged(GetService<AdminPageView>());
             }
             else
             {
+                
                 var paramConvert = ConvertToDictionary(() => Login, () => Password);
 
                 var user = ServiceManager.UserService.GetSingleEntityByParam(paramConvert!);
 
-                //TODO
-                // Создать сервисы для инкапсуляции запросов в GUI
 
                 if (user is null)
                     return;
@@ -45,9 +39,16 @@ namespace Library.GUI.ViewModels.LogInSystemVM
                 //Тестовый вывод для проверки 
                 Logger.Log($"{user}");
 
-                OpenNewWindow(new UserWindow());
+                RaiseContentChanged(GetService<UserPageView>());
             }
         }
-        private bool CanExecEnter(object? param = null) => !string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Password);
+        private IObservable<bool> CanExecEnter()
+        {
+            return this.WhenAnyValue(
+                vm => vm.Login,
+                vm => vm.Password,
+                (login, password) => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password)
+            );
+        }
     }
 }

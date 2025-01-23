@@ -3,12 +3,12 @@ using Library.BL.Models;
 
 namespace Library.GUI.ViewModels.AdminVM
 {
-    class AdminWindowVM : ViewModelBase
+    class AdminPageViewModel : ViewModelBase
     {
         //Заглушка чтобы проверить работоспособность 
         public ObservableCollection<User> Users { get; set; }
 
-        public AdminWindowVM()
+        public AdminPageViewModel()
         {
             var users = ServiceManager.UserService.GetAllEntities();
 

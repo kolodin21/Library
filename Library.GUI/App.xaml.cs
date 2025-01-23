@@ -4,8 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using Library.Infrastructure;
 using Library.Common;
+using Library.GUI.View.Admin;
 using Library.GUI.View.LogInSystem;
+using Library.GUI.View.User;
+using Library.GUI.ViewModels.AdminVM;
 using Library.GUI.ViewModels.LogInSystemVM;
+using Library.GUI.ViewModels.UserVM;
 
 namespace Library.GUI
 {
@@ -37,8 +41,16 @@ namespace Library.GUI
 
             services.AddViewWithViewModel<MainMenuPageView, MainMenuPageViewModel>();
             services.AddViewWithViewModel<AuthorizationPageView, AuthorizationPageViewModel>();
+            services.AddViewWithViewModel<RegistrationPageView, RegistrationPageViewModel>();
+            services.AddViewWithViewModel<AdminPageView, AdminPageViewModel>();
+            services.AddViewWithViewModel<UserPageView, UserPageViewModel>();
 
         }
+
+        //Todo
+        //Добавить логирование
+        //Добавить асинхронность
+
 
         public class WpfLogger : IMessageLogger
         {
