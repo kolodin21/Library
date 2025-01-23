@@ -1,12 +1,11 @@
 ﻿using System.Data;
 using Dapper;
-using Library.Common;
 using Library.DAL.Interface;
 
 
 namespace Library.DAL.Repositories
 {
-    public class ModificationRepository(IMessageLogger logger) : BaseRepository(logger), IModificationRepository
+    public class ModificationRepository: BaseRepository, IModificationRepository
     {
 
         #region Add
@@ -46,7 +45,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error in AddEntity: {ex.Message}");
+                Logger.Info($"Error in AddEntity: {ex.Message}");
                 return false;
             }
         }
@@ -63,7 +62,7 @@ namespace Library.DAL.Repositories
 
             if ((IsNullFields(tableName, method) || IsNullFields(parameters, method)) && !parameters.ContainsKey("id"))
             {
-                Logger.Log("Parameters must include an 'id' for the WHERE clause.");
+                Logger.Info("Parameters must include an 'id' for the WHERE clause.");
                 return false;
             }
 
@@ -115,7 +114,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error in DeleteEntityByIdProcedure: {ex.Message}");
+                Logger.Info($"Error in DeleteEntityByIdProcedure: {ex.Message}");
                 return false;
             }
         }
@@ -148,7 +147,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error in DeleteEntityDynamic: {ex.Message}");
+                Logger.Info($"Error in DeleteEntityDynamic: {ex.Message}");
                 return false;
             }
         }
@@ -182,7 +181,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error in DeleteEntityDynamic: {ex.Message}");
+                Logger.Info($"Error in DeleteEntityDynamic: {ex.Message}");
                 return false;
             }
         }

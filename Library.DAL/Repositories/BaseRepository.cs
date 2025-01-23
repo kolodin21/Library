@@ -1,17 +1,16 @@
 ﻿using System.Data;
-using Library.Common;
 using Library.DAL.Configuration;
+using NLog;
 using Npgsql;
 
 namespace Library.DAL.Repositories
 {
     public abstract class BaseRepository
     {
-        protected readonly IMessageLogger Logger;
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected BaseRepository(IMessageLogger logger)
+        protected BaseRepository()
         {
-            Logger = logger;
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
         }
 
@@ -24,11 +23,12 @@ namespace Library.DAL.Repositories
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
 
+                Logger.Info("Подключение успешно!");
                 return queryAction(connection);
             }
             catch (NpgsqlException e)
             {
-                Logger.Log(e.Message);
+                Logger.Info(e.Message);
                 return default; 
             }
         }
@@ -37,18 +37,18 @@ namespace Library.DAL.Repositories
         {
             if (entity is null)
             {
-                Logger.Log($"Method {methodName}: entity is null.");
+                Logger.Info($"Method {methodName}: entity is null.");
                 return true;
             }
 
             switch (entity)
             {
                 case string str when string.IsNullOrWhiteSpace(str):
-                    Logger.Log($"Method {methodName}: string entity is empty or whitespace.");
+                    Logger.Info($"Method {methodName}: string entity is empty or whitespace.");
                     return true;
 
                 case Dictionary<string, object> dictionary when dictionary.Count == 0:
-                    Logger.Log($"Method {methodName}: dictionary entity is empty.");
+                    Logger.Info($"Method {methodName}: dictionary entity is empty.");
                     return true;
 
                 default:

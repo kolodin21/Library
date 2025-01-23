@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using Library.GUI.View.LogInSystem;
 using Library.GUI.ViewModels.LogInSystemVM;
+using NLog;
 
 namespace Library.GUI.ViewModels
 {
@@ -9,7 +10,6 @@ namespace Library.GUI.ViewModels
     {
         private readonly MainMenuPageViewModel _mainMenuPageViewModel;
         private readonly AuthorizationPageViewModel _authorizationPageViewModel;
-
         [Reactive] public UserControl? CurrentContent { get; set; }
 
         public MainWindowViewModel()
@@ -26,6 +26,7 @@ namespace Library.GUI.ViewModels
 
             _authorizationPageViewModel.ContentChanged += newContent
                 => CurrentContent = newContent;
+            Logger.Info("Подписались на все события");
 
         }
     }

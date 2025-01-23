@@ -37,7 +37,7 @@ namespace Library.GUI.ViewModels.LogInSystemVM
                     return;
 
                 //Тестовый вывод для проверки 
-                Logger.Log($"{user}");
+                Logger.Info($"{user}");
 
                 RaiseContentChanged(GetService<UserPageView>());
             }

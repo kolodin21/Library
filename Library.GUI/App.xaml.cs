@@ -3,18 +3,19 @@ using Library.GUI.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using Library.Infrastructure;
-using Library.Common;
 using Library.GUI.View.Admin;
 using Library.GUI.View.LogInSystem;
 using Library.GUI.View.User;
 using Library.GUI.ViewModels.AdminVM;
 using Library.GUI.ViewModels.LogInSystemVM;
 using Library.GUI.ViewModels.UserVM;
+using NLog;
 
 namespace Library.GUI
 {
     public partial class App : Application
     {
+        //Сервис для работы с классами и их получения из DI
         public IServiceProvider ServiceProvider { get; private set; }
 
         public App()
@@ -28,17 +29,14 @@ namespace Library.GUI
             // Построение провайдера
             ServiceProvider = services.BuildServiceProvider();
 
-            var logger = ServiceProvider.GetRequiredService<IMessageLogger>();
-
             var serviceManager = ServiceProvider.GetRequiredService<ServiceManager>();
 
-            ViewModelBase.Initialize(logger, serviceManager);
+            ViewModelBase.Initialize(serviceManager);
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IMessageLogger, WpfLogger>();
-
+            
             services.AddViewWithViewModel<MainMenuPageView, MainMenuPageViewModel>();
             services.AddViewWithViewModel<AuthorizationPageView, AuthorizationPageViewModel>();
             services.AddViewWithViewModel<RegistrationPageView, RegistrationPageViewModel>();
@@ -48,17 +46,8 @@ namespace Library.GUI
         }
 
         //Todo
-        //Добавить логирование
         //Добавить асинхронность
 
-
-        public class WpfLogger : IMessageLogger
-        {
-            public void Log(string message)
-            {
-                MessageBox.Show(message);
-            }
-        }
     }
 
     public static class ServiceCollectionExtensions

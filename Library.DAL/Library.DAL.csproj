@@ -7,15 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
-    <PackageReference Include="Npgsql" Version="9.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Library.Common">
-      <HintPath>..\Library.Common\bin\Debug\net8.0\Library.Common.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Dapper" Version="2.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.*" />
+    <PackageReference Include="NLog" Version="5.*" />
+    <PackageReference Include="Npgsql" Version="9.*" />
   </ItemGroup>
 
   <ItemGroup>

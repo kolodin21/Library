@@ -2,23 +2,22 @@
 using System.Windows;
 using System.Windows.Controls;
 using Library.BL.Service;
-using Library.Common;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using ReactiveUI;
 
 namespace Library.GUI.ViewModels
 {
     public abstract class ViewModelBase : ReactiveObject
     {
-        //Логгер
-        protected static IMessageLogger Logger { get; private set; } = null!;
-
         //Сервис для работы с бизнес логикой 
         protected static ServiceManager ServiceManager { get; private set; } = null!;
 
-        public static void Initialize(IMessageLogger logger, ServiceManager serviceManager)
+        //Логгер
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public static void Initialize(ServiceManager serviceManager)
         {
-            Logger = logger;
             ServiceManager = serviceManager;
         }
 
@@ -62,6 +61,7 @@ namespace Library.GUI.ViewModels
         {
             ContentChanged?.Invoke(newContent);
         }
+
         //Получение выбранной страницы
         protected T GetService<T>() =>
             ((App)Application.Current).ServiceProvider.GetRequiredService<T>();
@@ -72,5 +72,4 @@ namespace Library.GUI.ViewModels
             Application.Current.Shutdown();
         }
     }
-
 }

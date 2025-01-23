@@ -1,12 +1,11 @@
 ﻿using Dapper;
-using Library.Common;
 using Npgsql;
 using Library.DAL.Configuration;
 using Library.DAL.Interface;
 
 namespace Library.DAL.Repositories
 {
-    public class GetRepository(IMessageLogger logger) : BaseRepository(logger),IGetRepository
+    public class GetRepository : BaseRepository,IGetRepository
     {
         #region GetAll
 
@@ -27,7 +26,7 @@ namespace Library.DAL.Repositories
                 }
                 catch (NpgsqlException e)
                 {
-                    Logger.Log(e.Message);
+                    Logger.Info(e.Message);
                     return null;
                 }
             });
@@ -93,7 +92,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception e)
             {
-                Logger.Log($"Unexpected Error in {method}: {e.Message}");
+                Logger.Info($"Unexpected Error in {method}: {e.Message}");
                 return null;
             }
         }
@@ -127,7 +126,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception e)
             {
-                Logger.Log($"Unexpected Error in {method}: {e.Message}");
+                Logger.Info($"Unexpected Error in {method}: {e.Message}");
                 return null;
             }
         }
@@ -157,14 +156,14 @@ namespace Library.DAL.Repositories
                     }
                     catch (NpgsqlException e)
                     {
-                        Logger.Log($"Database Error in {methodName}: {e.Message}");
+                        Logger.Info($"Database Error in {methodName}: {e.Message}");
                         return null;
                     }
                 });
             }
             catch (Exception e)
             {
-                Logger.Log($"Unexpected Error in {methodName}: {e.Message}");
+                Logger.Info($"Unexpected Error in {methodName}: {e.Message}");
                 return null;
             }
         }
@@ -241,7 +240,7 @@ namespace Library.DAL.Repositories
             }
             catch (NpgsqlException e)
             {
-                Logger.Log(e.Message);
+                Logger.Info(e.Message);
                 return Array.Empty<string>(); // Возвращаем пустой массив.
             }
         }
