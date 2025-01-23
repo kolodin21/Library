@@ -18,6 +18,8 @@ namespace Library.GUI.Configuration
         public static string Login => Configuration["AdminSettings:AdminLogin"];
 
         public static string Password => Configuration["AdminSettings:AdminPassword"];
+
+        public static string PathNlog => Configuration["AdminSettings:PathNlog"];
         //Todo
         // добавить проверки на null
     }

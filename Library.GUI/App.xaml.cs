@@ -2,6 +2,7 @@
 using Library.GUI.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using Library.GUI.Configuration;
 using Library.Infrastructure;
 using Library.GUI.View.Admin;
 using Library.GUI.View.LogInSystem;
@@ -22,8 +23,14 @@ namespace Library.GUI
         {
             IServiceCollection services = new ServiceCollection();
 
+            //Логгер
+            LogManager.LoadConfiguration(AdminConfig.PathNlog);
+            var logger = LogManager.GetCurrentClassLogger();
+            
+            //Получение View и ViewModel
             ConfigureServices(services);
 
+            //Создание прочих классов приложения
             services.AddInfrastructure();
 
             // Построение провайдера
@@ -31,9 +38,10 @@ namespace Library.GUI
 
             var serviceManager = ServiceProvider.GetRequiredService<ServiceManager>();
 
-            ViewModelBase.Initialize(serviceManager);
+            ViewModelBase.Initialize(serviceManager, logger);
         }
 
+        //Реализация View и ViewModel
         private static void ConfigureServices(IServiceCollection services)
         {
             
@@ -44,12 +52,11 @@ namespace Library.GUI
             services.AddViewWithViewModel<UserPageView, UserPageViewModel>();
 
         }
-
         //Todo
         //Добавить асинхронность
-
     }
 
+    //Метод расширения для IServiceCollection для одновременного создадания View и ViewModel с привязкой DataContext
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddViewWithViewModel<TView, TViewModel>(this IServiceCollection services)
@@ -68,5 +75,4 @@ namespace Library.GUI
             return services;
         }
     }
-
 }

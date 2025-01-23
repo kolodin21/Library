@@ -14,11 +14,12 @@ namespace Library.GUI.ViewModels
         protected static ServiceManager ServiceManager { get; private set; } = null!;
 
         //Логгер
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        protected static Logger Logger { get; set; }
 
-        public static void Initialize(ServiceManager serviceManager)
+        public static void Initialize(ServiceManager serviceManager,Logger logger)
         {
             ServiceManager = serviceManager;
+            Logger = logger;
         }
 
         //Преобразование свойств в Dictionary
