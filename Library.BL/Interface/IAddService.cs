@@ -2,7 +2,7 @@
 {
     public interface IAddService<in T>
     {
-        bool AddEntity(T entity);
+        Task<bool> AddEntity(T entity);
     }
 }
  

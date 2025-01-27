@@ -1,6 +1,4 @@
-﻿using Dapper;
-
-namespace Library.BL.Interface
+﻿namespace Library.BL.Interface
 {
     public interface IGetAllService<T>
     {

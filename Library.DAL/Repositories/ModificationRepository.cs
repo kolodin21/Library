@@ -12,9 +12,9 @@ namespace Library.DAL.Repositories
         /// <summary>
         /// Добавление объекта в базу данных.
         /// </summary>
-        public async Task<bool> AddEntity<T>(string sqlQuery, T entity, bool isStoredProcedure = false) where T : class
+        public async Task<bool> AddEntityAsync<T>(string sqlQuery, T entity, bool isStoredProcedure = false) where T : class
         {
-            var method = nameof(AddEntity);
+            var method = nameof(AddEntityAsync);
 
             if (IsNullFields(sqlQuery, method) || IsNullFields(entity, method))
                 return false;
@@ -55,9 +55,9 @@ namespace Library.DAL.Repositories
         /// <summary>
         /// Обновление объекта на основе динамических параметров.
         /// </summary>
-        public async Task<bool> UpdateEntityDynamic(string tableName, Dictionary<string, object> parameters)
+        public async Task<bool> UpdateEntityDynamicAsync(string tableName, Dictionary<string, object> parameters)
         {
-            var method = nameof(UpdateEntityDynamic);
+            var method = nameof(UpdateEntityDynamicAsync);
 
             if ((IsNullFields(tableName, method) || IsNullFields(parameters, method)) && !parameters.ContainsKey("id"))
             {
@@ -95,9 +95,9 @@ namespace Library.DAL.Repositories
         /// <summary>
         /// Удаление объекта по ID через хранимую процедуру.
         /// </summary>
-        public async Task<bool> DeleteEntityByIdProcedure(string procedureName, int id)
+        public async Task<bool> DeleteEntityByIdProcedureAsync(string procedureName, int id)
         {
-            if (IsNullFields(procedureName, nameof(DeleteEntityByIdProcedure)))
+            if (IsNullFields(procedureName, nameof(DeleteEntityByIdProcedureAsync)))
                 return false;
             try
             {
@@ -113,7 +113,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception ex)
             {
-                Logger.Info($"Error in DeleteEntityByIdProcedure: {ex.Message}");
+                Logger.Info($"Error in DeleteEntityByIdProcedureAsync: {ex.Message}");
                 return false;
             }
         }
@@ -121,9 +121,9 @@ namespace Library.DAL.Repositories
         /// <summary>
         /// Удаление объекта на основе динамических параметров.
         /// </summary>
-        public async Task<bool> DeleteEntityDynamic(string tableName, Dictionary<string, object> whereParameters)
+        public async Task<bool> DeleteEntityDynamicAsync(string tableName, Dictionary<string, object> whereParameters)
         {
-            var method = nameof(DeleteEntityDynamic);
+            var method = nameof(DeleteEntityDynamicAsync);
             if (IsNullFields(tableName, method) || IsNullFields(whereParameters, method))
                 return false;
 
@@ -146,14 +146,15 @@ namespace Library.DAL.Repositories
             }
             catch (Exception ex)
             {
-                Logger.Info($"Error in DeleteEntityDynamic: {ex.Message}");
+                Logger.Info($"Error in DeleteEntityDynamicAsync: {ex.Message}");
                 return false;
             }
         }
 
-        public async Task<bool> DeleteEntityDynamic<T>(string tableName, T entity)
+
+        public async Task<bool> DeleteEntityDynamicAsync<T>(string tableName, T entity)
         {
-            if (IsNullFields(tableName, nameof(DeleteEntityDynamic)))
+            if (IsNullFields(tableName, nameof(DeleteEntityDynamicAsync)))
                 return false;
 
             try
@@ -180,7 +181,7 @@ namespace Library.DAL.Repositories
             }
             catch (Exception ex)
             {
-                Logger.Info($"Error in DeleteEntityDynamic: {ex.Message}");
+                Logger.Info($"Error in DeleteEntityDynamicAsync: {ex.Message}");
                 return false;
             }
         }
