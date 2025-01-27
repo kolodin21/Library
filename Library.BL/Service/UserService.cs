@@ -1,5 +1,4 @@
-﻿using Library.BL.Interface;
-using Library.BL.ModelsDTO.User;
+﻿using Library.BL.ModelsDTO.User;
 using Library.BL.Models;
 using Library.DAL.Repositories;
 
@@ -22,19 +21,20 @@ namespace Library.BL.Service
         #region GetService
 
         public async Task<IEnumerable<User>?> GetAllEntitiesAsync() =>
-           await RepositoryManager.GetDataRepository.GetAllEntity<User>(_sqlProvider.GetAll);
-        public IEnumerable<User>? GetEntitiesByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetEntitiesByParam<User>(_sqlProvider.GetByParam, param);
+           await RepositoryManager.GetDataRepository.GetAllEntityAsync<User>(_sqlProvider.GetAll);
 
-        public User? GetSingleEntityByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetSingleEntityByParam<User>(_sqlProvider.GetByParam, param);
+        public async Task<IEnumerable<User>?> GetEntitiesByParamAsync(Dictionary<string, object> param) =>
+           await RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<User>(_sqlProvider.GetByParam, param);
+
+        public async Task<User?> GetSingleEntityByParamAsync(Dictionary<string, object> param) =>
+            await RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<User>(_sqlProvider.GetByParam, param);
 
         #endregion
 
         #region AddService
 
-        public bool AddEntity(UserAddDto userAddDto) =>
-            RepositoryManager.ModificationRepository.AddEntity<UserAddDto>(_sqlProvider.Add, userAddDto, true);
+        public async Task<bool> AddEntityAsync(UserAddDto userAddDto) =>
+            await RepositoryManager.ModificationRepository.AddEntityAsync<UserAddDto>(_sqlProvider.Add, userAddDto, true);
 
         #endregion
 
@@ -46,47 +46,40 @@ namespace Library.BL.Service
         //public bool DeleteEntity(UserAddDto userAddDto) =>
         //    RepositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlProvider.Delete, userAddDto);
 
-        public bool DeleteEntity(int id) =>
-            RepositoryManager.ModificationRepository.DeleteEntityByIdProcedure(_sqlProvider.Delete, id);
+        public async Task<bool> DeleteEntityAsync(int id) =>
+           await RepositoryManager.ModificationRepository.DeleteEntityByIdProcedureAsync(_sqlProvider.Delete, id);
 
         #endregion
 
         #region UpdateService
 
-        public bool UpdateEntity(UserUpdatePersonalInfoDto entity) => UpdatePersonalInfo(entity);
-        private bool UpdatePersonalInfo(UserUpdatePersonalInfoDto updatePersonalInfo)
+        public async Task<bool> UpdateEntityAsync(UserUpdatePersonalInfoDto entity) => await UpdatePersonalInfoAsync(entity);
+        private async Task<bool> UpdatePersonalInfoAsync(UserUpdatePersonalInfoDto updatePersonalInfo)
         {
             // Получаем имена колонок таблицы
-            var columnNames =
-                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.NamePersonTable,
+            var columnNames = await 
+                RepositoryManager.GetDataRepository.GetColumnNamesAsync(_sqlProvider.NamePersonTable,
                     _sqlProvider.GetColumnAndTypeTable);
-
-            if (columnNames is null)
-                return false;
 
             var updateParams = GetDynamicUpdateParams(updatePersonalInfo, columnNames);
 
-            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.NamePersonTable, updateParams!);
+            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.NamePersonTable, updateParams!);
         }
 
 
-        public bool UpdateEntity(UserUpdateContactInfoDto entity) => UpdateContactInfo(entity);
-        private bool UpdateContactInfo(UserUpdateContactInfoDto updateContactInfo)
+        public async Task<bool> UpdateEntityAsync(UserUpdateContactInfoDto entity) => await UpdateContactInfoAsync(entity);
+        private async Task<bool> UpdateContactInfoAsync(UserUpdateContactInfoDto updateContactInfo)
         {
             
             // Получаем имена колонок таблицы
-            var columnNames =
-                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.MainNameTable,
+            var columnNames = await 
+                RepositoryManager.GetDataRepository.GetColumnNamesAsync(_sqlProvider.MainNameTable,
                     _sqlProvider.GetColumnAndTypeTable);
-
-            if (columnNames is null)
-                return false;
 
             var updateParams = GetDynamicUpdateParams(updateContactInfo, columnNames);
 
-            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.MainNameTable, updateParams!);
+            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable, updateParams!);
         }
-
         #endregion
     }
 }

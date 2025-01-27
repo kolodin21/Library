@@ -1,5 +1,4 @@
-﻿using Library.BL.Interface;
-using Library.BL.ModelsDTO.TakeReturn;
+﻿using Library.BL.ModelsDTO.TakeReturn;
 using Library.BL.Models;
 using Library.DAL.Repositories;
 
@@ -20,20 +19,24 @@ namespace Library.BL.Service
 
         #region GetService
 
-        public IEnumerable<TakeReturnBooks>? GetAllEntities() =>
-            RepositoryManager.GetDataRepository.GetAllEntity<TakeReturnBooks>(_sqlProvider.GetAll);
+        public async Task<IEnumerable<TakeReturnBooks>?> GetAllEntitiesAsync() => await 
+            RepositoryManager.GetDataRepository.GetAllEntityAsync<TakeReturnBooks>(_sqlProvider.GetAll);
 
-        public IEnumerable<TakeReturnBooks>? GetEntitiesByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetEntitiesByParam<TakeReturnBooks>(_sqlProvider.GetByParam, param);
+        public async Task<IEnumerable<TakeReturnBooks>?> GetEntitiesByParamAsync(Dictionary<string, object> param) => await 
+            RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<TakeReturnBooks>(_sqlProvider.GetByParam, param);
 
-        public TakeReturnBooks? GetSingleEntityByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetSingleEntityByParam<TakeReturnBooks>(_sqlProvider.GetByParam, param);
+        public async Task<TakeReturnBooks?> GetSingleEntityByParamAsync(Dictionary<string, object> param) => await 
+            RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<TakeReturnBooks>(_sqlProvider.GetByParam, param);
 
-        public List<TakeReturnBookDto>? GetAllEntitiesDto()
+        public async Task<List<TakeReturnBookDto>> GetAllEntitiesDtoAsync()
         {
-            List<TakeReturnBookDto> books = [];
-            var takeReturn = GetAllEntities();
+            // Инициализация списка
+            var books = new List<TakeReturnBookDto>();
 
+            // Асинхронное получение данных
+            var takeReturn = await GetAllEntitiesAsync();
+
+            // Заполнение списка
             books.AddRange(takeReturn.Select(book => new TakeReturnBookDto
             {
                 Id = book.Id,
@@ -43,6 +46,7 @@ namespace Library.BL.Service
                 DateIssuance = book.DateIssuance,
                 DateReturn = book.DateReturn
             }));
+
             return books;
         }
 
@@ -50,14 +54,12 @@ namespace Library.BL.Service
 
         #region AddReturnService
 
-        public bool AddEntity(TakeBookDto takeBook) =>
-            RepositoryManager.ModificationRepository.AddEntity(_sqlProvider.Add, takeBook, true);
+        public async Task<bool> AddEntityAsync(TakeBookDto takeBook) => await 
+            RepositoryManager.ModificationRepository.AddEntityAsync(_sqlProvider.Add, takeBook, true);
 
-        public bool AddEntity(ReturnBookDto returnBook) =>
-            RepositoryManager.ModificationRepository.AddEntity(_sqlProvider.ReturnBook, returnBook,true);
-
+        public async Task<bool> AddEntityAsync(ReturnBookDto returnBook) => await 
+            RepositoryManager.ModificationRepository.AddEntityAsync(_sqlProvider.ReturnBook, returnBook,true);
 
         #endregion
-
     }
 }

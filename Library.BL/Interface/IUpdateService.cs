@@ -1,6 +1,6 @@
 ﻿namespace Library.BL.Interface;
 
-public interface IUpdateService<T> 
+public interface IUpdateService<in T> 
 {
-    bool UpdateEntity(T entity);
+    Task<bool> UpdateEntityAsync(T entity);
 }

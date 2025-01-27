@@ -2,13 +2,14 @@
 using System.Reactive;
 using Library.BL.Models;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Library.GUI.ViewModels.AdminVM
 {
     class AdminPageViewModel : ViewModelBase
     {
         //Заглушка чтобы проверить работоспособность 
-        public ObservableCollection<User> Users { get; set; }
+        [Reactive]public ObservableCollection<User>? Users { get; set; }
 
         public ReactiveCommand<Unit, Unit> LoadUsersCommand { get; }
 

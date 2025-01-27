@@ -1,11 +1,11 @@
 ﻿namespace Library.BL.Interface;
 
-public interface IGetByParamService<out T>
+public interface IGetByParamService<T>
 {
-    IEnumerable<T>? GetEntitiesByParam(Dictionary<string, object> param);
+    Task<IEnumerable<T>?> GetEntitiesByParamAsync(Dictionary<string, object> param);
 }
 
-public interface IGetSingleByParam<out T>
+public interface IGetSingleByParam<T>
 {
-    T? GetSingleEntityByParam(Dictionary<string, object> param);
+    Task<T?> GetSingleEntityByParamAsync(Dictionary<string, object> param);
 }

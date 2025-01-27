@@ -16,41 +16,39 @@ namespace Library.BL.Service
 
         #region GetService
 
-        
+        public async Task<IEnumerable<Publisher>?> GetAllEntitiesAsync() => await  
+            RepositoryManager.GetDataRepository.GetAllEntityAsync<Publisher>(_sqlProvider.GetAll);
 
-        public IEnumerable<Publisher>? GetAllEntities() =>
-            RepositoryManager.GetDataRepository.GetAllEntity<Publisher>(_sqlProvider.GetAll);
-
-        public Publisher? GetSingleEntityByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetSingleEntityByParam<Publisher>(_sqlProvider.GetByParam, param);
+        public async Task<Publisher?> GetSingleEntityByParamAsync(Dictionary<string, object> param) => await 
+            RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<Publisher>(_sqlProvider.GetByParam, param);
 
         #endregion
 
         #region AddService
 
-        public bool AddEntity(PublisherDto publisher) =>
-            RepositoryManager.ModificationRepository.AddEntity(_sqlProvider.Add, publisher, true);
+        public async Task<bool> AddEntityAsync(PublisherDto publisher) => await 
+            RepositoryManager.ModificationRepository.AddEntityAsync(_sqlProvider.Add, publisher, true);
 
         #endregion
 
         #region DeleteService
 
-        public bool DeleteEntity(Publisher publisher) =>
-            RepositoryManager.ModificationRepository.DeleteEntityDynamic(_sqlProvider.MainNameTable, publisher);
+        public async Task<bool> DeleteEntityAsync(Publisher publisher) => await 
+            RepositoryManager.ModificationRepository.DeleteEntityDynamicAsync(_sqlProvider.MainNameTable, publisher);
 
         #endregion
 
         #region UpdateService
-        public bool UpdateEntity(Publisher publisher)
+        public async Task<bool> UpdateEntityAsync(Publisher publisher)
         {
             // Получаем имена колонок таблицы
-            var columnNames =
-                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.MainNameTable,
+            var columnNames = await 
+                RepositoryManager.GetDataRepository.GetColumnNamesAsync(_sqlProvider.MainNameTable,
                     _sqlProvider.GetColumnAndTypeTable);
 
             var updateParams = GetDynamicUpdateParams(publisher, columnNames!);
 
-            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.MainNameTable, updateParams);
+            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable, updateParams);
         }
         #endregion
     }

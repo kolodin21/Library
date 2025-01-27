@@ -151,7 +151,6 @@ namespace Library.DAL.Repositories
             }
         }
 
-
         public async Task<bool> DeleteEntityDynamicAsync<T>(string tableName, T entity)
         {
             if (IsNullFields(tableName, nameof(DeleteEntityDynamicAsync)))

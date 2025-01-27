@@ -20,43 +20,43 @@ namespace Library.BL.Service
 
         #region IGetAllService
 
-        public IEnumerable<Book>? GetAllEntities() =>
-            RepositoryManager.GetDataRepository.GetAllEntity<Book>(_sqlProvider.GetAll);
+        public async Task<IEnumerable<Book>?> GetAllEntitiesAsync() => await 
+            RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll);
 
-        public IEnumerable<Book>? GetEntitiesByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetEntitiesByParam<Book>(_sqlProvider.GetByParam, param);
+        public async Task<IEnumerable<Book>?> GetEntitiesByParamAsync(Dictionary<string, object> param) => await 
+            RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<Book>(_sqlProvider.GetByParam, param);
 
-        public Book? GetSingleEntityByParam(Dictionary<string, object> param) =>
-            RepositoryManager.GetDataRepository.GetSingleEntityByParam<Book>(_sqlProvider.GetByParam, param);
+        public async Task<Book?> GetSingleEntityByParamAsync(Dictionary<string, object> param) => await 
+            RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<Book>(_sqlProvider.GetByParam, param);
 
         #endregion
 
         #region IAddService
 
-        public bool AddEntity(BookAddDto bookAddDto) =>
-            RepositoryManager.ModificationRepository.AddEntity<BookAddDto>(_sqlProvider.Add, bookAddDto, true);
+        public async Task<bool> AddEntityAsync(BookAddDto bookAddDto) => await 
+            RepositoryManager.ModificationRepository.AddEntityAsync<BookAddDto>(_sqlProvider.Add, bookAddDto, true);
 
         #endregion
 
         #region IDeleteService
 
-        public bool DeleteEntity(int id) =>
-            RepositoryManager.ModificationRepository.DeleteEntityByIdProcedure(_sqlProvider.Delete, id);
+        public async Task<bool> DeleteEntityAsync(int id) => await 
+            RepositoryManager.ModificationRepository.DeleteEntityByIdProcedureAsync(_sqlProvider.Delete, id);
         
         #endregion
 
         #region IUpdateService
 
-        public bool UpdateEntity(BookUpdateInfoDto updateBookInfo)
+        public async Task<bool> UpdateEntityAsync(BookUpdateInfoDto updateBookInfo)
         {
             // Получаем имена колонок таблицы
-            var columnNames =
-                RepositoryManager.GetDataRepository.GetColumnNames(_sqlProvider.MainNameTable,
+            var columnNames = await 
+                RepositoryManager.GetDataRepository.GetColumnNamesAsync(_sqlProvider.MainNameTable,
                     _sqlProvider.GetColumnAndTypeTable);
 
             var updateParams = GetDynamicUpdateParams(updateBookInfo, columnNames!); 
             
-            return RepositoryManager.ModificationRepository.UpdateEntityDynamic(_sqlProvider.MainNameTable, updateParams);
+            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable, updateParams);
         }
 
         #endregion

@@ -16,10 +16,10 @@ namespace Library.GUI.ViewModels.LogInSystemVM
 
         public AuthorizationPageViewModel()
         {
-            EnterCommand = ReactiveCommand.Create(ExecEnter, CanExecEnter());
+            EnterCommand = ReactiveCommand.CreateFromTask(ExecEnter, CanExecEnter());
         }
         
-        private void ExecEnter()
+        private async Task ExecEnter()
         {
             if (AdminConfig.Login == Login && AdminConfig.Password == Password)
             {
@@ -27,11 +27,9 @@ namespace Library.GUI.ViewModels.LogInSystemVM
             }
             else
             {
-                
                 var paramConvert = ConvertToDictionary(() => Login, () => Password);
 
-                var user = ServiceManager.UserService.GetSingleEntityByParam(paramConvert!);
-
+                var user = await ServiceManager.UserService.GetSingleEntityByParamAsync(paramConvert!);
 
                 if (user is null)
                     return;
