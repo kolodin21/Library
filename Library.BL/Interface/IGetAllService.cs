@@ -2,8 +2,8 @@
 
 namespace Library.BL.Interface
 {
-    public interface IGetAllService<out T>
+    public interface IGetAllService<T>
     {
-        IEnumerable<T>? GetAllEntities();
+        Task<IEnumerable<T>?> GetAllEntitiesAsync();
     }
 }

@@ -15,21 +15,28 @@ namespace Library.DAL.Repositories
         }
 
         // Метод для работы с запросами с соединением в using
-        protected T? ExecuteQuery<T>(Func<NpgsqlConnection, T> queryAction)
+        protected async Task<T> ExecuteQuery<T>(Func<NpgsqlConnection, Task<T>> queryAction)
         {
-            using var connection = new NpgsqlConnection(DatabaseConfig.ConnectionString);
+            await using var connection = new NpgsqlConnection(DatabaseConfig.ConnectionString);
             try
             {
                 if (connection.State == ConnectionState.Closed)
-                    connection.Open();
+                    await connection.OpenAsync();
 
                 Logger.Info("Подключение успешно!");
-                return queryAction(connection);
+                var result = await queryAction(connection);
+                Logger.Info("Запрос выполнен успешно.");
+                return result;
             }
             catch (NpgsqlException e)
             {
-                Logger.Info(e.Message);
-                return default; 
+                Logger.Info($"Ошибка базы данных: {e.Message}");
+                return default!;
+            }
+            catch (Exception e)
+            {
+                Logger.Info($"Неожиданная ошибка: {e.Message}");
+                return default!;
             }
         }
 

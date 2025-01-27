@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using Library.BL.Models;
+using ReactiveUI;
 
 namespace Library.GUI.ViewModels.AdminVM
 {
@@ -8,12 +10,21 @@ namespace Library.GUI.ViewModels.AdminVM
         //Заглушка чтобы проверить работоспособность 
         public ObservableCollection<User> Users { get; set; }
 
+        public ReactiveCommand<Unit, Unit> LoadUsersCommand { get; }
+
         public AdminPageViewModel()
         {
-            var users = ServiceManager.UserService.GetAllEntities();
-
-            Users = new ObservableCollection<User>(users);
+            LoadUsersCommand = ReactiveCommand.CreateFromTask(LoadUsersAsync);
+            LoadUsersCommand.Execute().Subscribe();
         }
 
+        private async Task LoadUsersAsync()
+        {
+            var users = await ServiceManager.UserService.GetAllEntitiesAsync();
+            if (users != null)
+            {
+                Users = new ObservableCollection<User>(users);
+            }
+        }
     }
 }

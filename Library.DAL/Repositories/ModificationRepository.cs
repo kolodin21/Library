@@ -7,13 +7,12 @@ namespace Library.DAL.Repositories
 {
     public class ModificationRepository: BaseRepository, IModificationRepository
     {
-
         #region Add
 
         /// <summary>
         /// Добавление объекта в базу данных.
         /// </summary>
-        public bool AddEntity<T>(string sqlQuery, T entity, bool isStoredProcedure = false) where T : class
+        public async Task<bool> AddEntity<T>(string sqlQuery, T entity, bool isStoredProcedure = false) where T : class
         {
             var method = nameof(AddEntity);
 
@@ -21,7 +20,7 @@ namespace Library.DAL.Repositories
                 return false;
             try
             {
-                return ExecuteQuery(connection =>
+                return await ExecuteQuery(async connection =>
                 {
                     var dynamicParams = new DynamicParameters();
 
@@ -37,7 +36,7 @@ namespace Library.DAL.Repositories
                     }
 
                     //Выполняем запрос или хранимую процедуру в зависимости от флага isStoredProcedure
-                    var result = connection.Execute(sqlQuery, dynamicParams, commandType: isStoredProcedure
+                    var result = await connection.ExecuteAsync(sqlQuery, dynamicParams, commandType: isStoredProcedure
                         ? CommandType.StoredProcedure
                         : CommandType.Text);
                     return result > 0;
@@ -56,7 +55,7 @@ namespace Library.DAL.Repositories
         /// <summary>
         /// Обновление объекта на основе динамических параметров.
         /// </summary>
-        public bool UpdateEntityDynamic(string tableName, Dictionary<string, object> parameters)
+        public async Task<bool> UpdateEntityDynamic(string tableName, Dictionary<string, object> parameters)
         {
             var method = nameof(UpdateEntityDynamic);
 
@@ -70,9 +69,9 @@ namespace Library.DAL.Repositories
             string sqlQuery = GenerateUpdateQuery(tableName, parameters);
 
             // Выполнение запроса
-            return ExecuteQuery(connection =>
+            return await ExecuteQuery(async connection =>
             {
-                var result = connection.Execute(sqlQuery, new DynamicParameters(parameters));
+                var result = await connection.ExecuteAsync(sqlQuery, new DynamicParameters(parameters));
                 return result > 0;
             });
         }
@@ -96,18 +95,18 @@ namespace Library.DAL.Repositories
         /// <summary>
         /// Удаление объекта по ID через хранимую процедуру.
         /// </summary>
-        public bool DeleteEntityByIdProcedure(string procedureName, int id)
+        public async Task<bool> DeleteEntityByIdProcedure(string procedureName, int id)
         {
             if (IsNullFields(procedureName, nameof(DeleteEntityByIdProcedure)))
                 return false;
             try
             {
-                return ExecuteQuery(connection =>
+                return await ExecuteQuery(async connection =>
                 {
                     var dynamicParams = new DynamicParameters();
                     dynamicParams.Add("_id", id);
 
-                    var result = connection.Execute(procedureName, dynamicParams,
+                    var result = await connection.ExecuteAsync(procedureName, dynamicParams,
                         commandType: CommandType.StoredProcedure);
                     return result > 0;
                 });
@@ -122,7 +121,7 @@ namespace Library.DAL.Repositories
         /// <summary>
         /// Удаление объекта на основе динамических параметров.
         /// </summary>
-        public bool DeleteEntityDynamic(string tableName, Dictionary<string, object> whereParameters)
+        public async Task<bool> DeleteEntityDynamic(string tableName, Dictionary<string, object> whereParameters)
         {
             var method = nameof(DeleteEntityDynamic);
             if (IsNullFields(tableName, method) || IsNullFields(whereParameters, method))
@@ -130,7 +129,7 @@ namespace Library.DAL.Repositories
 
             try
             {
-                return ExecuteQuery(connection =>
+                return await ExecuteQuery(async connection =>
                 {
                     var whereClauses = whereParameters.Keys.Select(key => $"{key} = @{key}");
                     string sqlQuery = $"DELETE FROM {tableName} WHERE {string.Join(" AND ", whereClauses)}";
@@ -141,7 +140,7 @@ namespace Library.DAL.Repositories
                         dynamicParams.Add(param.Key, param.Value);
                     }
 
-                    var result = connection.Execute(sqlQuery, dynamicParams);
+                    var result = await connection.ExecuteAsync(sqlQuery, dynamicParams);
                     return result > 0;
                 });
             }
@@ -152,14 +151,14 @@ namespace Library.DAL.Repositories
             }
         }
 
-        public bool DeleteEntityDynamic<T>(string tableName, T entity)
+        public async Task<bool> DeleteEntityDynamic<T>(string tableName, T entity)
         {
             if (IsNullFields(tableName, nameof(DeleteEntityDynamic)))
                 return false;
 
             try
             {
-                return ExecuteQuery(connection =>
+                return await ExecuteQuery(async connection =>
                 {
                     var dynamicParams = new DynamicParameters();
 
@@ -175,7 +174,7 @@ namespace Library.DAL.Repositories
 
                     string sqlQuery = $"DELETE FROM {tableName} WHERE {string.Join(" AND ", whereClauses)}";
 
-                    var result = connection.Execute(sqlQuery, dynamicParams);
+                    var result = await connection.ExecuteAsync(sqlQuery, dynamicParams);
                     return result > 0;
                 });
             }

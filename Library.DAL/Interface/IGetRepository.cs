@@ -2,10 +2,9 @@
 {
     public interface IGetRepository
     {
-        IEnumerable<T>? GetAllEntity<T>(string query) where T : class;
-        T? GetSingleEntityByParam<T>(string query, Dictionary<string, object> param) where T : class;
-        IEnumerable<T>? GetEntitiesByParam<T>(string query, Dictionary<string, object> param) where T : class;
-        IEnumerable<string>? GetColumnNames(string tableName, string sqlQuery);
-
+        Task<IEnumerable<T>?> GetAllEntityAsync<T>(string query) where T : class;
+        Task<T?> GetSingleEntityByParamAsync<T>(string query, Dictionary<string, object> param) where T : class;
+        Task<IEnumerable<T>?> GetEntitiesByParamAsync<T>(string query, Dictionary<string, object> param) where T : class;
+        Task<IEnumerable<string>> GetColumnNamesAsync(string tableName, string sqlQuery);
     }
 }

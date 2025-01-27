@@ -15,13 +15,13 @@ namespace Library.DAL.Repositories
         /// <typeparam name="T">Тип сущности, который будет возвращен в результате выполнения запроса.</typeparam>
         /// <param name="sqlQuery">SQL-запрос, который будет выполнен для получения данных.</param>
         /// <returns>Коллекция сущностей типа <typeparamref name="T"/>, или <c>null</c> в случае ошибки выполнения запроса.</returns>
-        public IEnumerable<T>? GetAllEntity<T>(string sqlQuery) where T : class
+        public async Task<IEnumerable<T>?> GetAllEntityAsync<T>(string sqlQuery) where T : class
         {
-            return ExecuteQuery(connection =>
+            return await ExecuteQuery(async connection =>
             {
                 try
                 {
-                    var result = connection.Query<T>(sqlQuery);
+                    var result = await connection.QueryAsync<T>(sqlQuery);
                     return result;
                 }
                 catch (NpgsqlException e)
@@ -70,21 +70,21 @@ namespace Library.DAL.Repositories
         /// <param name="sqlQuery">SQL-запрос для выполнения.</param>
         /// <param name="parameters">Словарь параметров, которые передаются в запрос.</param>
         /// <returns>Объект типа <typeparamref name="T"/>, если найден, иначе null.</returns>
-        public T? GetSingleEntityByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
+        public async Task<T?> GetSingleEntityByParamAsync<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            var method = nameof(ExecuteWithParameters);
+            var method = nameof(ExecuteWithParametersAsync);
             if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
                 return null;
             try
             {
 
-                return ExecuteWithParameters(
-                    nameof(GetSingleEntityByParam),
+                return await ExecuteWithParametersAsync(
+                    nameof(GetSingleEntityByParamAsync),
                     sqlQuery,
                     parameters,
-                    (connection, dynamicParams, finalQuery) =>
+                    async (connection, dynamicParams, finalQuery) =>
                     {
-                        var result = GetMethod<T>(nameof(GetSingleEntityByParam), finalQuery, dynamicParams, connection)
+                        var result = await GetMethodAsync<T>(nameof(GetSingleEntityByParamAsync), finalQuery, dynamicParams, connection)
                             .Invoke();
                         return result as T;
                     }
@@ -104,21 +104,21 @@ namespace Library.DAL.Repositories
         /// <param name="sqlQuery">SQL-запрос для выполнения.</param>
         /// <param name="parameters">Словарь параметров, которые передаются в запрос.</param>
         /// <returns>Коллекция объектов типа <typeparamref name="T"/>, если найдены, иначе null.</returns>
-        public IEnumerable<T>? GetEntitiesByParam<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
+        public async Task<IEnumerable<T>?> GetEntitiesByParamAsync<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            var method = nameof(ExecuteWithParameters);
+            var method = nameof(ExecuteWithParametersAsync);
             if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
                 return null;
             try
             {
-                return ExecuteWithParameters
+                return await ExecuteWithParametersAsync
                 (
-                    nameof(GetEntitiesByParam),
+                    nameof(GetEntitiesByParamAsync),
                     sqlQuery,
                     parameters,
-                    (connection, dynamicParams, finalQuery) =>
+                    async (connection, dynamicParams, finalQuery) =>
                     {
-                        var result = GetMethod<T>(nameof(GetEntitiesByParam), finalQuery, dynamicParams, connection)
+                        var result = await GetMethodAsync<T>(nameof(GetEntitiesByParamAsync), finalQuery, dynamicParams, connection)
                             .Invoke();
                         return result as IEnumerable<T>; // Приведение результата
                     }
@@ -143,29 +143,23 @@ namespace Library.DAL.Repositories
         /// <param name="parameters">Словарь параметров, которые передаются в запрос.</param>
         /// <param name="executeQuery">Делегат, который выполняет запрос и возвращает результат.</param>
         /// <returns>Результат выполнения запроса типа <typeparamref name="T"/>, или null, если произошла ошибка.</returns>
-        private T? ExecuteWithParameters<T>(string methodName, string sqlQuery, Dictionary<string, object>? parameters, Func<NpgsqlConnection, DynamicParameters, string, T?> executeQuery) where T : class
+        private async Task<T?> ExecuteWithParametersAsync<T>(
+            string methodName,
+            string sqlQuery,
+            Dictionary<string, object>? parameters,
+            Func<NpgsqlConnection, DynamicParameters, string, Task<T?>> executeQuery
+        ) where T : class
         {
-            try
-            {
-                return ExecuteQuery(connection =>
+            if (parameters != null)
+
+                return await ExecuteQuery(async connection =>
                 {
-                    try
-                    {
-                        var dynamicParams = DynamicParameters<T>(sqlQuery, parameters!, out var finalQuery);
-                        return executeQuery(connection, dynamicParams, finalQuery);
-                    }
-                    catch (NpgsqlException e)
-                    {
-                        Logger.Info($"Database Error in {methodName}: {e.Message}");
-                        return null;
-                    }
+                    var dynamicParams = DynamicParameters<T>(sqlQuery, parameters, out var finalQuery);
+                    return await executeQuery(connection, dynamicParams, finalQuery);
                 });
-            }
-            catch (Exception e)
-            {
-                Logger.Info($"Unexpected Error in {methodName}: {e.Message}");
-                return null;
-            }
+            Logger.Info($"Parameters are null in {methodName}");
+            return null;
+
         }
 
         /// <summary>
@@ -177,16 +171,17 @@ namespace Library.DAL.Repositories
         /// <param name="dynamicParams">Параметры, которые передаются в запрос.</param>
         /// <param name="connection">Соединение с базой данных.</param>
         /// <returns>Делегат, который выполняет запрос и возвращает результат.</returns>
-        private static Func<object?> GetMethod<T>(string methodName, string finalQuery, DynamicParameters dynamicParams, NpgsqlConnection connection)
+        private static Func<Task<object?>> GetMethodAsync<T>(string methodName, string finalQuery, DynamicParameters dynamicParams, NpgsqlConnection connection)
         {
-            if (finalQuery == null) throw new ArgumentNullException(nameof(finalQuery));
+            if (finalQuery == null) 
+                throw new ArgumentNullException(nameof(finalQuery));
             return methodName switch
             {
                 "GetSingleEntityByParam" =>
-                    () => connection.QuerySingleOrDefault<T>(finalQuery, dynamicParams),
+                    async () => await connection.QuerySingleOrDefaultAsync<T>(finalQuery, dynamicParams),
 
                 "GetEntitiesByParam" =>
-                    () => connection.Query<T>(finalQuery, dynamicParams),
+                    async () => await connection.QueryAsync<T>(finalQuery, dynamicParams),
 
                 _ => throw new ArgumentException("Invalid method name", nameof(methodName))
             };
@@ -219,30 +214,30 @@ namespace Library.DAL.Repositories
 
         #region Methods
 
-        public IEnumerable<string>? GetColumnNames(string tableName, string sqlQuery)
+        public Task<IEnumerable<string>> GetColumnNamesAsync(string tableName, string sqlQuery)
         {
             string schema = DatabaseConfig.DatabaseSchema;
-            var method = nameof(GetColumnNames);
+            var method = nameof(GetColumnNamesAsync);
 
             if (IsNullFields(tableName, method) || IsNullFields(sqlQuery, method) || IsNullFields(schema, method))
-                return null;
+                return Task.FromResult<IEnumerable<string>>(Array.Empty<string>());
 
-            try
+            return ExecuteQuery(async connection =>
             {
-                return ExecuteQuery(connection =>
+                try
                 {
-                    var result = connection.Query<string>(
+                    var result = await connection.QueryAsync<string>(
                         sqlQuery,
                         new { TableName = tableName, SchemaName = schema }
                     );
                     return result;
-                });
-            }
-            catch (NpgsqlException e)
-            {
-                Logger.Info(e.Message);
-                return Array.Empty<string>(); // Возвращаем пустой массив.
-            }
+                }
+                catch (NpgsqlException e)
+                {
+                    Logger.Info($"Database error in {method}: {e.Message}");
+                    return Array.Empty<string>(); // Возвращаем пустой массив.
+                }
+            });
         }
         #endregion
     }

@@ -21,8 +21,8 @@ namespace Library.BL.Service
 
         #region GetService
 
-        public IEnumerable<User>? GetAllEntities() =>
-            RepositoryManager.GetDataRepository.GetAllEntity<User>(_sqlProvider.GetAll);
+        public async Task<IEnumerable<User>?> GetAllEntitiesAsync() =>
+           await RepositoryManager.GetDataRepository.GetAllEntity<User>(_sqlProvider.GetAll);
         public IEnumerable<User>? GetEntitiesByParam(Dictionary<string, object> param) =>
             RepositoryManager.GetDataRepository.GetEntitiesByParam<User>(_sqlProvider.GetByParam, param);
 
