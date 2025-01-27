@@ -72,7 +72,7 @@ namespace Library.DAL.Repositories
         /// <returns>Объект типа <typeparamref name="T"/>, если найден, иначе null.</returns>
         public async Task<T?> GetSingleEntityByParamAsync<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            var method = nameof(ExecuteWithParametersAsync);
+            const string method = nameof(ExecuteWithParametersAsync);
             if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
                 return null;
             try
@@ -106,7 +106,7 @@ namespace Library.DAL.Repositories
         /// <returns>Коллекция объектов типа <typeparamref name="T"/>, если найдены, иначе null.</returns>
         public async Task<IEnumerable<T>?> GetEntitiesByParamAsync<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            var method = nameof(ExecuteWithParametersAsync);
+            const string method = nameof(ExecuteWithParametersAsync);
             if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
                 return null;
             try
@@ -216,8 +216,8 @@ namespace Library.DAL.Repositories
 
         public Task<IEnumerable<string>> GetColumnNamesAsync(string tableName, string sqlQuery)
         {
-            string schema = DatabaseConfig.DatabaseSchema;
-            var method = nameof(GetColumnNamesAsync);
+            var schema = DatabaseConfig.DatabaseSchema;
+            const string method = nameof(GetColumnNamesAsync);
 
             if (IsNullFields(tableName, method) || IsNullFields(sqlQuery, method) || IsNullFields(schema, method))
                 return Task.FromResult<IEnumerable<string>>(Array.Empty<string>());

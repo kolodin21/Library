@@ -2,7 +2,6 @@
 using Dapper;
 using Library.DAL.Interface;
 
-
 namespace Library.DAL.Repositories
 {
     public class ModificationRepository: BaseRepository, IModificationRepository
@@ -14,7 +13,7 @@ namespace Library.DAL.Repositories
         /// </summary>
         public async Task<bool> AddEntityAsync<T>(string sqlQuery, T entity, bool isStoredProcedure = false) where T : class
         {
-            var method = nameof(AddEntityAsync);
+            const string method = nameof(AddEntityAsync);
 
             if (IsNullFields(sqlQuery, method) || IsNullFields(entity, method))
                 return false;
@@ -57,7 +56,7 @@ namespace Library.DAL.Repositories
         /// </summary>
         public async Task<bool> UpdateEntityDynamicAsync(string tableName, Dictionary<string, object> parameters)
         {
-            var method = nameof(UpdateEntityDynamicAsync);
+            const string method = nameof(UpdateEntityDynamicAsync);
 
             if ((IsNullFields(tableName, method) || IsNullFields(parameters, method)) && !parameters.ContainsKey("id"))
             {
@@ -66,7 +65,7 @@ namespace Library.DAL.Repositories
             }
 
             // Генерация SQL-запроса
-            string sqlQuery = GenerateUpdateQuery(tableName, parameters);
+            var sqlQuery = GenerateUpdateQuery(tableName, parameters);
 
             // Выполнение запроса
             return await ExecuteQuery(async connection =>
@@ -76,7 +75,7 @@ namespace Library.DAL.Repositories
             });
         }
 
-        private string GenerateUpdateQuery(string tableName, Dictionary<string, object> parameters)
+        private static string GenerateUpdateQuery(string tableName, Dictionary<string, object> parameters)
         {
             var setClause = string.Join(", ", parameters.Keys
                 .Where(key => !key.Equals("id", StringComparison.OrdinalIgnoreCase))
@@ -123,7 +122,8 @@ namespace Library.DAL.Repositories
         /// </summary>
         public async Task<bool> DeleteEntityDynamicAsync(string tableName, Dictionary<string, object> whereParameters)
         {
-            var method = nameof(DeleteEntityDynamicAsync);
+            const string method = nameof(DeleteEntityDynamicAsync);
+
             if (IsNullFields(tableName, method) || IsNullFields(whereParameters, method))
                 return false;
 
@@ -132,7 +132,7 @@ namespace Library.DAL.Repositories
                 return await ExecuteQuery(async connection =>
                 {
                     var whereClauses = whereParameters.Keys.Select(key => $"{key} = @{key}");
-                    string sqlQuery = $"DELETE FROM {tableName} WHERE {string.Join(" AND ", whereClauses)}";
+                    var sqlQuery = $"DELETE FROM {tableName} WHERE {string.Join(" AND ", whereClauses)}";
 
                     var dynamicParams = new DynamicParameters();
                     foreach (var param in whereParameters)
@@ -172,7 +172,7 @@ namespace Library.DAL.Repositories
                     var whereClauses =
                         dynamicParams.ParameterNames.Select((paramName => $"{paramName} = @{paramName}"));
 
-                    string sqlQuery = $"DELETE FROM {tableName} WHERE {string.Join(" AND ", whereClauses)}";
+                    var sqlQuery = $"DELETE FROM {tableName} WHERE {string.Join(" AND ", whereClauses)}";
 
                     var result = await connection.ExecuteAsync(sqlQuery, dynamicParams);
                     return result > 0;
@@ -187,4 +187,3 @@ namespace Library.DAL.Repositories
         #endregion
     }
 }
-

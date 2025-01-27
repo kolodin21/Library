@@ -48,7 +48,7 @@ namespace Library.BL.Service
 
             var updateParams = GetDynamicUpdateParams(publisher, columnNames!);
 
-            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable, updateParams);
+            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable, updateParams!);
         }
         #endregion
     }

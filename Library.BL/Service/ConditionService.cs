@@ -44,13 +44,13 @@ namespace Library.BL.Service
         public async Task<bool> UpdateEntityAsync(Condition condition)
         {
             // Получаем имена колонок таблицы
-            var columnNames =await 
+            var columnNames = await 
                 RepositoryManager.GetDataRepository.GetColumnNamesAsync(_sqlProvider.MainNameTable,
                     _sqlProvider.GetColumnAndTypeTable);
 
             var updateParams = GetDynamicUpdateParams(condition, columnNames!);
 
-            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable, updateParams);
+            return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable, updateParams!);
         }
         #endregion
     }

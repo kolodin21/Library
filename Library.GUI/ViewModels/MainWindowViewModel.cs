@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using Library.GUI.View.LogInSystem;
 using Library.GUI.ViewModels.LogInSystemVM;
-using NLog;
 
 namespace Library.GUI.ViewModels
 {

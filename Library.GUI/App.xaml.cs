@@ -52,8 +52,6 @@ namespace Library.GUI
             services.AddViewWithViewModel<UserPageView, UserPageViewModel>();
 
         }
-        //Todo
-        //Добавить асинхронность
     }
 
     //Метод расширения для IServiceCollection для одновременного создадания View и ViewModel с привязкой DataContext

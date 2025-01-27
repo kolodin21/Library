@@ -16,10 +16,10 @@ namespace Library.GUI.ViewModels.LogInSystemVM
 
         public AuthorizationPageViewModel()
         {
-            EnterCommand = ReactiveCommand.CreateFromTask(ExecEnter, CanExecEnter());
+            EnterCommand = ReactiveCommand.CreateFromTask(ExecEnterAsync, CanExecEnter());
         }
         
-        private async Task ExecEnter()
+        private async Task ExecEnterAsync()
         {
             if (AdminConfig.Login == Login && AdminConfig.Password == Password)
             {
