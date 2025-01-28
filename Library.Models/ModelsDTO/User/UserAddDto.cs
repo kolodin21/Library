@@ -1,4 +1,4 @@
-﻿namespace Library.Models.ModelsDTO
+﻿namespace Library.Server.BL.ModelsDTO.User
 {
     public class UserAddDto(string surname, string name, string? patronymic, string login, string password, string email, string phone)
     {

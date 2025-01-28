@@ -1,5 +1,5 @@
-﻿using Library.Models;
-using Library.Models.ModelsDTO;
+﻿using Library.Server.BL.Models;
+using Library.Server.BL.ModelsDTO.TakeReturn;
 using Library.Server.DAL.Repositories;
 
 namespace Library.Server.BL.Service

@@ -1,4 +1,5 @@
-﻿namespace Library.Models.ModelsDTO;
+﻿namespace Library.Server.BL.ModelsDTO.User;
+
 public class UserUpdatePersonalInfoDto
 {
     public int Id { get; set; }

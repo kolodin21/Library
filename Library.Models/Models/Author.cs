@@ -1,4 +1,4 @@
-﻿namespace Library.Models;
+﻿namespace Library.Server.BL.Models;
 
 public record Author
 {

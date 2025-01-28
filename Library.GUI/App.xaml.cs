@@ -7,55 +7,50 @@ using Library.Client.GUI.ViewModels;
 using Library.Client.GUI.ViewModels.AdminVM;
 using Library.Client.GUI.ViewModels.LogInSystemVM;
 using Library.Client.GUI.ViewModels.UserVM;
-using Library.Client.Http;
-using Library.Models;
+using Library.Infrastructure;
+using Library.Server.BL.Service;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 
 namespace Library.Client.GUI
 {
-    public partial class App
+    public partial class App : Application
     {
         //Сервис для работы с классами и их получения из DI
-        public IServiceProvider ServiceProvider { get;}
-        public ManagerHttp ManagerHttp { get;}
+        public IServiceProvider ServiceProvider { get; private set; }
 
-        [Obsolete("Obsolete")]
         public App()
         {
             IServiceCollection services = new ServiceCollection();
 
             //Логгер
             LogManager.LoadConfiguration(AdminConfig.PathNlog);
+            var logger = LogManager.GetCurrentClassLogger();
             
             //Получение View и ViewModel
             ConfigureServices(services);
 
+            //Создание прочих классов приложения
+            services.AddInfrastructure();
+
             // Построение провайдера
             ServiceProvider = services.BuildServiceProvider();
-            ManagerHttp = ServiceProvider.GetRequiredService<ManagerHttp>();
 
-            ViewModelBase.Initialize(ServiceProvider, ManagerHttp);
+            var serviceManager = ServiceProvider.GetRequiredService<ServiceManager>();
+
+            ViewModelBase.Initialize(serviceManager, logger);
         }
 
         //Реализация View и ViewModel
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<UserHttpClient>();
-            services.AddSingleton<ManagerHttp>();
-
+            
             services.AddViewWithViewModel<MainMenuPageView, MainMenuPageViewModel>();
             services.AddViewWithViewModel<AuthorizationPageView, AuthorizationPageViewModel>();
             services.AddViewWithViewModel<RegistrationPageView, RegistrationPageViewModel>();
             services.AddViewWithViewModel<AdminPageView, AdminPageViewModel>();
             services.AddViewWithViewModel<UserPageView, UserPageViewModel>();
 
-            services.AddTransient<UserPageViewModel>(provider =>
-            {
-                var user = provider.GetRequiredService<User>(); // Получаем пользователя (позже передадим вручную)
-                return new UserPageViewModel(user);
-            });
-            services.AddTransient<UserPageView>();
         }
     }
 
@@ -67,7 +62,7 @@ namespace Library.Client.GUI
             where TViewModel : class
         {
             services.AddSingleton<TViewModel>();
-            services.AddTransient<TView>(provider =>
+            services.AddSingleton<TView>(provider =>
             {
                 var view = new TView
                 {

@@ -1,4 +1,4 @@
-﻿namespace Library.Models.ModelsDTO
+﻿namespace Library.Server.BL.ModelsDTO.BookDto
 {
     public class BookAddDto(string title, int authorId, int year, int publisherId, int conditionId, int quantity)
     {

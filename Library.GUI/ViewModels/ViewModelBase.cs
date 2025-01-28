@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
-using Library.Client.Http;
+using Library.Server.BL.Service;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI;
@@ -10,15 +10,16 @@ namespace Library.Client.GUI.ViewModels
 {
     public abstract class ViewModelBase : ReactiveObject
     {
-        //Логгер
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        public static ManagerHttp ManagerHttp { get; set; } = null!;
-        protected static IServiceProvider ServiceProvider { get; private set; } = null!;
+        //Сервис для работы с бизнес логикой 
+        protected static ServiceManager ServiceManager { get; private set; } = null!;
 
-        public static void Initialize(IServiceProvider serviceProvider,ManagerHttp managerHttp)
+        //Логгер
+        protected static Logger Logger { get; set; }
+
+        public static void Initialize(ServiceManager serviceManager,Logger logger)
         {
-            ServiceProvider = serviceProvider;
-            ManagerHttp = managerHttp;
+            ServiceManager = serviceManager;
+            Logger = logger;
         }
 
         //Преобразование свойств в Dictionary
@@ -63,9 +64,8 @@ namespace Library.Client.GUI.ViewModels
         }
 
         //Получение выбранной страницы
-        protected T GetPage<T>() where T : notnull =>
-            ServiceProvider.GetRequiredService<T>();
-          
+        protected T GetService<T>() =>
+            ((App)Application.Current).ServiceProvider.GetRequiredService<T>();
 
         //Закрытие приложения 
         protected static void ExecExit()

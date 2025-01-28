@@ -1,14 +1,11 @@
 ﻿using System.Data;
 using Dapper;
 using Library.Server.DAL.Interface;
-using NLog;
 
 namespace Library.Server.DAL.Repositories
 {
     public class ModificationRepository: BaseRepository, IModificationRepository
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         #region Add
 
         /// <summary>
