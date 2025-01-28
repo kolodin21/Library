@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.DAL", "Library.DAL\Library.DAL.csproj", "{D1088DCC-4ED4-4F2B-AD19-450B9C6C824B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Server.DAL", "Library.DAL\Library.Server.DAL.csproj", "{D1088DCC-4ED4-4F2B-AD19-450B9C6C824B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.BL", "Library.BL\Library.BL.csproj", "{AE01A792-AD70-4012-AB2E-FD2B68ADE9FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Server.BL", "Library.BL\Library.Server.BL.csproj", "{AE01A792-AD70-4012-AB2E-FD2B68ADE9FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.GUI", "Library.GUI\Library.GUI.csproj", "{2C0A63CC-7A2E-492E-BADF-DB012EA1CCBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Client.GUI", "Library.GUI\Library.Client.GUI.csproj", "{2C0A63CC-7A2E-492E-BADF-DB012EA1CCBF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Infrastructure", "Library.Infrastructure\Library.Infrastructure.csproj", "{121368DE-380F-4387-8395-5E9CCADF4DEA}"
 EndProject
