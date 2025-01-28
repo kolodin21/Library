@@ -50,9 +50,6 @@ namespace Library.GUI.ViewModels.LogInSystemVM
         }
     }
 }   
-//sdfsdfsfsdfsd
-
-
 
 //Todo
 //Добавить логи в DAL слой
