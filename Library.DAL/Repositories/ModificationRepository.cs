@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using Dapper;
-using Library.DAL.Interface;
+using Library.Server.DAL.Interface;
 
-namespace Library.DAL.Repositories
+namespace Library.Server.DAL.Repositories
 {
     public class ModificationRepository: BaseRepository, IModificationRepository
     {

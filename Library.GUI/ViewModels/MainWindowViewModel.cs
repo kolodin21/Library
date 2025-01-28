@@ -1,9 +1,9 @@
-﻿using ReactiveUI.Fody.Helpers;
-using System.Windows.Controls;
-using Library.GUI.View.LogInSystem;
-using Library.GUI.ViewModels.LogInSystemVM;
+﻿using System.Windows.Controls;
+using Library.Client.GUI.View.LogInSystem;
+using Library.Client.GUI.ViewModels.LogInSystemVM;
+using ReactiveUI.Fody.Helpers;
 
-namespace Library.GUI.ViewModels
+namespace Library.Client.GUI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {

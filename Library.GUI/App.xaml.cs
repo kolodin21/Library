@@ -1,18 +1,18 @@
-﻿using Library.BL.Service;
-using Library.GUI.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using Library.GUI.Configuration;
+﻿using System.Windows;
+using Library.Client.GUI.Configuration;
+using Library.Client.GUI.View.Admin;
+using Library.Client.GUI.View.LogInSystem;
+using Library.Client.GUI.View.User;
+using Library.Client.GUI.ViewModels;
+using Library.Client.GUI.ViewModels.AdminVM;
+using Library.Client.GUI.ViewModels.LogInSystemVM;
+using Library.Client.GUI.ViewModels.UserVM;
 using Library.Infrastructure;
-using Library.GUI.View.Admin;
-using Library.GUI.View.LogInSystem;
-using Library.GUI.View.User;
-using Library.GUI.ViewModels.AdminVM;
-using Library.GUI.ViewModels.LogInSystemVM;
-using Library.GUI.ViewModels.UserVM;
+using Library.Server.BL.Service;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 
-namespace Library.GUI
+namespace Library.Client.GUI
 {
     public partial class App : Application
     {

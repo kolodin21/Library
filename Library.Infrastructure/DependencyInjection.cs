@@ -1,8 +1,8 @@
-﻿using Library.BL;
-using Library.BL.Models;
-using Library.BL.Service;
-using Library.DAL.Interface;
-using Library.DAL.Repositories;
+﻿using Library.Server.BL;
+using Library.Server.BL.Models;
+using Library.Server.BL.Service;
+using Library.Server.DAL.Interface;
+using Library.Server.DAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Library.Infrastructure

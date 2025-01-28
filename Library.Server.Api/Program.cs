@@ -1,5 +1,5 @@
-using Library.BL.Service;
 using Library.Infrastructure;
+using Library.Server.BL.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

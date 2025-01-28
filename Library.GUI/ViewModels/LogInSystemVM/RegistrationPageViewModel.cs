@@ -1,4 +1,4 @@
-﻿namespace Library.GUI.ViewModels.LogInSystemVM
+﻿namespace Library.Client.GUI.ViewModels.LogInSystemVM
 {
     public class RegistrationPageViewModel()
     {

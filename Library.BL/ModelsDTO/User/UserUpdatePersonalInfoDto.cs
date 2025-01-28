@@ -1,4 +1,4 @@
-﻿namespace Library.BL.ModelsDTO.User;
+﻿namespace Library.Server.BL.ModelsDTO.User;
 
 public class UserUpdatePersonalInfoDto
 {

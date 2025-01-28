@@ -1,6 +1,6 @@
-﻿using Library.BL.Models;
+﻿using Library.Server.BL.Models;
 
-namespace Library.BL
+namespace Library.Server.BL
 {
     #region Interface
     public interface ISqlBaseProvider
