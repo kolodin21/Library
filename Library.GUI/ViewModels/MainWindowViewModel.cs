@@ -27,6 +27,10 @@ namespace Library.GUI.ViewModels
                 => CurrentContent = newContent;
             Logger.Info("Подписались на все события");
 
-        }
+        }   
+
+
+
+
     }
 }
