@@ -1,4 +1,4 @@
-﻿namespace Library.BL.Interface
+﻿namespace Library.Server.BL.Interface
 {
     public interface IAddService<in T>
     {

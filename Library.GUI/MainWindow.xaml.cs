@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Library.GUI
+namespace Library.Client.GUI
 {
     public partial class MainWindow : Window
     {

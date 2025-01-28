@@ -2,11 +2,11 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reactive;
-using Library.BL.Models;
+using Library.Server.BL.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Library.GUI.ViewModels.AdminVM
+namespace Library.Client.GUI.ViewModels.AdminVM
 {
     public class AdminPageViewModel : ViewModelBase
     {

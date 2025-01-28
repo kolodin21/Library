@@ -1,8 +1,8 @@
-﻿using Library.BL.ModelsDTO.User;
-using Library.BL.Models;
-using Library.DAL.Repositories;
+﻿using Library.Server.BL.Models;
+using Library.Server.BL.ModelsDTO.User;
+using Library.Server.DAL.Repositories;
 
-namespace Library.BL.Service
+namespace Library.Server.BL.Service
 {
     public class UserService:BaseService,IUserService
     {

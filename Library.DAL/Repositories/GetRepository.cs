@@ -1,9 +1,9 @@
 ﻿using Dapper;
+using Library.Server.DAL.Configuration;
+using Library.Server.DAL.Interface;
 using Npgsql;
-using Library.DAL.Configuration;
-using Library.DAL.Interface;
 
-namespace Library.DAL.Repositories
+namespace Library.Server.DAL.Repositories
 {
     public class GetRepository : BaseRepository,IGetRepository
     {

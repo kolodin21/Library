@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="Library.GUI.View.User.UserPageView"
+﻿<UserControl x:Class="Library.Client.GUI.View.User.UserPageView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:userVm="clr-namespace:Library.GUI.ViewModels.UserVM"
+             xmlns:userVm="clr-namespace:Library.Client.GUI.ViewModels.UserVM"
              Height="350" 
              Width="400">
 

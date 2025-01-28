@@ -1,6 +1,6 @@
-﻿using Library.DAL.Repositories;
+﻿using Library.Server.DAL.Repositories;
 
-namespace Library.BL.Service
+namespace Library.Server.BL.Service
 {
     public abstract class BaseService
     {

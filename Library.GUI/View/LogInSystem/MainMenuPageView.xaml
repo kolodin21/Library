@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="Library.GUI.View.LogInSystem.MainMenuPageView"
+﻿<UserControl x:Class="Library.Client.GUI.View.LogInSystem.MainMenuPageView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:logInSystemVm="clr-namespace:Library.GUI.ViewModels.LogInSystemVM"
+             xmlns:logInSystemVm="clr-namespace:Library.Client.GUI.ViewModels.LogInSystemVM"
              Height="300" 
              Width="400">
 

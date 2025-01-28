@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Configuration;
 
-namespace Library.GUI.Configuration
+namespace Library.Client.GUI.Configuration
 {
     public static class AdminConfig
     {
