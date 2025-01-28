@@ -6,7 +6,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Library.GUI.ViewModels.AdminVM
 {
-    class AdminPageViewModel : ViewModelBase
+    public class AdminPageViewModel : ViewModelBase
     {
         //Заглушка чтобы проверить работоспособность 
         [Reactive]public ObservableCollection<User>? Users { get; set; }
@@ -20,9 +20,9 @@ namespace Library.GUI.ViewModels.AdminVM
         }
 
         private async Task LoadUsersAsync()
-        {
+        { 
             var users = await ServiceManager.UserService.GetAllEntitiesAsync();
-            if (users != null)
+            if (users != null) 
             {
                 Users = new ObservableCollection<User>(users);
             }

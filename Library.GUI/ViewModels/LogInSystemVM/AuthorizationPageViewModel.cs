@@ -50,3 +50,7 @@ namespace Library.GUI.ViewModels.LogInSystemVM
         }
     }
 }
+
+//Todo
+//Добавить логи в DAL слой
+//Начать реализовывать графический интерфейс
