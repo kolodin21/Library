@@ -1,4 +1,4 @@
-﻿namespace Library.BL.Models
+﻿namespace Library.Server.BL.Models
 {
     public record User
     {

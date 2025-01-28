@@ -1,4 +1,4 @@
-﻿namespace Library.DAL.Interface
+﻿namespace Library.Server.DAL.Interface
 {
     public interface IModificationRepository
     {

@@ -1,9 +1,9 @@
 ﻿using System.Data;
-using Library.DAL.Configuration;
+using Library.Server.DAL.Configuration;
 using NLog;
 using Npgsql;
 
-namespace Library.DAL.Repositories
+namespace Library.Server.DAL.Repositories
 {
     public abstract class BaseRepository
     {

@@ -1,8 +1,8 @@
-﻿using Library.BL.Models;
-using Library.BL.ModelsDTO.BookDto;
-using Library.DAL.Repositories;
+﻿using Library.Server.BL.Models;
+using Library.Server.BL.ModelsDTO.BookDto;
+using Library.Server.DAL.Repositories;
 
-namespace Library.BL.Service
+namespace Library.Server.BL.Service
 {
     public class BookService : BaseService,IBookService
     {

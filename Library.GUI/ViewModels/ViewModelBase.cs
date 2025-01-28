@@ -1,12 +1,12 @@
 ﻿using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
-using Library.BL.Service;
+using Library.Server.BL.Service;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI;
 
-namespace Library.GUI.ViewModels
+namespace Library.Client.GUI.ViewModels
 {
     public abstract class ViewModelBase : ReactiveObject
     {

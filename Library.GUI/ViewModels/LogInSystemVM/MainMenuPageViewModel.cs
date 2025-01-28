@@ -1,8 +1,8 @@
-﻿using ReactiveUI;
-using System.Reactive;
-using Library.GUI.View.LogInSystem;
+﻿using System.Reactive;
+using Library.Client.GUI.View.LogInSystem;
+using ReactiveUI;
 
-namespace Library.GUI.ViewModels.LogInSystemVM
+namespace Library.Client.GUI.ViewModels.LogInSystemVM
 {
     public class MainMenuPageViewModel : ViewModelBase
     {

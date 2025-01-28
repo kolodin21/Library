@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Library.DAL.Configuration
+namespace Library.Server.DAL.Configuration
 {
     public static class DatabaseConfig 
     {

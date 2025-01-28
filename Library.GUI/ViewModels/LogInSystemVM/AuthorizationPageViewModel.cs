@@ -1,11 +1,11 @@
 ﻿using System.Reactive;
-using Library.GUI.Configuration;
-using Library.GUI.View.Admin;
-using Library.GUI.View.User;
+using Library.Client.GUI.Configuration;
+using Library.Client.GUI.View.Admin;
+using Library.Client.GUI.View.User;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Library.GUI.ViewModels.LogInSystemVM
+namespace Library.Client.GUI.ViewModels.LogInSystemVM
 {
     public class AuthorizationPageViewModel : ViewModelBase
     {

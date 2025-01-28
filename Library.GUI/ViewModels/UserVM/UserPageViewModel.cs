@@ -1,4 +1,4 @@
-﻿namespace Library.GUI.ViewModels.UserVM
+﻿namespace Library.Client.GUI.ViewModels.UserVM
 {
     public class UserPageViewModel
     {

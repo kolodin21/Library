@@ -1,11 +1,11 @@
-﻿using Library.BL.Interface;
-using Library.BL.ModelsDTO.BookDto;
-using Library.BL.ModelsDTO.Others;
-using Library.BL.ModelsDTO.TakeReturn;
-using Library.BL.ModelsDTO.User;
-using Library.BL.Models;
+﻿using Library.Server.BL.Interface;
+using Library.Server.BL.Models;
+using Library.Server.BL.ModelsDTO.BookDto;
+using Library.Server.BL.ModelsDTO.Others;
+using Library.Server.BL.ModelsDTO.TakeReturn;
+using Library.Server.BL.ModelsDTO.User;
 
-namespace Library.BL.Service
+namespace Library.Server.BL.Service
 {
     #region Interface
 

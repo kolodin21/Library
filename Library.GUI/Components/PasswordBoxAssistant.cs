@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
 
-namespace Library.GUI.Components
+namespace Library.Client.GUI.Components
 {
     public static class PasswordBoxAssistant
     {

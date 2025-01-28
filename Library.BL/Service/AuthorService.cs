@@ -1,8 +1,8 @@
-﻿using Library.BL.ModelsDTO.Others;
-using Library.DAL.Repositories;
-using Library.BL.Models;
+﻿using Library.Server.BL.Models;
+using Library.Server.BL.ModelsDTO.Others;
+using Library.Server.DAL.Repositories;
 
-namespace Library.BL.Service
+namespace Library.Server.BL.Service
 {
     public class AuthorService : BaseService, IAuthorService
     {
