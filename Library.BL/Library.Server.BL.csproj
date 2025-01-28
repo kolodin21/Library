@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Library.DAL\Library.Server.DAL.csproj" />
+<<<<<<< HEAD:Lilbrary.Client.DAL/Library.Client.Http.csproj
     <ProjectReference Include="..\Library.Models\Library.Models.csproj" />
+=======
+    <ProjectReference Include="..\Library.DAL\Library.Server.DAL.csproj" />
+>>>>>>> Добавил слой Api и сделал пробный запрос для проверки в GUI:Library.BL/Library.Server.BL.csproj
   </ItemGroup>
 
 </Project>

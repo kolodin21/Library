@@ -1,21 +1,14 @@
 ﻿using System.Reactive;
-using Library.Client.GUI.Configuration;
-using Library.Client.GUI.View.Admin;
-using Library.Client.GUI.View.User;
-using Library.Client.GUI.ViewModels.UserVM;
-using Library.Client.Http;
-using Microsoft.Extensions.DependencyInjection;
-using NLog;
+using Library.GUI.Configuration;
+using Library.GUI.View.Admin;
+using Library.GUI.View.User;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Library.Client.GUI.ViewModels.LogInSystemVM
+namespace Library.GUI.ViewModels.LogInSystemVM
 {
     public class AuthorizationPageViewModel : ViewModelBase
     {
-        //Логгер
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         [Reactive] public string? Login { get; set; }
         [Reactive] public string? Password { get; set; }
 
@@ -30,29 +23,21 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         {
             if (AdminConfig.Login == Login && AdminConfig.Password == Password)
             {
-                RaiseContentChanged(GetPage<AdminPageView>());
+                RaiseContentChanged(GetService<AdminPageView>());
             }
             else
             {
                 var paramConvert = ConvertToDictionary(() => Login, () => Password);
 
-                var user = await ManagerHttp.UserHttpClient.GetSingleUser(paramConvert!);
-                await Task.Delay(300);
+                var user = await ServiceManager.UserService.GetSingleEntityByParamAsync(paramConvert!);
 
                 if (user is null)
                     return;
 
-                //  Создаем `UserPageViewModel` через DI, передав `User`
-                var userViewModel = ActivatorUtilities.CreateInstance<UserPageViewModel>(ServiceProvider, user);
+                //Тестовый вывод для проверки 
+                Logger.Info($"{user}");
 
-                //  Создаем страницу через DI и устанавливаем `DataContext`
-                var userPage = GetPage<UserPageView>();
-                userPage.DataContext = userViewModel;
-
-
-                Logger.Info($"Пользователь : {user.Login} зашел в аккаунт.");
-
-                RaiseContentChanged(userPage);
+                RaiseContentChanged(GetService<UserPageView>());
             }
         }
         private IObservable<bool> CanExecEnter()
@@ -65,3 +50,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         }
     }
 }   
+
+//Todo
+//Добавить логи в DAL слой
+//Начать реализовывать графический интерфейс

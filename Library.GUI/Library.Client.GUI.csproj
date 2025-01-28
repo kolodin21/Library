@@ -17,11 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ViewModels\LogInSystemVM\MainMenuPageViewModel.cs" />
+    <ProjectReference Include="..\Library.BL\Library.Server.BL.csproj" />
+    <ProjectReference Include="..\Library.Infrastructure\Library.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lilbrary.Client.DAL\Library.Client.Http.csproj" />
+    <None Include="ViewModels\LogInSystemVM\MainMenuPageViewModel.cs" />
   </ItemGroup>
 
 	<ItemGroup>
