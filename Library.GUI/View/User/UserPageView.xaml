@@ -9,8 +9,9 @@
         <userVm:UserPageViewModel/>
     </UserControl.DataContext>
 
-    <Grid>
-            
-    </Grid>
+    <StackPanel>
+        <Label Content="{Binding UserName}"
+               Height="100"/>
+    </StackPanel>
 
 </UserControl>
