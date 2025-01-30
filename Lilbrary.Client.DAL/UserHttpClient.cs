@@ -5,30 +5,40 @@ namespace Library.Client.Http
 {
     public class UserHttpClient : LibraryHttpBase
     {
-        #region URI
-
         private Uri GetAllUsersUri => new Uri($"{Host}/AllUsers");
 
         private Uri GetSingleUserUri => new Uri($"{Host}/SingleUser");
 
-        #endregion
+        private Uri _getSingleUser(Dictionary<string, object> param)
+        {
+            var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            foreach (var kvp in param)
+            {
+                query[kvp.Key] = kvp.Value switch
+                {
+                    null => "",
+                    bool b => b.ToString().ToLower(),
+                    DateTime dt => dt.ToString("o"),
+                    _ => kvp.Value.ToString()
+                };
+            }
 
-        #region Http
+            return new Uri($"{Host}/SingleUser{(query.Count > 0 ? "?" + query : "")}");
+        }
 
         public async Task<IEnumerable<User>?> GetAllUsers() => await
             Client.GetFromJsonAsync<IEnumerable<User>>(GetAllUsersUri);
 
-
         public async Task<User?> GetSingleUser(Dictionary<string, object> param)
         {
-            var response = await Client.PostAsJsonAsync(GetSingleUserUri,param);
+
+            var response = await Client.PostAsJsonAsync($"{Host}/SingleUser", param);
 
             return response.IsSuccessStatusCode
                 ? await response.Content.ReadFromJsonAsync<User>()
                 : null;
         }
             
-        #endregion
            
     }
 }

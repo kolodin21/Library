@@ -1,5 +1,4 @@
-﻿namespace Library.Server.BL.Models;
-
+﻿namespace Library.Models;
 public record Condition
 {
     public int Id { get; set; }

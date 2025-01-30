@@ -1,4 +1,4 @@
-﻿namespace Library.Server.BL.ModelsDTO.Others
+﻿namespace Library.Models.ModelsDTO
 {
     public record  ConditionDto
     {

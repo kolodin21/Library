@@ -1,12 +1,15 @@
 ﻿using Dapper;
 using Library.Server.DAL.Configuration;
 using Library.Server.DAL.Interface;
+using NLog;
 using Npgsql;
 
 namespace Library.Server.DAL.Repositories
 {
     public class GetRepository : BaseRepository,IGetRepository
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         #region GetAll
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace Library.Server.DAL.Repositories
         /// <returns>Объект типа <typeparamref name="T"/>, если найден, иначе null.</returns>
         public async Task<T?> GetSingleEntityByParamAsync<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            const string method = nameof(ExecuteWithParametersAsync);
+            string method = nameof(ExecuteWithParametersAsync);
             if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
                 return null;
             try
@@ -106,7 +109,7 @@ namespace Library.Server.DAL.Repositories
         /// <returns>Коллекция объектов типа <typeparamref name="T"/>, если найдены, иначе null.</returns>
         public async Task<IEnumerable<T>?> GetEntitiesByParamAsync<T>(string sqlQuery, Dictionary<string, object> parameters) where T : class
         {
-            const string method = nameof(ExecuteWithParametersAsync);
+            string method = nameof(ExecuteWithParametersAsync);
             if (IsNullFields(parameters, method) || IsNullFields(sqlQuery, method))
                 return null;
             try
@@ -175,12 +178,13 @@ namespace Library.Server.DAL.Repositories
         {
             if (finalQuery == null) 
                 throw new ArgumentNullException(nameof(finalQuery));
+
             return methodName switch
             {
-                "GetSingleEntityByParam" =>
+                "GetSingleEntityByParamAsync" =>
                     async () => await connection.QuerySingleOrDefaultAsync<T>(finalQuery, dynamicParams),
 
-                "GetEntitiesByParam" =>
+                "GetEntitiesByParamAsync" =>
                     async () => await connection.QueryAsync<T>(finalQuery, dynamicParams),
 
                 _ => throw new ArgumentException("Invalid method name", nameof(methodName))

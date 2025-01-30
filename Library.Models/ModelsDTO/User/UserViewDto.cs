@@ -1,4 +1,4 @@
-﻿namespace Library.Server.BL.ModelsDTO.User
+﻿namespace Library.Models.ModelsDTO
 {
     public record UserViewDto
     {

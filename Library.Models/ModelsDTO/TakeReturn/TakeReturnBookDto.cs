@@ -1,4 +1,4 @@
-﻿namespace Library.Server.BL.ModelsDTO.TakeReturn
+﻿namespace Library.Models.ModelsDTO
 {
     public record TakeReturnBookDto
     {
