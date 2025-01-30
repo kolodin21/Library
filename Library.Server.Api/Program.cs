@@ -3,6 +3,7 @@ using Library.Server.BL.Service;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System.Text.Json;
+using Library.Models.ModelsDTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,9 +46,12 @@ app.MapPost("/SingleUser", async ([FromBody] Dictionary<string, JsonElement> par
     return await serviceManager.UserService.GetSingleEntityByParamAsync(parsedParams);
 });
 
- #endregion
+app.MapPost("/AddUser", async (UserAddDto userAddDto) =>
+    await serviceManager.UserService.AddEntityAsync(userAddDto));
 
- static object JsonElementToObject(JsonElement element)
+#endregion
+
+static object JsonElementToObject(JsonElement element)
 {
     return element.ValueKind switch
     {

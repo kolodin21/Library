@@ -1,6 +1,7 @@
 ﻿using System.Reactive;
 using Library.Client.GUI.Configuration;
 using Library.Client.GUI.View.Admin;
+using Library.Client.GUI.View.LogInSystem;
 using Library.Client.GUI.View.User;
 using Library.Client.GUI.ViewModels.UserVM;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,14 +16,16 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Reactive] public string? Login { get; set; }
-        [Reactive] public string? Password { get; set; }
+        [Reactive] public string? Login { get; set; } = "Admin";
+        [Reactive] public string? Password { get; set; } = "Admin";
 
         public ReactiveCommand<Unit, Unit> EnterCommand { get; }
+        public ReactiveCommand<Unit, Unit> BackCommand { get; }
 
         public AuthorizationPageViewModel()
         {
             EnterCommand = ReactiveCommand.CreateFromTask(ExecEnterAsync, CanExecEnter());
+            BackCommand = ReactiveCommand.Create(ExecBack);
         }
         
         private async Task ExecEnterAsync()
@@ -54,12 +57,19 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
                 RaiseContentChanged(userPage,"Библиотека");
             }
         }
+        private void ExecBack()
+        {
+            RaiseContentChanged(GetPage<MainMenuPageView>(),"Главное меню");
+        }
+
         private IObservable<bool> CanExecEnter()
         {
             return this.WhenAnyValue(
                 vm => vm.Login,
                 vm => vm.Password,
-                (login, password) => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password)
+                (login, password) => 
+                    !string.IsNullOrEmpty(login) && 
+                    !string.IsNullOrEmpty(password)
             );
         }
     }

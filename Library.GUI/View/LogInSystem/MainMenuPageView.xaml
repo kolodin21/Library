@@ -9,7 +9,7 @@
         <logInSystemVm:MainMenuPageViewModel/>
     </UserControl.DataContext>
 
-    <StackPanel>
+    <StackPanel Background="White">
 
         <Label Content="Библиотека"  
                Height="40"

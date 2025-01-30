@@ -1,25 +1,23 @@
-﻿using System.Reactive.Disposables;
-using ReactiveUI;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Library.Models;
 
 namespace Library.Client.GUI.Components
 {
     /// <summary>
     /// Логика взаимодействия для InputControl.xaml
     /// </summary>
-    public partial class InputControl :UserControl
+    public partial class InputPasswordControl : UserControl
     {
-        public static readonly DependencyProperty LabelProperty =
-            DependencyProperty.Register(nameof(Label), typeof(string), typeof(InputControl));
+        public static readonly DependencyProperty LabelProperty = 
+            DependencyProperty.Register(nameof(Label), typeof(string), typeof(InputPasswordControl));
 
-        public static readonly DependencyProperty InputTextProperty =
-            DependencyProperty.Register(nameof(InputText), typeof(string), typeof(InputControl),
+        public static readonly DependencyProperty InputPasswordProperty =
+            DependencyProperty.Register(nameof(InputPassword), typeof(string), typeof(InputPasswordControl),
                 new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty IsReadOnlyProperty =
-            DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(InputControl));
+           DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(InputPasswordControl));
+
 
         public string Label
         {
@@ -27,10 +25,10 @@ namespace Library.Client.GUI.Components
             set => SetValue(LabelProperty, value);
         }
 
-        public string InputText
+        public string InputPassword
         {
-            get => (string)GetValue(InputTextProperty);
-            set => SetValue(InputTextProperty, value);
+            get => (string)GetValue(InputPasswordProperty);
+            set => SetValue(InputPasswordProperty, value);
         }
 
         public bool IsReadOnly
@@ -39,7 +37,7 @@ namespace Library.Client.GUI.Components
             set => SetValue(IsReadOnlyProperty, value);
         }
 
-        public InputControl()
+        public InputPasswordControl()
         {
             InitializeComponent();
         }

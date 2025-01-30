@@ -1,19 +1,16 @@
 ﻿using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Reactive;
-using Library.BL.Models;
+using Library.Client.Http;
+using Library.Models;
+using NLog;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Library.GUI.ViewModels.AdminVM
+namespace Library.Client.GUI.ViewModels.AdminVM
 {
     public class AdminPageViewModel : ViewModelBase
     {
-        private static readonly HttpClient Client = new();
-
-        private static readonly Uri GetAllUsers = new Uri("http://localhost:5241/AllUsers");
-
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         //Заглушка чтобы проверить работоспособность 
         [Reactive]public ObservableCollection<User>? Users { get; set; }
@@ -27,13 +24,21 @@ namespace Library.GUI.ViewModels.AdminVM
         }
 
         private async Task LoadUsersAsync()
-        { 
-            //var users = await ServiceManager.UserService.GetAllEntitiesAsync();
-            var users = await Client.GetFromJsonAsync<IEnumerable<User>>(GetAllUsers);
-
-            if (users != null) 
+        {
+            try
             {
-                Users = new ObservableCollection<User>(users);
+                Logger.Info("Запрос отправлен");
+                var users =await ManagerHttp.UserHttpClient.GetAllUsers();
+
+                if (users != null) 
+                {
+                    Users = new ObservableCollection<User>(users);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Info(e.Message);
+                throw;
             }
         }
     }
