@@ -1,5 +1,5 @@
-﻿using Library.Server.BL;
-using Library.Server.BL.Models;
+﻿using Library.Models;
+using Library.Server.BL;
 using Library.Server.BL.Service;
 using Library.Server.DAL.Interface;
 using Library.Server.DAL.Repositories;
@@ -35,6 +35,5 @@ namespace Library.Infrastructure
 
             return services;
         }
-
     }
 }

@@ -3,12 +3,9 @@ using Library.Client.GUI.Configuration;
 using Library.Client.GUI.View.Admin;
 using Library.Client.GUI.View.LogInSystem;
 using Library.Client.GUI.View.User;
-using Library.Client.GUI.ViewModels;
 using Library.Client.GUI.ViewModels.AdminVM;
 using Library.Client.GUI.ViewModels.LogInSystemVM;
 using Library.Client.GUI.ViewModels.UserVM;
-using Library.Infrastructure;
-using Library.Server.BL.Service;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 
@@ -25,20 +22,13 @@ namespace Library.Client.GUI
 
             //Логгер
             LogManager.LoadConfiguration(AdminConfig.PathNlog);
-            var logger = LogManager.GetCurrentClassLogger();
             
             //Получение View и ViewModel
             ConfigureServices(services);
 
-            //Создание прочих классов приложения
-            services.AddInfrastructure();
-
             // Построение провайдера
             ServiceProvider = services.BuildServiceProvider();
 
-            var serviceManager = ServiceProvider.GetRequiredService<ServiceManager>();
-
-            ViewModelBase.Initialize(serviceManager, logger);
         }
 
         //Реализация View и ViewModel

@@ -6,6 +6,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
 {
     public class MainMenuPageViewModel : ViewModelBase
     {
+
         public ReactiveCommand<Unit, Unit> LoginCommand { get; }
         public ReactiveCommand<Unit, Unit>? RegistrationCommand { get; }
         public ReactiveCommand<Unit, Unit>? ExitCommand { get; }
