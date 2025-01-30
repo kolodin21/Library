@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModels="clr-namespace:Library.Client.GUI.ViewModels"
 
-        Title="Авторизация" 
+        Title="{Binding Title}"
         Height="350" 
         Width="400"
         SizeToContent="WidthAndHeight" 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:logInSystemVm="clr-namespace:Library.Client.GUI.ViewModels.LogInSystemVM"
              xmlns:components="clr-namespace:Library.Client.GUI.Components"
+
              Height="350" 
              Width="400">
 
@@ -10,7 +11,7 @@
         <logInSystemVm:AuthorizationPageViewModel/>
     </UserControl.DataContext>
 
-    <Grid>
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>

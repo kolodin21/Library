@@ -5,14 +5,24 @@ using Library.Client.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Library.Client.GUI.ViewModels
 {
-    public abstract class ViewModelBase : ReactiveObject
+    public interface IContentChanger
+    {
+        event Action<UserControl, string> ContentChanged;
+    }
+
+    public abstract class ViewModelBase : ReactiveObject,IContentChanger
     {
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        
+        //HTTP клиент
         public static ManagerHttp ManagerHttp { get; set; } = null!;
+
+        //DI провайдер
         protected static IServiceProvider ServiceProvider { get; private set; } = null!;
 
         public static void Initialize(IServiceProvider serviceProvider,ManagerHttp managerHttp)
@@ -54,18 +64,20 @@ namespace Library.Client.GUI.ViewModels
             return result;
         }
 
-        //Событие для отображения нужной страницы
-        public event Action<UserControl>? ContentChanged;
+        #region IContentChanger
 
-        protected void RaiseContentChanged(UserControl newContent)
+        //Событие для отображения нужной страницы
+        public event Action<UserControl,string>? ContentChanged;
+
+        protected void RaiseContentChanged(UserControl newContent,string title)
         {
-            ContentChanged?.Invoke(newContent);
+            ContentChanged?.Invoke(newContent,title);
         }
+        #endregion
 
         //Получение выбранной страницы
         protected T GetPage<T>() where T : notnull =>
             ServiceProvider.GetRequiredService<T>();
-          
 
         //Закрытие приложения 
         protected static void ExecExit()

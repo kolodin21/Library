@@ -27,6 +27,8 @@ var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
  Logger Logger = LogManager.GetCurrentClassLogger();
 
 
+ #region User
+
 app.MapGet("/AllUsers",async () =>
 {
     Logger.Info("Запрос на получение всех пользователей отправлен!");
@@ -42,6 +44,8 @@ app.MapPost("/SingleUser", async ([FromBody] Dictionary<string, JsonElement> par
     );
     return await serviceManager.UserService.GetSingleEntityByParamAsync(parsedParams);
 });
+
+ #endregion
 
  static object JsonElementToObject(JsonElement element)
 {

@@ -11,27 +11,36 @@ namespace Library.Client.GUI.ViewModels
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly MainMenuPageViewModel _mainMenuPageViewModel;
-        private readonly AuthorizationPageViewModel _authorizationPageViewModel;
-
         [Reactive] public UserControl? CurrentContent { get; set; }
+        [Reactive] public string Title { get; set; }
 
         public MainWindowViewModel()
         {
             CurrentContent = GetPage<MainMenuPageView>();
+            Title = "Главное меню";
 
             // Инициализация начального представлений
-            _mainMenuPageViewModel = GetPage<MainMenuPageViewModel>();
-            _authorizationPageViewModel = GetPage<AuthorizationPageViewModel>();
+             var mainMenuPageViewModel = GetPage<MainMenuPageViewModel>();
+             var authorizationPageViewModel = GetPage<AuthorizationPageViewModel>();
 
-            // Подписываемся на событие ContentChanged
-            _mainMenuPageViewModel.ContentChanged += newContent
-                => CurrentContent = newContent;
-
-            _authorizationPageViewModel.ContentChanged += newContent
-                => CurrentContent = newContent;
+            SubscribeToContentChanged(mainMenuPageViewModel);
+            SubscribeToContentChanged(authorizationPageViewModel);
 
             Logger.Info("Подписались на все события");
+        }
+        
+        //Подписка на обновление данных
+        private void SubscribeToContentChanged<TViewModel>(TViewModel viewModel)
+            where TViewModel : class
+        {
+            if (viewModel is IContentChanger contentChanger)
+            {
+                contentChanger.ContentChanged += (newContent, newTitle) =>
+                {
+                    CurrentContent = newContent;
+                    Title = newTitle; // Обновляем заголовок окна
+                };
+            }
         }
     }
 }
