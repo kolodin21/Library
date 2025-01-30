@@ -1,4 +1,4 @@
-﻿namespace Library.Server.BL.Models
+﻿namespace Library.Models
 {
     public record Book
     {

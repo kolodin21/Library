@@ -7,8 +7,7 @@ namespace Library.Server.DAL.Repositories
 {
     public abstract class BaseRepository
     {
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         protected BaseRepository()
         {
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
@@ -24,6 +23,8 @@ namespace Library.Server.DAL.Repositories
                     await connection.OpenAsync();
 
                 Logger.Info("Подключение успешно!");
+                Logger.Info($"{connection}");
+
                 var result = await queryAction(connection);
                 Logger.Info("Запрос выполнен успешно.");
                 return result;

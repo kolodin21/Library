@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Reactive;
-using Library.Server.BL.Models;
+using Library.Client.Http;
+using Library.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -10,10 +9,7 @@ namespace Library.Client.GUI.ViewModels.AdminVM
 {
     public class AdminPageViewModel : ViewModelBase
     {
-        private static readonly HttpClient Client = new();
-
-        private static readonly Uri GetAllUsers = new Uri("http://localhost:5241/AllUsers");
-
+        private readonly ManagerHttp _managerHttp = new ManagerHttp(new UserHttpClient());
 
         //Заглушка чтобы проверить работоспособность 
         [Reactive]public ObservableCollection<User>? Users { get; set; }
@@ -27,9 +23,9 @@ namespace Library.Client.GUI.ViewModels.AdminVM
         }
 
         private async Task LoadUsersAsync()
-        { 
-            //var users = await ServiceManager.UserService.GetAllEntitiesAsync();
-            var users = await Client.GetFromJsonAsync<IEnumerable<User>>(GetAllUsers);
+        {
+            var users =await _managerHttp.UserHttpClient.GetAllUsers();
+            //var users = await Client.GetFromJsonAsync<IEnumerable<User>>(GetAllUsers);
 
             if (users != null) 
             {

@@ -1,9 +1,6 @@
-﻿using Library.Server.BL.Interface;
-using Library.Server.BL.Models;
-using Library.Server.BL.ModelsDTO.BookDto;
-using Library.Server.BL.ModelsDTO.Others;
-using Library.Server.BL.ModelsDTO.TakeReturn;
-using Library.Server.BL.ModelsDTO.User;
+﻿using Library.Models;
+using Library.Models.ModelsDTO;
+using Library.Server.BL.Interface;
 
 namespace Library.Server.BL.Service
 {
