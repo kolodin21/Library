@@ -1,4 +1,4 @@
-﻿namespace Library.Server.BL.ModelsDTO.BookDto
+﻿namespace Library.Models.ModelsDTO
 {
     public class BookUpdateInfoDto
     {

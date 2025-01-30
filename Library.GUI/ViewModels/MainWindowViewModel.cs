@@ -1,12 +1,16 @@
 ﻿using System.Windows.Controls;
 using Library.Client.GUI.View.LogInSystem;
 using Library.Client.GUI.ViewModels.LogInSystemVM;
+using NLog;
 using ReactiveUI.Fody.Helpers;
 
 namespace Library.Client.GUI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        //Логгер
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly MainMenuPageViewModel _mainMenuPageViewModel;
         private readonly AuthorizationPageViewModel _authorizationPageViewModel;
         [Reactive] public UserControl? CurrentContent { get; set; }

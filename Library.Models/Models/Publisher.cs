@@ -1,6 +1,6 @@
-﻿namespace Library.Server.BL.Models;
+﻿namespace Library.Models;
 
-public record Condition
+public record Publisher
 {
     public int Id { get; set; }
     public required string Name { get; set; }

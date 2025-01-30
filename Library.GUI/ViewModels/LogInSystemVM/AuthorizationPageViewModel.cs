@@ -2,6 +2,8 @@
 using Library.Client.GUI.Configuration;
 using Library.Client.GUI.View.Admin;
 using Library.Client.GUI.View.User;
+using Library.Client.Http;
+using NLog;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -9,6 +11,10 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
 {
     public class AuthorizationPageViewModel : ViewModelBase
     {
+        //Логгер
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ManagerHttp _managerHttp = new ManagerHttp(new UserHttpClient());
+
         [Reactive] public string? Login { get; set; }
         [Reactive] public string? Password { get; set; }
 
@@ -29,13 +35,16 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
             {
                 var paramConvert = ConvertToDictionary(() => Login, () => Password);
 
-                var user = await ServiceManager.UserService.GetSingleEntityByParamAsync(paramConvert!);
+                //var user = await ServiceManager.UserService.GetSingleEntityByParamAsync(paramConvert!);
+                var user = await _managerHttp.UserHttpClient.GetSingleUser(paramConvert!);
+                await Task.Delay(300);
+
 
                 if (user is null)
                     return;
 
-                //Тестовый вывод для проверки 
                 Logger.Info($"{user}");
+                //Тестовый вывод для проверки 
 
                 RaiseContentChanged(GetService<UserPageView>());
             }

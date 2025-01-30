@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
-using Library.Server.BL.Service;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI;
@@ -10,17 +9,8 @@ namespace Library.Client.GUI.ViewModels
 {
     public abstract class ViewModelBase : ReactiveObject
     {
-        //Сервис для работы с бизнес логикой 
-        protected static ServiceManager ServiceManager { get; private set; } = null!;
-
         //Логгер
-        protected static Logger Logger { get; set; }
-
-        public static void Initialize(ServiceManager serviceManager,Logger logger)
-        {
-            ServiceManager = serviceManager;
-            Logger = logger;
-        }
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         //Преобразование свойств в Dictionary
         protected Dictionary<string, object?> ConvertToDictionary(params Expression<Func<object?>>[] expressions)

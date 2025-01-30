@@ -1,4 +1,4 @@
-﻿using Library.Server.BL.Models;
+﻿using Library.Models;
 
 namespace Library.Server.BL
 {
