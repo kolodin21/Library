@@ -14,12 +14,13 @@ using NLog;
 
 namespace Library.Client.GUI
 {
-    public partial class App : Application
+    public partial class App
     {
         //Сервис для работы с классами и их получения из DI
         public IServiceProvider ServiceProvider { get;}
         public ManagerHttp ManagerHttp { get;}
 
+        [Obsolete("Obsolete")]
         public App()
         {
             IServiceCollection services = new ServiceCollection();
