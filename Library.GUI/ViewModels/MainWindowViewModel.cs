@@ -22,9 +22,11 @@ namespace Library.Client.GUI.ViewModels
             // Инициализация начального представлений
              var mainMenuPageViewModel = GetPage<MainMenuPageViewModel>();
              var authorizationPageViewModel = GetPage<AuthorizationPageViewModel>();
+             var registrationPageViewModel = GetPage<RegistrationPageViewModel>();
 
             SubscribeToContentChanged(mainMenuPageViewModel);
             SubscribeToContentChanged(authorizationPageViewModel);
+            SubscribeToContentChanged(registrationPageViewModel);
 
             Logger.Info("Подписались на все события");
         }

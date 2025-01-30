@@ -16,9 +16,6 @@ namespace Library.Client.GUI.ViewModels
 
     public abstract class ViewModelBase : ReactiveObject,IContentChanger
     {
-        //Логгер
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        
         //HTTP клиент
         public static ManagerHttp ManagerHttp { get; set; } = null!;
 
@@ -84,5 +81,6 @@ namespace Library.Client.GUI.ViewModels
         {
             Application.Current.Shutdown();
         }
+
     }
 }

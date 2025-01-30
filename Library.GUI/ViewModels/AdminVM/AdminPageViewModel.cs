@@ -2,6 +2,7 @@
 using System.Reactive;
 using Library.Client.Http;
 using Library.Models;
+using NLog;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -9,7 +10,7 @@ namespace Library.Client.GUI.ViewModels.AdminVM
 {
     public class AdminPageViewModel : ViewModelBase
     {
-        private readonly ManagerHttp _managerHttp = new ManagerHttp(new UserHttpClient());
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         //Заглушка чтобы проверить работоспособность 
         [Reactive]public ObservableCollection<User>? Users { get; set; }
@@ -24,12 +25,20 @@ namespace Library.Client.GUI.ViewModels.AdminVM
 
         private async Task LoadUsersAsync()
         {
-            var users =await _managerHttp.UserHttpClient.GetAllUsers();
-            //var users = await Client.GetFromJsonAsync<IEnumerable<User>>(GetAllUsers);
-
-            if (users != null) 
+            try
             {
-                Users = new ObservableCollection<User>(users);
+                Logger.Info("Запрос отправлен");
+                var users =await ManagerHttp.UserHttpClient.GetAllUsers();
+
+                if (users != null) 
+                {
+                    Users = new ObservableCollection<User>(users);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Info(e.Message);
+                throw;
             }
         }
     }
