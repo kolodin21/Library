@@ -3,7 +3,6 @@ using Library.Client.GUI.Configuration;
 using Library.Client.GUI.View.Admin;
 using Library.Client.GUI.View.User;
 using Library.Client.GUI.ViewModels.UserVM;
-using Library.Client.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI;
@@ -30,7 +29,8 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         {
             if (AdminConfig.Login == Login && AdminConfig.Password == Password)
             {
-                RaiseContentChanged(GetPage<AdminPageView>());
+                Logger.Info($"Администратор:{Login} зашёл в систему");
+                RaiseContentChanged(GetPage<AdminPageView>(),"Режим администратора");
             }
             else
             {
@@ -49,10 +49,9 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
                 var userPage = GetPage<UserPageView>();
                 userPage.DataContext = userViewModel;
 
+                Logger.Info($"Пользователь: {user.Login} зашел в аккаунт.");
 
-                Logger.Info($"Пользователь : {user.Login} зашел в аккаунт.");
-
-                RaiseContentChanged(userPage);
+                RaiseContentChanged(userPage,"Библиотека");
             }
         }
         private IObservable<bool> CanExecEnter()
