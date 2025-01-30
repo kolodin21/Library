@@ -22,6 +22,8 @@ IServiceProvider serviceProvider = service.BuildServiceProvider();
 var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 
 #endregion
+
+//Ëמדדונ
  Logger Logger = LogManager.GetCurrentClassLogger();
 
 
