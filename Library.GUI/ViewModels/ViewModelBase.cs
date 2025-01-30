@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
+using Library.Client.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI;
@@ -11,6 +12,14 @@ namespace Library.Client.GUI.ViewModels
     {
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        public static ManagerHttp ManagerHttp { get; set; } = null!;
+        protected static IServiceProvider ServiceProvider { get; private set; } = null!;
+
+        public static void Initialize(IServiceProvider serviceProvider,ManagerHttp managerHttp)
+        {
+            ServiceProvider = serviceProvider;
+            ManagerHttp = managerHttp;
+        }
 
         //Преобразование свойств в Dictionary
         protected Dictionary<string, object?> ConvertToDictionary(params Expression<Func<object?>>[] expressions)
@@ -54,8 +63,9 @@ namespace Library.Client.GUI.ViewModels
         }
 
         //Получение выбранной страницы
-        protected T GetService<T>() =>
-            ((App)Application.Current).ServiceProvider.GetRequiredService<T>();
+        protected T GetPage<T>() where T : notnull =>
+            ServiceProvider.GetRequiredService<T>();
+          
 
         //Закрытие приложения 
         protected static void ExecExit()

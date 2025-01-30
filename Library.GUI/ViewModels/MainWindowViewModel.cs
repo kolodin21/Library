@@ -13,15 +13,16 @@ namespace Library.Client.GUI.ViewModels
 
         private readonly MainMenuPageViewModel _mainMenuPageViewModel;
         private readonly AuthorizationPageViewModel _authorizationPageViewModel;
+
         [Reactive] public UserControl? CurrentContent { get; set; }
 
         public MainWindowViewModel()
         {
-            CurrentContent = GetService<MainMenuPageView>();
+            CurrentContent = GetPage<MainMenuPageView>();
 
             // Инициализация начального представлений
-            _mainMenuPageViewModel = GetService<MainMenuPageViewModel>();
-            _authorizationPageViewModel = GetService<AuthorizationPageViewModel>();
+            _mainMenuPageViewModel = GetPage<MainMenuPageViewModel>();
+            _authorizationPageViewModel = GetPage<AuthorizationPageViewModel>();
 
             // Подписываемся на событие ContentChanged
             _mainMenuPageViewModel.ContentChanged += newContent
@@ -29,8 +30,8 @@ namespace Library.Client.GUI.ViewModels
 
             _authorizationPageViewModel.ContentChanged += newContent
                 => CurrentContent = newContent;
-            Logger.Info("Подписались на все события");
 
+            Logger.Info("Подписались на все события");
         }
     }
 }
