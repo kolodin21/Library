@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Reactive;
 using System.Windows;
-using System.Windows.Documents;
 using Library.Client.GUI.View.LogInSystem;
 using Library.Models.ModelsDTO;
 using NLog;
@@ -69,6 +68,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
                 ClearFields();
                 Logger.Info($"Пользователь {Login} успешно зарегистирован!");
                 MessageBox.Show("Регистрация прошла успешно!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                RaiseContentChanged(GetPage<MainMenuPageView>(), "Главное меню");
             }
             catch (HttpRequestException e)
             {
