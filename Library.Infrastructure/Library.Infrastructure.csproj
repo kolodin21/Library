@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Library.BL\Library.Server.BL.csproj" />
-    <ProjectReference Include="..\Library.DAL\Library.Server.DAL.csproj" />
+    <ProjectReference Include="..\Library.Server.BL\Library.Server.BL.csproj" />
+    <ProjectReference Include="..\Library.Server.DAL\Library.Server.DAL.csproj" />
   </ItemGroup>
 
 </Project>

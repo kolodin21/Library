@@ -25,7 +25,7 @@ var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 #endregion
 
 //Ëמדדונ
- Logger Logger = LogManager.GetCurrentClassLogger();
+ var Logger = LogManager.GetCurrentClassLogger();
 
 
  #region User
@@ -45,6 +45,7 @@ app.MapPost("/SingleUser", async ([FromBody] Dictionary<string, JsonElement> par
     );
     return await serviceManager.UserService.GetSingleEntityByParamAsync(parsedParams);
 });
+
 
 app.MapPost("/AddUser", async (UserAddDto userAddDto) =>
     await serviceManager.UserService.AddEntityAsync(userAddDto));
