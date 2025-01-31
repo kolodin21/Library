@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Server.DAL", "Library.DAL\Library.Server.DAL.csproj", "{D1088DCC-4ED4-4F2B-AD19-450B9C6C824B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Server.DAL", "Library.Server.DAL\Library.Server.DAL.csproj", "{D1088DCC-4ED4-4F2B-AD19-450B9C6C824B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Server.BL", "Library.BL\Library.Server.BL.csproj", "{AE01A792-AD70-4012-AB2E-FD2B68ADE9FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Server.BL", "Library.Server.BL\Library.Server.BL.csproj", "{AE01A792-AD70-4012-AB2E-FD2B68ADE9FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Client.GUI", "Library.GUI\Library.Client.GUI.csproj", "{2C0A63CC-7A2E-492E-BADF-DB012EA1CCBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Client.GUI", "Library.Client.GUI\Library.Client.GUI.csproj", "{2C0A63CC-7A2E-492E-BADF-DB012EA1CCBF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Infrastructure", "Library.Infrastructure\Library.Infrastructure.csproj", "{121368DE-380F-4387-8395-5E9CCADF4DEA}"
 EndProject
@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Server.Api", "Libra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Models", "Library.Models\Library.Models.csproj", "{9E6A4D6D-2E9C-4127-AC96-13B9CDE59BF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Client.Http", "Lilbrary.Client.DAL\Library.Client.Http.csproj", "{36102A01-F9D7-4699-83A8-B0AF6EC0F811}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Client.Http", "Library.Client.Http\Library.Client.Http.csproj", "{D1B22CDC-902B-4172-A3D9-4DA3545F3B07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +51,10 @@ Global
 		{9E6A4D6D-2E9C-4127-AC96-13B9CDE59BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E6A4D6D-2E9C-4127-AC96-13B9CDE59BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E6A4D6D-2E9C-4127-AC96-13B9CDE59BF9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36102A01-F9D7-4699-83A8-B0AF6EC0F811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36102A01-F9D7-4699-83A8-B0AF6EC0F811}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36102A01-F9D7-4699-83A8-B0AF6EC0F811}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36102A01-F9D7-4699-83A8-B0AF6EC0F811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1B22CDC-902B-4172-A3D9-4DA3545F3B07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1B22CDC-902B-4172-A3D9-4DA3545F3B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1B22CDC-902B-4172-A3D9-4DA3545F3B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1B22CDC-902B-4172-A3D9-4DA3545F3B07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +65,6 @@ Global
 		{2C0A63CC-7A2E-492E-BADF-DB012EA1CCBF} = {4F22E8CA-D5F3-4086-9FC2-15BF69758BD7}
 		{121368DE-380F-4387-8395-5E9CCADF4DEA} = {029C6D5F-2483-4AE8-ABE1-C8BCDD710B1D}
 		{973D526E-57CC-405D-A4DA-B560B8A72EEC} = {029C6D5F-2483-4AE8-ABE1-C8BCDD710B1D}
-		{36102A01-F9D7-4699-83A8-B0AF6EC0F811} = {4F22E8CA-D5F3-4086-9FC2-15BF69758BD7}
+		{D1B22CDC-902B-4172-A3D9-4DA3545F3B07} = {4F22E8CA-D5F3-4086-9FC2-15BF69758BD7}
 	EndGlobalSection
 EndGlobal

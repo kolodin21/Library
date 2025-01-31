@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Reactive;
+using System.Windows;
 using Library.Client.Http;
 using Library.Models;
 using NLog;
@@ -27,7 +29,6 @@ namespace Library.Client.GUI.ViewModels.AdminVM
         {
             try
             {
-                Logger.Info("Запрос отправлен");
                 var users =await ManagerHttp.UserHttpClient.GetAllUsers();
 
                 if (users != null) 
@@ -35,10 +36,14 @@ namespace Library.Client.GUI.ViewModels.AdminVM
                     Users = new ObservableCollection<User>(users);
                 }
             }
+            catch (HttpRequestException e)
+            {
+                Logger.Error(e, "Ошибка подключения");
+                MessageBox.Show("Ошибка подключения к серверу. Проверьте интернет-соединение.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception e)
             {
                 Logger.Info(e.Message);
-                throw;
             }
         }
     }

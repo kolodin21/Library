@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lilbrary.Client.DAL\Library.Client.Http.csproj" />
+    <ProjectReference Include="..\Library.Client.Http\Library.Client.Http.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
