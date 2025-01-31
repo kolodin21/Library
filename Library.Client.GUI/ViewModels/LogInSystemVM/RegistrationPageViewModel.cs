@@ -15,14 +15,14 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Reactive] public string Surname {get; set; }
-        [Reactive] public string Name { get; set; }
-        [Reactive] public string? Patronymic {get; set; }
-        [Reactive] public string Login {get; set;}
-        [Reactive] public string OnePassword {get; set;}
-        [Reactive] public string TwoPassword {get; set;}
-        [Reactive] public string Phone {get; set;}
-        [Reactive] public string Email {get; set;}
+        [Reactive] public string Surname { get; set; } = "Иванов";
+        [Reactive] public string Name { get; set; } = "Иван";
+        [Reactive] public string? Patronymic { get; set; } = "Иванович";
+        [Reactive] public string Login { get; set; } = "Ivanoovich";
+        [Reactive] public string OnePassword { get; set; } = "123456";
+        [Reactive] public string TwoPassword { get; set; } = "123456";
+        [Reactive] public string Phone { get; set; } = "89211123312";
+        [Reactive] public string Email { get; set; } = "Ivanovich@gmail.com";
 
         public ReactiveCommand<Unit,Unit> RegistrationCommand { get; }
         public ReactiveCommand<Unit,Unit> BackCommand { get; }
@@ -33,35 +33,36 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
             RegistrationCommand = ReactiveCommand.CreateFromTask(ExecRegistrationAsync, CanExecRegistration());
             BackCommand = ReactiveCommand.Create(ExecBack);
         }
+        //TODO Добавить проверки на ввод данных и подсвечивание для каждого поля отдельно
 
         private async Task ExecRegistrationAsync()
         {
             try
             {
-                //var property = new List<string>{Login,Phone,Email};
-                //for (var i = 0; i < property.Count; i++)
-                //{
-                //    var paramConvert = ConvertToDictionary(() => property[i]);
-                //    var findUser = await ManagerHttp.UserHttpClient.GetSingleUser(paramConvert!);
-
-                //    if (findUser != null)
-                //    {
-                //        MessageBox.Show("Такой пользователь уже зарегистриван");
-                //        return;
-                //    }
-                //}
-                var paramConvert = ConvertToDictionary(() => Login);
-                var findUser = await ManagerHttp.UserHttpClient.GetSingleUser(paramConvert!);
-                
-                //TODO Доделать логику поиска пользователя по свойствам 
-
-
-                if (findUser != null)
+                var prop = new List<Dictionary<string, object?>>
                 {
-                    MessageBox.Show("Такой пользователь уже зарегистрирован");
+                    ConvertToDictionary(() =>Login ),
+                    ConvertToDictionary(() =>Phone ),
+                    ConvertToDictionary(() =>Email )
+                };
+
+                //Проверка на уже существуещего пользователя
+                foreach (var item in prop)
+                {
+                    var findUser = await ManagerHttp.UserHttpClient.GetSingleUser(item!);
+                    if (findUser == null) 
+                        continue;
+
+                    if(findUser.Login == Login)
+                        MessageBox.Show("Пользователь с таким логином уже зарегистирован");
+                    if (findUser.Phone == Phone)
+                        MessageBox.Show("Пользователь с таким телефоном уже зарегистирован");
+                    if (findUser.Email == Email)
+                        MessageBox.Show("Пользователь с такой почтой уже зарегистирован");
                     return;
                 }
 
+                //Регистарция нового пользователя
                 var user = new UserAddDto(Surname, Name, Patronymic, Login, OnePassword, Phone, Email);
                 await ManagerHttp.UserHttpClient.AddUser(user);
 
@@ -115,6 +116,8 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
             Name = string.Empty;
             Patronymic = string.Empty;
             Login = string.Empty;
+            OnePassword = string.Empty;
+            TwoPassword = string.Empty;
             Phone = string.Empty;
             Email = string.Empty;
         }
