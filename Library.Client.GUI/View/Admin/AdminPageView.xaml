@@ -8,18 +8,30 @@
     <UserControl.DataContext>
         <adminVm:AdminPageViewModel/>
     </UserControl.DataContext>
+    
 
 
-    <Grid>
+    <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="7*"/>
+            <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" LastChildFill="False">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                <Button Content="Личный кабинет"
+                        Style="{StaticResource ButtonMenuStyle}"/>
+                <Button Content="Настройки"
+                        Style="{StaticResource ButtonMenuStyle}"/>
+            </StackPanel>
+        </DockPanel>
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
+
 
             <StackPanel Grid.Column="0">
                 <Label Content="Меню" Style="{StaticResource LabelMenuStyle}"/>

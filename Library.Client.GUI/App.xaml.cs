@@ -44,6 +44,7 @@ namespace Library.Client.GUI
             services.AddSingleton<UserHttpClient>();
             services.AddSingleton<ManagerHttp>();
 
+            services.AddTransient<User>();
             services.AddViewWithViewModel<MainMenuPageView, MainMenuPageViewModel>();
             services.AddViewWithViewModel<AuthorizationPageView, AuthorizationPageViewModel>();
             services.AddViewWithViewModel<RegistrationPageView, RegistrationPageViewModel>();

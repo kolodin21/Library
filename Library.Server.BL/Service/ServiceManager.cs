@@ -6,10 +6,15 @@ namespace Library.Server.BL.Service
 {
     #region Interface
 
+    public interface ICustomBookService<T> 
+    {
+        Task<IEnumerable<T>?> GetBookActivityUserAsync(Dictionary<string, object> param);
+    }
+
     public interface IGetService<TEntity> :
         IGetAllService<TEntity>,
-        IGetSingleByParam<TEntity>,
-        IGetByParamService<TEntity>{}
+        IGetByParamService<TEntity>,
+        IGetSingleByParam<TEntity>{}
 
     public interface IEntityService<TEntity> :
         IGetAllService<TEntity>,
@@ -25,8 +30,9 @@ namespace Library.Server.BL.Service
         IUpdateService<UserUpdatePersonalInfoDto>,
         IUpdateService<UserUpdateContactInfoDto> { }
 
-    public interface IBookService : 
+    public interface IBookService :
         IGetService<Book>,
+        ICustomBookService<BookViewDto>,
         IAddService<BookAddDto>,
         IUpdateService<BookUpdateInfoDto>,
         IDeleteServiceByIdProcedure { }

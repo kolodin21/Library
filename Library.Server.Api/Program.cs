@@ -28,7 +28,7 @@ var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
  var Logger = LogManager.GetCurrentClassLogger();
 
 
- #region User
+#region User
 
 app.MapGet("/AllUsers",async () =>
 {
@@ -38,19 +38,24 @@ app.MapGet("/AllUsers",async () =>
 
 
 app.MapPost("/SingleUser", async ([FromBody] Dictionary<string, JsonElement> param) =>
-{
-    var parsedParams = param.ToDictionary(
-        kvp => kvp.Key,
-        kvp => JsonElementToObject(kvp.Value)
-    );
-    return await serviceManager.UserService.GetSingleEntityByParamAsync(parsedParams);
-});
+    await serviceManager.UserService.GetSingleEntityByParamAsync(ParsedParam(param)));
+
 
 
 app.MapPost("/AddUser", async (UserAddDto userAddDto) =>
     await serviceManager.UserService.AddEntityAsync(userAddDto));
 
 #endregion
+
+#region Book
+
+app.MapPost("/ActivityBooks", async ([FromBody] Dictionary<string, JsonElement> param) =>
+    await serviceManager.BookService.GetBookActivityUserAsync(ParsedParam(param)));
+
+#endregion
+
+
+#region Methods
 
 static object JsonElementToObject(JsonElement element)
 {
@@ -65,5 +70,15 @@ static object JsonElementToObject(JsonElement element)
     };
 }
 
+static Dictionary<string, object> ParsedParam(Dictionary<string, JsonElement> param)
+{
+    var parsedParams = param.ToDictionary(
+        kvp => kvp.Key,
+        kvp => JsonElementToObject(kvp.Value)
+    );
+    return parsedParams;
+}
+
+#endregion
 
 app.Run();
