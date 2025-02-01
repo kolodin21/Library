@@ -38,7 +38,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
             var userId = CurrentUser.Id;
             var paramConvert = ConvertToDictionary(() => userId); //Fixme
 
-            CurrentSelectedCollections = await ManagerHttp.UserHttpClient.GetActivityBooks(paramConvert!);
+            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActivityBooks(paramConvert!);
 
         }
     }

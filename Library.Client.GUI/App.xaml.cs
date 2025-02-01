@@ -42,6 +42,7 @@ namespace Library.Client.GUI
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<UserHttpClient>();
+            services.AddSingleton<BookHttpClient>();
             services.AddSingleton<ManagerHttp>();
 
             services.AddTransient<User>();
@@ -53,7 +54,7 @@ namespace Library.Client.GUI
 
             services.AddTransient<UserPageViewModel>(provider =>
             {
-                var user = provider.GetRequiredService<User>(); // Получаем пользователя (позже передадим вручную)
+                var user = provider.GetRequiredService<User>(); // Получаем пользователя
                 return new UserPageViewModel(user);
             });
             services.AddTransient<UserPageView>();

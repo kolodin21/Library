@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Reactive;
 using System.Windows;
-using Library.Client.Http;
 using Library.Models;
 using NLog;
 using ReactiveUI;
@@ -14,7 +13,7 @@ namespace Library.Client.GUI.ViewModels.AdminVM
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        //Заглушка чтобы проверить работоспособность 
+        //TODO Заглушка чтобы проверить работоспособность 
         [Reactive]public ObservableCollection<User>? Users { get; set; }
 
         public ReactiveCommand<Unit, Unit> LoadUsersCommand { get; }
