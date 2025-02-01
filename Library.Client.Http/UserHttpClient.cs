@@ -7,13 +7,11 @@ namespace Library.Client.Http
     public class UserHttpClient : LibraryHttpBase
     {
         #region URI
-        private Uri GetAllUsersUri => new Uri($"{Host}/AllUsers");
+        private static Uri GetAllUsersUri => new Uri($"{Host}/AllUsers");
 
-        private Uri GetSingleUserUri => new Uri($"{Host}/SingleUser");
+        private static Uri GetSingleUserUri => new Uri($"{Host}/SingleUser");
 
-        private Uri AddUserUri => new Uri($"{Host}/AddUser");
-
-        private Uri GetActivityUri => new Uri($"{Host}/ActivityBooks");
+        private static Uri AddUserUri => new Uri($"{Host}/AddUser");
 
         #endregion
 
@@ -21,7 +19,6 @@ namespace Library.Client.Http
 
         public async Task<IEnumerable<User>?> GetAllUsers() =>
             await Client.GetFromJsonAsync<IEnumerable<User>>(GetAllUsersUri);
-
 
         public async Task<User?> GetSingleUser(Dictionary<string, object> param)
         {
@@ -36,15 +33,5 @@ namespace Library.Client.Http
             Client.PostAsJsonAsync(AddUserUri, userAddDto);
 
         #endregion
-
-        public async Task<IEnumerable<BookViewDto>?> GetActivityBooks(Dictionary<string, object> param)
-        {
-            var response = await Client.PostAsJsonAsync(GetActivityUri, param);
-
-            return response.IsSuccessStatusCode
-                ? await response.Content.ReadFromJsonAsync<IEnumerable<BookViewDto>>()
-                : null;
-        }
-
     }
 }
