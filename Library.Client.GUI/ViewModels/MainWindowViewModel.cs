@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 using Library.Client.GUI.View.LogInSystem;
 using Library.Client.GUI.ViewModels.LogInSystemVM;
+using Library.Client.GUI.ViewModels.UserVM;
 using NLog;
 using ReactiveUI.Fody.Helpers;
 
@@ -23,10 +24,12 @@ namespace Library.Client.GUI.ViewModels
              var mainMenuPageViewModel = GetPage<MainMenuPageViewModel>();
              var authorizationPageViewModel = GetPage<AuthorizationPageViewModel>();
              var registrationPageViewModel = GetPage<RegistrationPageViewModel>();
+             var userPageViewModel = GetPage<UserPageViewModel>();
 
             SubscribeToContentChanged(mainMenuPageViewModel);
             SubscribeToContentChanged(authorizationPageViewModel);
             SubscribeToContentChanged(registrationPageViewModel);
+            SubscribeToContentChanged(userPageViewModel);
 
             Logger.Info("Подписались на все события");
         }

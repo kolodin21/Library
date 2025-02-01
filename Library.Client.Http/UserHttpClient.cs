@@ -13,6 +13,8 @@ namespace Library.Client.Http
 
         private Uri AddUserUri => new Uri($"{Host}/AddUser");
 
+        private Uri GetActivityUri => new Uri($"{Host}/ActivityBooks");
+
         #endregion
 
         #region Http
@@ -34,6 +36,15 @@ namespace Library.Client.Http
             Client.PostAsJsonAsync(AddUserUri, userAddDto);
 
         #endregion
+
+        public async Task<IEnumerable<BookViewDto>?> GetActivityBooks(Dictionary<string, object> param)
+        {
+            var response = await Client.PostAsJsonAsync(GetActivityUri, param);
+
+            return response.IsSuccessStatusCode
+                ? await response.Content.ReadFromJsonAsync<IEnumerable<BookViewDto>>()
+                : null;
+        }
 
     }
 }
