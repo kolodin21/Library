@@ -75,8 +75,8 @@ namespace Library.Server.BL
 
     public class SqlBookProvider : SqlBaseProvider, ISqlBookProvider
     {
-        public string GetAll => @"SELECT * FROM view_books_v2";
-        public string GetByParam => @"SELECT * FROM view_books_v2 WHERE 1=1";
+        public string GetAll => @"SELECT * FROM view_books";
+        public string GetByParam => @"SELECT * FROM view_books WHERE 1=1";
         public string Add => @"addBook";
         public string Delete => @"deleteBook";
         public string MainNameTable => @"table_books";

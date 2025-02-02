@@ -1,7 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Reactive;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using Library.Client.GUI.View.LogInSystem;
 using Library.Models;
+using Library.Models.ModelsDTO;
 using NLog;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -12,34 +17,83 @@ namespace Library.Client.GUI.ViewModels.UserVM
     {
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        public User CurrentUser { get; set; }
+        public User CurrentUser { get;}
 
         [Reactive] public string NameCurrentCollection { get; set; }
         [Reactive] public object? CurrentSelectedCollections { get; set; }
 
-        [Reactive]public string UserName { get; private set; }
+        public string UserName { get; private set; }
+        public int UserId { get; private set; }
 
-        public ReactiveCommand<Unit, Unit> LoadBooksCommand { get; }
+        public ObservableCollection<DataGridColumn> Columns { get; set; } = [];
 
+        public ReactiveCommand<Unit, Unit> LoadActivityBooksUserCommand { get; }
+        public ReactiveCommand<Unit, Unit> LoadActualBooksCommand { get; }
+        public ReactiveCommand<Unit, Unit> BackCommand { get; }
+        public ReactiveCommand<Unit, Unit> ExitCommand { get; }
+
+
+        public UserPageViewModel(){}
         public UserPageViewModel(User user)
         {
             CurrentUser = user;
             UserName = CurrentUser.Name;
-            LoadBooksCommand = ReactiveCommand.CreateFromTask(LoadActivityBooks);
-            LoadBooksCommand.Execute().Subscribe();
+            UserId = CurrentUser.Id;
+
+            LoadActivityBooksUserCommand = ReactiveCommand.CreateFromTask(LoadActivityBooks);
+            LoadActivityBooksUserCommand.Execute().Subscribe();
+
+            LoadActualBooksCommand = ReactiveCommand.CreateFromTask(LoadActualBooks);
+
+            BackCommand = ReactiveCommand.Create(ExecBack);
+            ExitCommand = ReactiveCommand.Create(ExecExit);
         }
-
-        public UserPageViewModel(){}
-
 
         private async Task LoadActivityBooks()
         {
-            var userId = CurrentUser.Id;
-            var paramConvert = ConvertToDictionary(() => userId); //Fixme
+            var userParams = ConvertToDictionary(() => UserId); //Fixme
 
-            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActivityBooks(paramConvert!);
+            NameCurrentCollection = $"Активные книги: {UserName}";
+            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActivityBooks(userParams!);
 
+            InitColumns();
+            Columns.Add(CreateColumn("Дата выдачи", "DateIssuance", new DataGridLength(1, DataGridLengthUnitType.Star)));
+        }
+
+        private async Task LoadActualBooks()
+        {
+            NameCurrentCollection = "Доступные книги библиотеки";
+            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActualBooksLibrary();
+
+            InitColumns();
+            Columns.Add(CreateColumn("Остаток книг", "BalanceBook", new DataGridLength(1, DataGridLengthUnitType.Star)));
+        }
+
+
+        private void ExecBack()
+        {
+            RaiseContentChanged(GetPage<MainMenuPageView>(), "Главное меню");
+        }
+
+
+        private DataGridTextColumn CreateColumn(string header, string? bindingPath, DataGridLength? width = null)
+        {
+            return new DataGridTextColumn
+            {
+                Header = header,
+                Binding = bindingPath != null ? new Binding(bindingPath) : null,
+                Width = width ?? DataGridLength.Auto // Если ширина не указана, используем Auto
+            };
+        }
+
+        private void InitColumns()
+        {
+            Columns.Clear();
+            Columns.Add(CreateColumn("Автор", "NameAuthor"));
+            Columns.Add(CreateColumn("Название", "Title"));
+            Columns.Add(CreateColumn("Год выпуска", "Year"));
+            Columns.Add(CreateColumn("Состояние", "Condition"));
+            Columns.Add(CreateColumn("Издательство", "Publisher"));
         }
     }
 }

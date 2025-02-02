@@ -2,6 +2,7 @@
 using Library.Client.GUI.View.LogInSystem;
 using Library.Client.GUI.ViewModels.LogInSystemVM;
 using Library.Client.GUI.ViewModels.UserVM;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI.Fody.Helpers;
 
@@ -20,20 +21,22 @@ namespace Library.Client.GUI.ViewModels
             CurrentContent = GetPage<MainMenuPageView>();
             Title = "Главное меню";
 
-            // Инициализация начального представлений
-             var mainMenuPageViewModel = GetPage<MainMenuPageViewModel>();
-             var authorizationPageViewModel = GetPage<AuthorizationPageViewModel>();
-             var registrationPageViewModel = GetPage<RegistrationPageViewModel>();
-             var userPageViewModel = GetPage<UserPageViewModel>();
-
-            SubscribeToContentChanged(mainMenuPageViewModel);
-            SubscribeToContentChanged(authorizationPageViewModel);
-            SubscribeToContentChanged(registrationPageViewModel);
-            SubscribeToContentChanged(userPageViewModel);
+            // Инициализация и подписка на все ViewModel
+            InitializeAndSubscribeToContentChanges<MainMenuPageViewModel>();
+            InitializeAndSubscribeToContentChanges<AuthorizationPageViewModel>();
+            InitializeAndSubscribeToContentChanges<RegistrationPageViewModel>();
+            InitializeAndSubscribeToContentChanges<UserPageViewModel>();
 
             Logger.Info("Подписались на все события");
         }
-        
+
+        private void InitializeAndSubscribeToContentChanges<TViewModel>()
+            where TViewModel : class
+        {
+            var viewModel = GetPage<TViewModel>();
+            SubscribeToContentChanged(viewModel);
+        }
+
         //Подписка на обновление данных
         private void SubscribeToContentChanged<TViewModel>(TViewModel viewModel)
             where TViewModel : class
@@ -46,6 +49,32 @@ namespace Library.Client.GUI.ViewModels
                     Title = newTitle; // Обновляем заголовок окна
                 };
             }
+        }
+    }
+
+    public class PageFactory
+    {
+        private readonly IServiceProvider _serviceProvider;
+
+        public PageFactory(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        public TView CreatePage<TView, TViewModel>(object? parameter = null)
+            where TView : UserControl, new()
+            where TViewModel : ViewModelBase
+        {
+            // Создаем ViewModel через DI и передаём параметр, если требуется
+            var viewModel = ActivatorUtilities.CreateInstance<TViewModel>(_serviceProvider, parameter);
+
+            // Создаём View и устанавливаем DataContext
+            var view = new TView
+            {
+                DataContext = viewModel
+            };
+
+            return view;
         }
     }
 }

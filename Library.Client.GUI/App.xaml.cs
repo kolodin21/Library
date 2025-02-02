@@ -41,17 +41,26 @@ namespace Library.Client.GUI
         //Реализация View и ViewModel
         private static void ConfigureServices(IServiceCollection services)
         {
+            // Регистрация фабрики
+            //services.AddSingleton<PageFactory>();
+
+            // Регистрация клиентов HTTP
             services.AddSingleton<UserHttpClient>();
             services.AddSingleton<BookHttpClient>();
             services.AddSingleton<ManagerHttp>();
 
+            // Регистрация модели данных
             services.AddTransient<User>();
+
+            // Регистрация страниц и ViewModel'ей
             services.AddViewWithViewModel<MainMenuPageView, MainMenuPageViewModel>();
             services.AddViewWithViewModel<AuthorizationPageView, AuthorizationPageViewModel>();
             services.AddViewWithViewModel<RegistrationPageView, RegistrationPageViewModel>();
             services.AddViewWithViewModel<AdminPageView, AdminPageViewModel>();
-            services.AddViewWithViewModel<UserPageView, UserPageViewModel>();
+            //services.AddViewWithViewModel<UserPageView, UserPageViewModel>();
 
+            //services.AddTransient<UserPageView>();
+            //services.AddTransient<UserPageViewModel>();
             services.AddTransient<UserPageViewModel>(provider =>
             {
                 var user = provider.GetRequiredService<User>(); // Получаем пользователя
@@ -69,7 +78,7 @@ namespace Library.Client.GUI
             where TViewModel : class
         {
             services.AddSingleton<TViewModel>();
-            services.AddTransient<TView>(provider =>
+            services.AddSingleton<TView>(provider =>
             {
                 var view = new TView
                 {

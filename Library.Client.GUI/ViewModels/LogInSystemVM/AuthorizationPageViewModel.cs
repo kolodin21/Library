@@ -18,9 +18,8 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [Reactive] public string? Login { get; set; } = "Admin";
-        [Reactive] public string? Password { get; set; } = "Admin";
-
+        [Reactive] public string? Login { get; set; } = "kolodin21";
+        [Reactive] public string? Password { get; set; } = "978509qq";
         public ReactiveCommand<Unit, Unit> EnterCommand { get; }
         public ReactiveCommand<Unit, Unit> BackCommand { get; }
 
@@ -59,6 +58,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
                     //  Создаем страницу через DI и устанавливаем `DataContext`
                     var userPage = GetPage<UserPageView>();
                     userPage.DataContext = userViewModel;
+
 
                     Logger.Info($"Пользователь: {user.Login} зашел в аккаунт.");
 
