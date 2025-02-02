@@ -52,6 +52,9 @@ app.MapPost("/AddUser", async (UserAddDto userAddDto) =>
 app.MapPost("/ActivityBooks", async ([FromBody] Dictionary<string, JsonElement> param) =>
     await serviceManager.BookService.GetBookActivityUserAsync(ParsedParam(param)));
 
+app.MapGet("/ActualBooksLibrary", async () => await 
+        serviceManager.BookService.GetAllEntitiesAsync());
+
 #endregion
 
 

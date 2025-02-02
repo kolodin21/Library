@@ -6,13 +6,15 @@
         Title="{Binding Title}"
         Height="350" 
         Width="400"
-        SizeToContent="WidthAndHeight" 
+        MaxHeight="650"
+        MaxWidth="1120"
+        SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
 
-    <ContentPresenter Content="{Binding CurrentContent}"/>
+    <ContentPresenter Content="{Binding CurrentContent}" />
 
 </Window>
