@@ -3,9 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Library.Client.Http;
 using Microsoft.Extensions.DependencyInjection;
-using NLog;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace Library.Client.GUI.ViewModels
 {
@@ -69,6 +67,16 @@ namespace Library.Client.GUI.ViewModels
         protected void RaiseContentChanged(UserControl newContent,string title)
         {
             ContentChanged?.Invoke(newContent,title);
+        }
+
+        //Подписка на обновление данных
+        protected void SubscribeToContentChanged<TViewModel>(TViewModel viewModel, Action<UserControl, string> updateContent)
+            where TViewModel : class
+        {
+            if (viewModel is IContentChanger contentChanger)
+            {
+                contentChanger.ContentChanged += updateContent;
+            }
         }
         #endregion
 

@@ -34,7 +34,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
             if (AdminConfig.Login == Login && AdminConfig.Password == Password)
             {
                 Logger.Info($"Администратор:{Login} зашёл в систему");
-                RaiseContentChanged(GetPage<AdminPageView>(),"Режим администратора");
+                RaiseContentChanged(GetPage<AdminPageView>(),NamePage.Administrator);
             }
             else
             {
@@ -55,6 +55,9 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
                     //  Создаем `UserPageViewModel` через DI, передав `User`
                     var userViewModel = ActivatorUtilities.CreateInstance<UserPageViewModel>(ServiceProvider, user);
 
+                    // Подписываем ViewModel на обновление контента
+                    SubscribeToContentChanged(userViewModel, RaiseContentChanged);
+
                     //  Создаем страницу через DI и устанавливаем `DataContext`
                     var userPage = GetPage<UserPageView>();
                     userPage.DataContext = userViewModel;
@@ -63,7 +66,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
                     Logger.Info($"Пользователь: {user.Login} зашел в аккаунт.");
 
                     ClearFields();
-                    RaiseContentChanged(userPage,"Библиотека");
+                    RaiseContentChanged(userPage,NamePage.User);
                 }
                 catch (HttpRequestException e)
                 {
@@ -81,7 +84,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         private void ExecBack()
         {
             ClearFields();
-            RaiseContentChanged(GetPage<MainMenuPageView>(),"Главное меню");
+            RaiseContentChanged(GetPage<MainMenuPageView>(),NamePage.MainMenu);
         }
 
         private IObservable<bool> CanExecEnter()

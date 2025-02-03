@@ -41,9 +41,6 @@ namespace Library.Client.GUI
         //Реализация View и ViewModel
         private static void ConfigureServices(IServiceCollection services)
         {
-            // Регистрация фабрики
-            //services.AddSingleton<PageFactory>();
-
             // Регистрация клиентов HTTP
             services.AddSingleton<UserHttpClient>();
             services.AddSingleton<BookHttpClient>();
@@ -52,15 +49,12 @@ namespace Library.Client.GUI
             // Регистрация модели данных
             services.AddTransient<User>();
 
-            // Регистрация страниц и ViewModel'ей
+            // Регистрация MainWindow и его ViewModel
             services.AddViewWithViewModel<MainMenuPageView, MainMenuPageViewModel>();
             services.AddViewWithViewModel<AuthorizationPageView, AuthorizationPageViewModel>();
             services.AddViewWithViewModel<RegistrationPageView, RegistrationPageViewModel>();
             services.AddViewWithViewModel<AdminPageView, AdminPageViewModel>();
-            //services.AddViewWithViewModel<UserPageView, UserPageViewModel>();
 
-            //services.AddTransient<UserPageView>();
-            //services.AddTransient<UserPageViewModel>();
             services.AddTransient<UserPageViewModel>(provider =>
             {
                 var user = provider.GetRequiredService<User>(); // Получаем пользователя

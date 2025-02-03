@@ -2,9 +2,9 @@
 {
     public record TakeBookDto
     {
-        public required int userid { get; set; }
-        public required int bookid { get; set; }
-        public required DateTime dateissuance { get; set; }
+        public required int Userid { get; set; }
+        public required int Bookid { get; set; }
+        public required DateTime DateIssuance { get; set; }
 
     }
     public record ReturnBookDto
@@ -12,6 +12,5 @@
         public required int UserId { get; set; }
         public required int BookId { get; set; }
         public required DateTime DateReturn { get; set; }
-
     }
 }

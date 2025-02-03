@@ -35,6 +35,7 @@ namespace Library.Server.BL
     public interface ISqlBookProvider : ISqlProvider<Book>, ISqlDelete
     {
         public string GetActivityBook { get; }
+        public string GetHistoryBook { get; }
     }
 
     #endregion
@@ -80,7 +81,8 @@ namespace Library.Server.BL
         public string Add => @"addBook";
         public string Delete => @"deleteBook";
         public string MainNameTable => @"table_books";
-        public string GetActivityBook => @"SELECT * FROM view_history_user_books WHERE 1=1 AND DateReturn is null";
+        public string GetActivityBook => @"SELECT * FROM view_history_user_books WHERE 1=1 and DateReturn is null";
+        public string GetHistoryBook => @"SELECT * FROM view_history_user_books WHERE 1=1 and DateReturn is not null";
     }
 
     public class SqlTakeReturnBookProvider : SqlBaseProvider, ISqlTakeReturnBookProvider

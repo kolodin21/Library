@@ -32,7 +32,7 @@ namespace Library.Server.BL.Service
 
     public interface IBookService :
         IGetService<Book>,
-        ICustomBookService<BookViewDto>,
+        ICustomBookService<BookUserActivityViewDto>,
         IAddService<BookAddDto>,
         IUpdateService<BookUpdateInfoDto>,
         IDeleteServiceByIdProcedure { }

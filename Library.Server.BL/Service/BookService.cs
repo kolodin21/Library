@@ -1,6 +1,5 @@
 ﻿using Library.Models;
 using Library.Models.ModelsDTO;
-using Library.Server.BL.Interface;
 using Library.Server.DAL.Repositories;
 
 namespace Library.Server.BL.Service
@@ -32,9 +31,11 @@ namespace Library.Server.BL.Service
     public async Task<Book?> GetSingleEntityByParamAsync(Dictionary<string, object> param) => await
         RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<Book>(_sqlProvider.GetByParam, param);
 
-    public async Task<IEnumerable<BookViewDto>?> GetBookActivityUserAsync(Dictionary<string, object> param) => await
-        RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookViewDto>(_sqlProvider.GetActivityBook, param); 
+    public async Task<IEnumerable<BookUserActivityViewDto>?> GetBookActivityUserAsync(Dictionary<string, object> param) => await
+        RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserActivityViewDto>(_sqlProvider.GetActivityBook, param);
 
+    public async Task<IEnumerable<BookUserHistoryViewDto>?> GetBookHistoryUserAsync(Dictionary<string, object> param) => await
+        RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserHistoryViewDto>(_sqlProvider.GetHistoryBook, param);
 
         #endregion
 
