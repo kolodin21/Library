@@ -15,10 +15,10 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
 
             // Реализация команд
             LoginCommand = ReactiveCommand.Create(() =>
-                RaiseContentChanged(GetPage<AuthorizationPageView>(),"Авторизация"));
+                RaiseContentChanged(GetPage<AuthorizationPageView>(),NamePage.Authorization));
 
             RegistrationCommand = ReactiveCommand.Create(()=>
-                RaiseContentChanged(GetPage<RegistrationPageView>(),"Регистрация"));
+                RaiseContentChanged(GetPage<RegistrationPageView>(), NamePage.Registration));
 
             ExitCommand = ReactiveCommand.Create(ExecExit);
         }

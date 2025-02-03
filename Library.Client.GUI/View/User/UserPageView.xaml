@@ -51,6 +51,7 @@
                         Style="{StaticResource ButtonMenuStyle}"/>
 
                 <Button Content="Посмотреть историю" 
+                        Command="{Binding LoadHistoryBooksUserCommand}"
                         Style="{StaticResource ButtonMenuStyle}"/>
 
                 <Button Content="Вернуться в главное меню" 

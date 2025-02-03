@@ -28,6 +28,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
         public ObservableCollection<DataGridColumn> Columns { get; set; } = [];
 
         public ReactiveCommand<Unit, Unit> LoadActivityBooksUserCommand { get; }
+        public ReactiveCommand<Unit, Unit> LoadHistoryBooksUserCommand { get; }
         public ReactiveCommand<Unit, Unit> LoadActualBooksCommand { get; }
         public ReactiveCommand<Unit, Unit> BackCommand { get; }
         public ReactiveCommand<Unit, Unit> ExitCommand { get; }
@@ -44,6 +45,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
             LoadActivityBooksUserCommand.Execute().Subscribe();
 
             LoadActualBooksCommand = ReactiveCommand.CreateFromTask(LoadActualBooks);
+            LoadHistoryBooksUserCommand = ReactiveCommand.CreateFromTask(LoadHistoryBooks);
 
             BackCommand = ReactiveCommand.Create(ExecBack);
             ExitCommand = ReactiveCommand.Create(ExecExit);
@@ -51,15 +53,34 @@ namespace Library.Client.GUI.ViewModels.UserVM
 
         private async Task LoadActivityBooks()
         {
-            var userParams = ConvertToDictionary(() => UserId); //Fixme
+            var userParams = ConvertToDictionary(() => UserId);
 
             NameCurrentCollection = $"Активные книги: {UserName}";
-            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActivityBooks(userParams!);
+            try
+            {
+                CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActivityBooks(userParams!);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
             InitColumns();
             Columns.Add(CreateColumn("Дата выдачи", "DateIssuance", new DataGridLength(1, DataGridLengthUnitType.Star)));
         }
+        private async Task LoadHistoryBooks()
+        {
+            var userParams = ConvertToDictionary(() => UserId);
 
+            NameCurrentCollection = $"История: {UserName}";
+            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetHistoryBooks(userParams!);
+
+            InitColumns();
+            Columns.Add(CreateColumn("Дата выдачи", "DateIssuance"));
+            Columns.Add(CreateColumn("Дата возврата", "DateReturn", new DataGridLength(1, DataGridLengthUnitType.Star)));
+        }
         private async Task LoadActualBooks()
         {
             NameCurrentCollection = "Доступные книги библиотеки";
@@ -72,7 +93,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
 
         private void ExecBack()
         {
-            RaiseContentChanged(GetPage<MainMenuPageView>(), "Главное меню");
+            RaiseContentChanged(GetPage<MainMenuPageView>(),NamePage.MainMenu);
         }
 
 
