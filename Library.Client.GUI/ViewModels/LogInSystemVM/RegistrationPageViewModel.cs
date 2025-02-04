@@ -107,7 +107,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
         private void ExecBack()
         {
             ClearFields();
-            RaiseContentChanged(GetPage<MainMenuPageView>(), "Главное меню");
+            RaiseContentChanged(GetPage<MainMenuPageView>(), NamePage.MainMenu);
         }
 
         private void ClearFields()

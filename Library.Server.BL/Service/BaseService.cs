@@ -1,4 +1,5 @@
-﻿using Library.Server.DAL.Repositories;
+﻿using System.Text;
+using Library.Server.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Library.Server.BL.Service
@@ -30,6 +31,40 @@ namespace Library.Server.BL.Service
                 }
             }
             return updateParams;
+        }
+
+        //Универсальный метод для кэширования запросов и получения данных их кэша
+        protected async Task<IEnumerable<T>?> GetSetCache<T>(
+            string cacheKey,
+            Func<Task<IEnumerable<T>?>> getEntity,
+            int timeCache = 5)
+        {
+            if (Cache.TryGetValue(cacheKey, out IEnumerable<T>? entity))
+                return entity;
+
+            // Данные не найдены в кэше, загружаем
+            entity = (await getEntity())?.ToList() ?? [];
+
+            var options = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(timeCache));
+
+            Cache.Set(cacheKey, entity, options);
+
+            return entity.Any() ? entity : null; // Если список пустой, возвращаем null, но в кэш кладем пустой
+        }
+
+        //Генерация ключа для кэша
+        protected string GenerateCacheKey(string prefix, Dictionary<string, object> param)
+        {
+            var paramString = new StringBuilder();
+
+            foreach (var item in param)
+            {
+                paramString.Append($"{item.Key}:{item.Value}");
+                paramString.Append(" ");  // Добавляем пробел между параметрами
+            }
+
+            return $"{prefix}_{paramString.ToString().Trim()}"; // Убираем лишний пробел в конце
         }
     }
 }

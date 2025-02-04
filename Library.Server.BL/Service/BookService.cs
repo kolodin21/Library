@@ -9,7 +9,7 @@ namespace Library.Server.BL.Service
 
     {
 
-    #region Constructor
+        #region Constructor
 
     private readonly ISqlBookProvider _sqlProvider;
 
@@ -23,55 +23,79 @@ namespace Library.Server.BL.Service
 
         #region IGetAllService
 
-        public async Task<IEnumerable<Book>?> GetAllEntitiesAsync()
-        {
-            const string cacheKey = "all_books"; // Уникальный ключ кэша
+        //public async Task<IEnumerable<Book>?> GetAllEntitiesAsync()
+        //{
+        //    const string cacheKey = "AllBooks"; // Уникальный ключ кэша
 
-            if (Cache.TryGetValue(cacheKey, out IEnumerable<Book>? books))
-                return books!;
+        //    if (Cache.TryGetValue(cacheKey, out IEnumerable<Book>? books))
+        //        return books;
 
-            books = (await RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll))?.ToList();
+        //    books = await RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll);
 
-            if (books is null || !books.Any()) // Проверяем на null и пустую коллекцию
-                return []; // Возвращаем пустой список вместо null
+        //    if (books is null || !books.Any()) // Проверяем на null и пустую коллекцию
+        //        return null;
 
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+        //    var cacheOptions = new MemoryCacheEntryOptions()
+        //        .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
 
-            Cache.Set(cacheKey, books, cacheOptions);
+        //    Cache.Set(cacheKey, books, cacheOptions);
 
-            return books;
-        }
+        //    return books;
+        //}
 
+        public async Task<IEnumerable<Book>?> GetAllEntitiesAsync() => await
+            GetSetCache<Book>
+            (
+                "AllBooks",
+                () => RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll)
+            );
+
+        
         public async Task<IEnumerable<Book>?> GetEntitiesByParamAsync(Dictionary<string, object> param) => await
-        RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<Book>(_sqlProvider.GetByParam, param);
+            RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<Book>(_sqlProvider.GetByParam, param);
 
-    public async Task<Book?> GetSingleEntityByParamAsync(Dictionary<string, object> param) => await
-        RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<Book>(_sqlProvider.GetByParam, param);
+        public async Task<Book?> GetSingleEntityByParamAsync(Dictionary<string, object> param) => await
+            RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<Book>(_sqlProvider.GetByParam, param);
 
-    public async Task<IEnumerable<BookUserActivityViewDto>?> GetBookActivityUserAsync(Dictionary<string, object> param) => await
-        RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserActivityViewDto>(_sqlProvider.GetActivityBook, param);
 
-    public async Task<IEnumerable<BookUserHistoryViewDto>?> GetBookHistoryUserAsync(Dictionary<string, object> param) => await
-        RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserHistoryViewDto>(_sqlProvider.GetHistoryBook, param);
+        //public async Task<IEnumerable<BookUserActivityViewDto>?> GetBookActivityUserAsync(Dictionary<string, object> param) =>
+        //    await RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserActivityViewDto>(
+        //        _sqlProvider.GetActivityBook, param);
+
+        public async Task<IEnumerable<BookUserActivityViewDto>?> GetBookActivityUserAsync(
+            Dictionary<string, object> param) => await 
+            GetSetCache<BookUserActivityViewDto>
+            (
+                GenerateCacheKey("BookActivityUser",param),
+                ()=> RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserActivityViewDto>(_sqlProvider.GetActivityBook, param)
+            );
+
+        public async Task<IEnumerable<BookUserHistoryViewDto>?> GetBookHistoryUserAsync(
+            Dictionary<string, object> param) => await
+            GetSetCache
+            (
+               GenerateCacheKey("HistoryBookUser",param),
+                () => RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserHistoryViewDto>(_sqlProvider.GetHistoryBook, param)
+            );
+
 
         #endregion
 
-    #region IAddService
+        #region IAddService
 
         public async Task<bool> AddEntityAsync(BookAddDto bookAddDto) => await
         RepositoryManager.ModificationRepository.AddEntityAsync<BookAddDto>(_sqlProvider.Add, bookAddDto, true);
 
     #endregion
 
-    #region IDeleteService
+        #region IDeleteService
 
     public async Task<bool> DeleteEntityAsync(int id) => await
         RepositoryManager.ModificationRepository.DeleteEntityByIdProcedureAsync(_sqlProvider.Delete, id);
 
     #endregion
 
-    #region IUpdateService
+        #region IUpdateService
 
     public async Task<bool> UpdateEntityAsync(BookUpdateInfoDto updateBookInfo)
     {
@@ -87,6 +111,7 @@ namespace Library.Server.BL.Service
     }
 
         #endregion
+
 
     }
 }
