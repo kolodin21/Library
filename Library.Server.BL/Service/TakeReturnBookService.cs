@@ -1,6 +1,7 @@
 ﻿using Library.Models;
 using Library.Models.ModelsDTO;
 using Library.Server.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Library.Server.BL.Service
 {
@@ -10,8 +11,9 @@ namespace Library.Server.BL.Service
         private readonly ISqlTakeReturnBookProvider _sqlProvider;
         public TakeReturnBookService(
             IRepositoryManager repositoryManager,
-            ISqlTakeReturnBookProvider sqlProvider) : 
-            base(repositoryManager)
+            ISqlTakeReturnBookProvider sqlProvider,
+            IMemoryCache cache) : 
+            base(repositoryManager, cache)
         {
             _sqlProvider = sqlProvider;
         }

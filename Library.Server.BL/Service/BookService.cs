@@ -1,6 +1,7 @@
 ﻿using Library.Models;
 using Library.Models.ModelsDTO;
 using Library.Server.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Library.Server.BL.Service
 {
@@ -12,20 +13,37 @@ namespace Library.Server.BL.Service
 
     private readonly ISqlBookProvider _sqlProvider;
 
-    public BookService(IRepositoryManager repositoryManager, ISqlBookProvider sqlProvider)
-        : base(repositoryManager)
+    public BookService(IRepositoryManager repositoryManager, ISqlBookProvider sqlProvider,IMemoryCache cache)
+        : base(repositoryManager,cache)
     {
         _sqlProvider = sqlProvider;
     }
 
-    #endregion
+        #endregion
 
-    #region IGetAllService
+        #region IGetAllService
 
-    public async Task<IEnumerable<Book>?> GetAllEntitiesAsync() => await
-        RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll);
+        public async Task<IEnumerable<Book>?> GetAllEntitiesAsync()
+        {
+            const string cacheKey = "all_books"; // Уникальный ключ кэша
 
-    public async Task<IEnumerable<Book>?> GetEntitiesByParamAsync(Dictionary<string, object> param) => await
+            if (Cache.TryGetValue(cacheKey, out IEnumerable<Book>? books))
+                return books!;
+
+            books = (await RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll))?.ToList();
+
+            if (books is null || !books.Any()) // Проверяем на null и пустую коллекцию
+                return []; // Возвращаем пустой список вместо null
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+
+            Cache.Set(cacheKey, books, cacheOptions);
+
+            return books;
+        }
+
+        public async Task<IEnumerable<Book>?> GetEntitiesByParamAsync(Dictionary<string, object> param) => await
         RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<Book>(_sqlProvider.GetByParam, param);
 
     public async Task<Book?> GetSingleEntityByParamAsync(Dictionary<string, object> param) => await
@@ -39,7 +57,7 @@ namespace Library.Server.BL.Service
 
         #endregion
 
-        #region IAddService
+    #region IAddService
 
         public async Task<bool> AddEntityAsync(BookAddDto bookAddDto) => await
         RepositoryManager.ModificationRepository.AddEntityAsync<BookAddDto>(_sqlProvider.Add, bookAddDto, true);
@@ -61,7 +79,7 @@ namespace Library.Server.BL.Service
         var columnNames = await
             RepositoryManager.GetDataRepository.GetColumnNamesAsync(_sqlProvider.MainNameTable,
                 _sqlProvider.GetColumnAndTypeTable);
-
+        
         var updateParams = GetDynamicUpdateParams(updateBookInfo, columnNames!);
 
         return await RepositoryManager.ModificationRepository.UpdateEntityDynamicAsync(_sqlProvider.MainNameTable,
