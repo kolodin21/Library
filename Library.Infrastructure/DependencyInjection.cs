@@ -24,6 +24,9 @@ namespace Library.Infrastructure
             services.AddSingleton<ISqlProvider<Publisher>, SqlPublisherProvider>();
             services.AddSingleton<ISqlProvider<Condition>, SqlConditionProvider>();
 
+            //Кэш
+            services.AddMemoryCache();
+
             // Сервисы 
             services.AddSingleton<UserService>();
             services.AddSingleton<BookService>();

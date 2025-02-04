@@ -68,7 +68,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
                 ClearFields();
                 Logger.Info($"Пользователь {Login} успешно зарегистирован!");
                 MessageBox.Show("Регистрация прошла успешно!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                RaiseContentChanged(GetPage<MainMenuPageView>(), "Главное меню");
+                RaiseContentChanged(GetPage<MainMenuPageView>(), NamePage.MainMenu);
             }
             catch (HttpRequestException e)
             {

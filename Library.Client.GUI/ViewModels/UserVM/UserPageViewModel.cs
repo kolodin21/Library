@@ -51,14 +51,54 @@ namespace Library.Client.GUI.ViewModels.UserVM
             ExitCommand = ReactiveCommand.Create(ExecExit);
         }
 
+        //Todo добавить кэш; Оптимизировать код; Добавить проверки; Реализовать другие кнопки и функционал
+
+
+
         private async Task LoadActivityBooks()
         {
-            var userParams = ConvertToDictionary(() => UserId);
-
-            NameCurrentCollection = $"Активные книги: {UserName}";
             try
             {
+                var userParams = ConvertToDictionary(() => UserId);
+
+                NameCurrentCollection = $"Активные книги: {UserName}";
+
                 CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActivityBooks(userParams!);
+                InitColumns();
+                Columns.Add(CreateColumn("Дата выдачи", "DateIssuance", new DataGridLength(1, DataGridLengthUnitType.Star)));
+            }
+            catch (Exception e)
+            {
+               Logger.Error(e.Message);
+            }
+
+        }
+        private async Task LoadHistoryBooks()
+        {
+            var userParams = ConvertToDictionary(() => UserId);
+            try
+            {
+                NameCurrentCollection = $"История: {UserName}";
+                CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetHistoryBooks(userParams!);
+
+                InitColumns();
+                Columns.Add(CreateColumn("Дата выдачи", "DateIssuance"));
+                Columns.Add(CreateColumn("Дата возврата", "DateReturn", new DataGridLength(1, DataGridLengthUnitType.Star)));
+
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message);
+            }
+        }
+        private async Task LoadActualBooks()
+        {
+            try
+            {
+                NameCurrentCollection = "Доступные книги библиотеки";
+                CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActualBooksLibrary();
+                InitColumns();
+                Columns.Add(CreateColumn("Остаток книг", "BalanceBook", new DataGridLength(1, DataGridLengthUnitType.Star)));
 
             }
             catch (Exception e)
@@ -66,28 +106,6 @@ namespace Library.Client.GUI.ViewModels.UserVM
                 Console.WriteLine(e);
                 throw;
             }
-
-            InitColumns();
-            Columns.Add(CreateColumn("Дата выдачи", "DateIssuance", new DataGridLength(1, DataGridLengthUnitType.Star)));
-        }
-        private async Task LoadHistoryBooks()
-        {
-            var userParams = ConvertToDictionary(() => UserId);
-
-            NameCurrentCollection = $"История: {UserName}";
-            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetHistoryBooks(userParams!);
-
-            InitColumns();
-            Columns.Add(CreateColumn("Дата выдачи", "DateIssuance"));
-            Columns.Add(CreateColumn("Дата возврата", "DateReturn", new DataGridLength(1, DataGridLengthUnitType.Star)));
-        }
-        private async Task LoadActualBooks()
-        {
-            NameCurrentCollection = "Доступные книги библиотеки";
-            CurrentSelectedCollections = await ManagerHttp.BookHttpClient.GetActualBooksLibrary();
-
-            InitColumns();
-            Columns.Add(CreateColumn("Остаток книг", "BalanceBook", new DataGridLength(1, DataGridLengthUnitType.Star)));
         }
 
 

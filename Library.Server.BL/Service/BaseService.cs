@@ -1,13 +1,16 @@
 ﻿using Library.Server.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Library.Server.BL.Service
 {
     public abstract class BaseService
     {
         protected readonly IRepositoryManager RepositoryManager;
-        protected BaseService(IRepositoryManager repositoryManager)
+        protected readonly IMemoryCache Cache;
+        protected BaseService(IRepositoryManager repositoryManager, IMemoryCache cache)
         {
             RepositoryManager = repositoryManager;
+            Cache= cache;
         }
 
         protected Dictionary<string, object>? GetDynamicUpdateParams<T>(T entity, IEnumerable<string> columnNames) where T : class

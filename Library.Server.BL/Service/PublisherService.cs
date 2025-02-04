@@ -1,6 +1,7 @@
 ﻿using Library.Models;
 using Library.Models.ModelsDTO;
 using Library.Server.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Library.Server.BL.Service
 {
@@ -8,7 +9,8 @@ namespace Library.Server.BL.Service
     {
         #region Constructor
         private readonly ISqlProvider<Publisher> _sqlProvider;
-        public PublisherService(IRepositoryManager repositoryManager, ISqlProvider<Publisher> sqlProvider) : base(repositoryManager)
+        public PublisherService(IRepositoryManager repositoryManager, ISqlProvider<Publisher> sqlProvider,IMemoryCache cache) 
+            : base(repositoryManager, cache)
         {
             _sqlProvider = sqlProvider;
         }
