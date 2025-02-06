@@ -36,7 +36,6 @@ namespace Library.Client.GUI.ViewModels
             InitializeAndSubscribeToContentChanges<MainMenuPageViewModel>();
             InitializeAndSubscribeToContentChanges<AuthorizationPageViewModel>();
             InitializeAndSubscribeToContentChanges<RegistrationPageViewModel>();
-            InitializeAndSubscribeToContentChanges<UserPageViewModel>();
 
             Logger.Info("Подписались на все события");
         }

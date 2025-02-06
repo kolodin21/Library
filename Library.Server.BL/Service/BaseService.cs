@@ -78,6 +78,7 @@ namespace Library.Server.BL.Service
             return $"{prefix}_{paramString.ToString().Trim()}"; // Убираем лишний пробел в конце
         }
 
+        //Удаление данных из кэша по ключу
         public void RemoveCache(string cacheKey)
         {
             Cache.Remove(cacheKey);
