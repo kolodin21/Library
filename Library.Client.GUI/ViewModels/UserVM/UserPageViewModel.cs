@@ -60,6 +60,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
             LoadActualBooksCommand = ReactiveCommand.CreateFromTask(LoadActualBooks);
             LoadHistoryBooksUserCommand = ReactiveCommand.CreateFromTask(LoadHistoryBooks);
             ReturnBookCommand = ReactiveCommand.CreateFromTask(ReturnBookUser);
+            TakeBookCommand = ReactiveCommand.CreateFromTask(TakeBookUser);
 
             BackCommand = ReactiveCommand.Create(ExecBack);
             ExitCommand = ReactiveCommand.Create(ExecExit);
@@ -175,6 +176,24 @@ namespace Library.Client.GUI.ViewModels.UserVM
                 MessageBox.Show("Книга возвращена");
 
                 await LoadActivityBooksUserCommand.Execute();
+            }
+            else
+            {
+                MessageBox.Show("Ошибка");
+            }
+        }
+
+        private async Task TakeBookUser()
+        {
+
+            var book = (Book)SelectedBook;
+            var takeBook = new TakeBookDto(UserId,book.Id,DateTime.Now);
+
+            if (await ManagerHttp.BookHttpClient.TakeBookUser(takeBook))
+            {
+                MessageBox.Show("Книга взята");
+
+                await LoadActualBooksCommand.Execute();
             }
             else
             {
