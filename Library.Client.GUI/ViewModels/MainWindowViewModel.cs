@@ -2,7 +2,6 @@
 using Library.Client.GUI.View.LogInSystem;
 using Library.Client.GUI.ViewModels.LogInSystemVM;
 using Library.Client.GUI.ViewModels.UserVM;
-using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ReactiveUI.Fody.Helpers;
 

@@ -36,10 +36,8 @@ app.MapGet("/AllUsers",async () =>
     return await serviceManager.UserService.GetAllEntitiesAsync();
 });
 
-
-app.MapPost("/SingleUser", async ([FromBody] Dictionary<string, JsonElement> param) =>
+app.MapPost("/SingleUser", async (Dictionary<string, JsonElement> param) =>
     await serviceManager.UserService.GetSingleEntityByParamAsync(ParsedParam(param)));
-
 
 
 app.MapPost("/AddUser", async (UserAddDto userAddDto) =>
@@ -49,14 +47,21 @@ app.MapPost("/AddUser", async (UserAddDto userAddDto) =>
 
 #region Book
 
-app.MapPost("/ActivityUserBooks", async ([FromBody] Dictionary<string, JsonElement> param) =>
+app.MapPost("/ActivityUserBooks", async (Dictionary<string, JsonElement> param) =>
     await serviceManager.BookService.GetBookActivityUserAsync(ParsedParam(param)));
 
-    app.MapPost("/HistoryUserBooks", async ([FromBody] Dictionary<string, JsonElement> param) =>
+app.MapPost("/HistoryUserBooks", async (Dictionary<string, JsonElement> param) =>
     await serviceManager.BookService.GetBookHistoryUserAsync(ParsedParam(param)));
 
-app.MapGet("/ActualBooksLibrary", async () => await 
-        serviceManager.BookService.GetAllEntitiesAsync());
+app.MapGet("/ActualBooksLibrary", async () => 
+    await serviceManager.BookService.GetAllEntitiesAsync());
+
+
+////===================//
+app.MapPost("/ReturnBook", async (ReturnBookDto returnBook) =>
+        await serviceManager.TakeReturnBookService.AddEntityAsync(returnBook));
+        
+
 
 #endregion
 

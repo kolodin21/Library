@@ -10,6 +10,11 @@ namespace Library.Server.BL.Service
     {
         Task<IEnumerable<T>?> GetBookActivityUserAsync(Dictionary<string, object> param);
     }
+    //Todo временный интерфейс,чтобы передавать данные для обновления кэша. Переделать
+    public interface ICustomTakeReturnService<T>
+    {
+        Task<bool> AddEntityAsync(T entity, Dictionary<string, object> param);
+    }
 
     public interface IGetService<TEntity> :
         IGetAllService<TEntity>,
@@ -37,10 +42,13 @@ namespace Library.Server.BL.Service
         IUpdateService<BookUpdateInfoDto>,
         IDeleteServiceByIdProcedure { }
 
+    //Todo Изменить интерфейсы для сервисов,чтобы передавать параметры для обновления кэша. Переделать
     public interface ITakeReturnBookService : 
         IGetService<TakeReturnBooks>,
         IAddService<TakeBookDto>,
         IAddService<ReturnBookDto>{}
+        //ICustomTakeReturnService<TakeBookDto>,
+        //ICustomTakeReturnService<ReturnBookDto>{}
 
     public interface IAuthorService : IEntityService<Author>, IAddService<AuthorDto>;
 

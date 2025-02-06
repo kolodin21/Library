@@ -1,16 +1,31 @@
-﻿namespace Library.Models.ModelsDTO
+﻿using System.Text.Json;
+
+namespace Library.Models.ModelsDTO
 {
-    public record TakeBookDto
+    public class TakeBookDto
     {
-        public required int Userid { get; set; }
-        public required int Bookid { get; set; }
-        public required DateTime DateIssuance { get; set; }
+        public int UserId { get; set; }
+        public int BookId { get; set; }
+        public DateTime DateIssuance { get; set; }
 
     }
-    public record ReturnBookDto
+    public class ReturnBookDto
     {
-        public required int UserId { get; set; }
-        public required int BookId { get; set; }
-        public required DateTime DateReturn { get; set; }
+        public int UserId { get; init; }
+        public int BookId { get; init; }
+        public DateTime DateReturn { get; init; }
+
+        public ReturnBookDto(int userId, int bookId, DateTime dateReturn)
+        {
+            UserId = userId;
+            BookId = bookId;
+            DateReturn = dateReturn;
+        }
+    }
+
+    public class ReturnBookRequest
+    {
+        public ReturnBookDto ReturnBook { get; set; }
+        public Dictionary<string, JsonElement> Param { get; set; }
     }
 }

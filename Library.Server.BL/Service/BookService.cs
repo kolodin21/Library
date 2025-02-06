@@ -23,30 +23,10 @@ namespace Library.Server.BL.Service
 
         #region IGetAllService
 
-        //public async Task<IEnumerable<Book>?> GetAllEntitiesAsync()
-        //{
-        //    const string cacheKey = "AllBooks"; // Уникальный ключ кэша
-
-        //    if (Cache.TryGetValue(cacheKey, out IEnumerable<Book>? books))
-        //        return books;
-
-        //    books = await RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll);
-
-        //    if (books is null || !books.Any()) // Проверяем на null и пустую коллекцию
-        //        return null;
-
-        //    var cacheOptions = new MemoryCacheEntryOptions()
-        //        .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
-
-        //    Cache.Set(cacheKey, books, cacheOptions);
-
-        //    return books;
-        //}
-
         public async Task<IEnumerable<Book>?> GetAllEntitiesAsync() => await
             GetSetCache<Book>
             (
-                "AllBooks",
+                Prifix.AllBooks,
                 () => RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll)
             );
 
@@ -58,15 +38,11 @@ namespace Library.Server.BL.Service
             RepositoryManager.GetDataRepository.GetSingleEntityByParamAsync<Book>(_sqlProvider.GetByParam, param);
 
 
-        //public async Task<IEnumerable<BookUserActivityViewDto>?> GetBookActivityUserAsync(Dictionary<string, object> param) =>
-        //    await RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserActivityViewDto>(
-        //        _sqlProvider.GetActivityBook, param);
-
         public async Task<IEnumerable<BookUserActivityViewDto>?> GetBookActivityUserAsync(
             Dictionary<string, object> param) => await 
             GetSetCache<BookUserActivityViewDto>
             (
-                GenerateCacheKey("BookActivityUser",param),
+                GenerateCacheKey(Prifix.Activity,param),
                 ()=> RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserActivityViewDto>(_sqlProvider.GetActivityBook, param)
             );
 
@@ -74,7 +50,7 @@ namespace Library.Server.BL.Service
             Dictionary<string, object> param) => await
             GetSetCache
             (
-               GenerateCacheKey("HistoryBookUser",param),
+               GenerateCacheKey(Prifix.History,param),
                 () => RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserHistoryViewDto>(_sqlProvider.GetHistoryBook, param)
             );
 
@@ -111,7 +87,6 @@ namespace Library.Server.BL.Service
     }
 
         #endregion
-
 
     }
 }
