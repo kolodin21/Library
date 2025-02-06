@@ -1,6 +1,7 @@
 ﻿using Library.Models.ModelsDTO;
 using System.Net.Http.Json;
 using Library.Models;
+using System.Text.Json;
 
 namespace Library.Client.Http
 {
@@ -9,9 +10,9 @@ namespace Library.Client.Http
         #region URI
         private static Uri GetActivityBookUserUri => new Uri($"{Host}/ActivityUserBooks");
         private static Uri GetActualBooksLibraryUri => new Uri($"{Host}/ActualBooksLibrary");
-
         private static Uri GetHistoryBookUserUri => new Uri($"{Host}/HistoryUserBooks");
 
+        private static Uri ReturnBookUserUri => new Uri($"{Host}/ReturnBook");
         #endregion
 
         #region Http
@@ -33,9 +34,16 @@ namespace Library.Client.Http
                 : null;
         }
 
-
         public async Task<IEnumerable<Book>?> GetActualBooksLibrary() => await
             Client.GetFromJsonAsync<IEnumerable<Book>?>(GetActualBooksLibraryUri);
+
+
+        public async Task<bool> ReturnBookUser(ReturnBookDto returnBook)
+        {
+            var response = await Client.PostAsJsonAsync(ReturnBookUserUri, returnBook);
+
+            return response.IsSuccessStatusCode;
+        }
 
         #endregion
     }

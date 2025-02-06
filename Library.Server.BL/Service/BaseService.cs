@@ -4,6 +4,17 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Library.Server.BL.Service
 {
+
+    public static class Prifix
+    {
+        public static string History => "HistoryBookUser";
+        public static string Activity => "BookActivityUser";
+        public static string AllBooks => "AllBooks";
+
+    }
+
+
+
     public abstract class BaseService
     {
         protected readonly IRepositoryManager RepositoryManager;
@@ -46,7 +57,7 @@ namespace Library.Server.BL.Service
             entity = (await getEntity())?.ToList() ?? [];
 
             var options = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(timeCache));
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(timeCache));
 
             Cache.Set(cacheKey, entity, options);
 
@@ -65,6 +76,11 @@ namespace Library.Server.BL.Service
             }
 
             return $"{prefix}_{paramString.ToString().Trim()}"; // Убираем лишний пробел в конце
+        }
+
+        public void RemoveCache(string cacheKey)
+        {
+            Cache.Remove(cacheKey);
         }
     }
 }

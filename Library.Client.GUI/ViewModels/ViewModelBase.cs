@@ -27,7 +27,7 @@ namespace Library.Client.GUI.ViewModels
         }
 
         //Преобразование свойств в Dictionary
-        protected Dictionary<string, object?> ConvertToDictionary(params Expression<Func<object?>>[] expressions)
+        protected Dictionary<string, object> ConvertToDictionary(params Expression<Func<object?>>[] expressions)
         {
             var result = new Dictionary<string, object?>();
 

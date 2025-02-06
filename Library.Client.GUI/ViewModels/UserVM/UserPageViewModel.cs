@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Library.Client.GUI.View.LogInSystem;
@@ -15,19 +17,31 @@ namespace Library.Client.GUI.ViewModels.UserVM
     {
         //Логгер
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        public User CurrentUser { get;}
 
+        //Активная коллекция
         [Reactive] public string NameCurrentCollection { get; set; }
         [Reactive] public object? CurrentSelectedCollections { get; set; }
 
+        [Reactive] public bool IsReturnBookButtonVisible { get; set; } 
+        [Reactive] public bool IsTakeBookButtonVisible { get; set; } 
+        [Reactive] public object SelectedBook { get; set;}
+
+        //Активный пользователь
+        public User CurrentUser { get;}
         public string UserName { get; }
         public int UserId { get; }
 
+        private Dictionary<string, object> param;
+
+        //Колонки DataGrid
         public ObservableCollection<DataGridColumn> Columns { get; set; } = [];
 
+        //Команды
         public ReactiveCommand<Unit, Unit> LoadActivityBooksUserCommand { get; }
         public ReactiveCommand<Unit, Unit> LoadHistoryBooksUserCommand { get; }
         public ReactiveCommand<Unit, Unit> LoadActualBooksCommand { get; }
+        public ReactiveCommand<Unit, Unit> ReturnBookCommand { get; }
+        public ReactiveCommand<Unit, Unit> TakeBookCommand { get; }
         public ReactiveCommand<Unit, Unit> BackCommand { get; }
         public ReactiveCommand<Unit, Unit> ExitCommand { get; }
 
@@ -38,15 +52,26 @@ namespace Library.Client.GUI.ViewModels.UserVM
             CurrentUser = user;
             UserName = CurrentUser.Name;
             UserId = CurrentUser.Id;
+            param = ConvertToDictionary(() => UserId!);
 
             LoadActivityBooksUserCommand = ReactiveCommand.CreateFromTask(LoadActivityBooks);
             LoadActivityBooksUserCommand.Execute().Subscribe();
 
             LoadActualBooksCommand = ReactiveCommand.CreateFromTask(LoadActualBooks);
             LoadHistoryBooksUserCommand = ReactiveCommand.CreateFromTask(LoadHistoryBooks);
+            ReturnBookCommand = ReactiveCommand.CreateFromTask(ReturnBookUser);
 
             BackCommand = ReactiveCommand.Create(ExecBack);
             ExitCommand = ReactiveCommand.Create(ExecExit);
+
+            //Наблюдение за свойствами
+            this.WhenAnyValue(vm => vm.SelectedBook)
+                .Subscribe(book =>
+                {
+                    IsReturnBookButtonVisible = book is BookUserActivityViewDto;
+                    IsTakeBookButtonVisible = book is Book;
+                });
+
         }
 
         //Todo: Добавить проверки; Реализовать другие кнопки и функционал.
@@ -55,6 +80,9 @@ namespace Library.Client.GUI.ViewModels.UserVM
         //Todo 3. Настройки 
 
 
+        #region LoadBooks
+
+        //Метод для загрузки книг 
         private async Task LoadBooksAsync<T>(
            Func<Task<IEnumerable<T>?>> getBooksFunc,
            string collectionName,
@@ -79,7 +107,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
         //Загрузка активных книг пользователя
         public Task LoadActivityBooks() =>
             LoadBooksAsync<BookUserActivityViewDto>(
-                () => ManagerHttp.BookHttpClient.GetActivityBooks(ConvertToDictionary(() => UserId)!),
+                () => ManagerHttp.BookHttpClient.GetActivityBooks(param),
                 $"Активные книги: {UserName}",
                 () => Columns.Add(CreateColumn("Дата выдачи", "DateIssuance", new DataGridLength(1, DataGridLengthUnitType.Star)))
             );
@@ -87,7 +115,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
         //Загрузка истории взятия книг
         public Task LoadHistoryBooks() =>
             LoadBooksAsync<BookUserHistoryViewDto>(
-                () => ManagerHttp.BookHttpClient.GetHistoryBooks(ConvertToDictionary(() => UserId)!),
+                () => ManagerHttp.BookHttpClient.GetHistoryBooks(param),
                 $"История: {UserName}",
                 () =>
                 {
@@ -96,7 +124,8 @@ namespace Library.Client.GUI.ViewModels.UserVM
                 }
             );
 
-        //Актуальные книги библиотеки
+        //TODO Проверить правильность вывода книг у которых наличие 0
+        //Актуальные книги библиотеки 
         public Task LoadActualBooks() =>
             LoadBooksAsync<Book>(
                 ManagerHttp.BookHttpClient.GetActualBooksLibrary,
@@ -104,6 +133,7 @@ namespace Library.Client.GUI.ViewModels.UserVM
                 () => Columns.Add(CreateColumn("Остаток книг", "BalanceBook", new DataGridLength(1, DataGridLengthUnitType.Star)))
             );
 
+       
         // Инициализация базовых колонок
         private void InitColumns()
         {
@@ -122,23 +152,40 @@ namespace Library.Client.GUI.ViewModels.UserVM
                 Columns.Add(CreateColumn(header, binding));
             }
         }
-
-
-        private void ExecBack()
-        {
-            RaiseContentChanged(GetPage<MainMenuPageView>(),NamePage.MainMenu);
-        }
-
-
         private DataGridTextColumn CreateColumn(string header, string? bindingPath, DataGridLength? width = null)
         {
             return new DataGridTextColumn
             {
                 Header = header,
                 Binding = bindingPath != null ? new Binding(bindingPath) : null,
-                Width = width ?? DataGridLength.Auto // Если ширина не указана, используем Auto
+                Width = width ?? DataGridLength.Auto        // Если ширина не указана, используем Auto
             };
         }
+        
+        #endregion
 
+        private async Task ReturnBookUser()
+        {
+            var book = (BookUserActivityViewDto)SelectedBook;
+
+            var returnBook = new ReturnBookDto(UserId,book.Id,DateTime.Now);
+
+            if (await ManagerHttp.BookHttpClient.ReturnBookUser(returnBook))
+            {
+                MessageBox.Show("Книга возвращена");
+
+                await LoadActivityBooksUserCommand.Execute();
+            }
+            else
+            {
+                MessageBox.Show("Ошибка");
+            }
+        }
+
+
+        private void ExecBack()
+        {
+            RaiseContentChanged(GetPage<MainMenuPageView>(),NamePage.MainMenu);
+        }
     }
 }

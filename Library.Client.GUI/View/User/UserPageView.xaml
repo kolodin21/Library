@@ -10,6 +10,10 @@
     </UserControl.DataContext>
 
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -18,6 +22,19 @@
 
         <DockPanel Grid.Row="0" LastChildFill="False">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+
+                <Button Content="Вернуть книгу"
+                        Command="{Binding ReturnBookCommand}"
+                        Style="{StaticResource ButtonMenuStyle}"
+                        Visibility="{Binding IsReturnBookButtonVisible,
+                                            Converter={StaticResource BoolToVis}}"/>
+
+                <Button Content="Взять книгу"
+                        Command="{Binding TakeBookCommand}"
+                        Style="{StaticResource ButtonMenuStyle}"
+                        Visibility="{Binding IsTakeBookButtonVisible,
+                             Converter={StaticResource BoolToVis}}"/>
+
                 <Button Content="Мои книги"
                         Command="{Binding LoadActivityBooksUserCommand}"
                         Style="{StaticResource ButtonMenuStyle}"/>
@@ -43,12 +60,10 @@
                 <Label Content="Меню" 
                        Style="{StaticResource LabelMenuStyle}"/>
 
-                <Button Content="Взять книгу" 
+                <Button Content="Книги библиотеки" 
                         Command="{Binding LoadActualBooksCommand}"
                         Style="{StaticResource ButtonMenuStyle}"/>
 
-                <Button Content="Вернуть книгу" 
-                        Style="{StaticResource ButtonMenuStyle}"/>
 
                 <Button Content="Посмотреть историю" 
                         Command="{Binding LoadHistoryBooksUserCommand}"
@@ -77,6 +92,7 @@
 
                 <DataGrid Grid.Row="1" 
                           ItemsSource="{Binding CurrentSelectedCollections}" 
+                          SelectedItem="{Binding SelectedBook }"
                           AutoGenerateColumns="False"
                           Margin="10"
                           ScrollViewer.HorizontalScrollBarVisibility="Auto"
