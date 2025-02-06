@@ -13,6 +13,9 @@ namespace Library.Client.Http
         private static Uri GetHistoryBookUserUri => new Uri($"{Host}/HistoryUserBooks");
 
         private static Uri ReturnBookUserUri => new Uri($"{Host}/ReturnBook");
+        private static Uri TakeBookUserUri => new Uri($"{Host}/TakeBook");
+
+
         #endregion
 
         #region Http
@@ -41,6 +44,13 @@ namespace Library.Client.Http
         public async Task<bool> ReturnBookUser(ReturnBookDto returnBook)
         {
             var response = await Client.PostAsJsonAsync(ReturnBookUserUri, returnBook);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> TakeBookUser(TakeBookDto takeBookBook)
+        {
+            var response = await Client.PostAsJsonAsync(TakeBookUserUri, takeBookBook);
 
             return response.IsSuccessStatusCode;
         }

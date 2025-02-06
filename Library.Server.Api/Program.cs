@@ -60,6 +60,9 @@ app.MapGet("/ActualBooksLibrary", async () =>
 ////===================//
 app.MapPost("/ReturnBook", async (ReturnBookDto returnBook) =>
         await serviceManager.TakeReturnBookService.AddEntityAsync(returnBook));
+
+app.MapPost("/TakeBook",async (TakeBookDto takeBook) => 
+    await serviceManager.TakeReturnBookService.AddEntityAsync(takeBook));
         
 
 

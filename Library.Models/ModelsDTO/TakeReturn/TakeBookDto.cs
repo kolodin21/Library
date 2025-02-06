@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 
 namespace Library.Models.ModelsDTO
 {
@@ -7,6 +8,13 @@ namespace Library.Models.ModelsDTO
         public int UserId { get; set; }
         public int BookId { get; set; }
         public DateTime DateIssuance { get; set; }
+
+        public TakeBookDto(int userId, int bookId, DateTime dateIssuance)
+        {
+            UserId = userId;
+            BookId = bookId;
+            DateIssuance = dateIssuance;
+        }
 
     }
     public class ReturnBookDto
