@@ -40,9 +40,7 @@ namespace Library.Client.GUI.ViewModels.LogInSystemVM
             {
                 try
                 {
-                    var paramConvert = ConvertToDictionary(() => Login, () => Password);
-
-                    var user = await ManagerHttp.UserHttpClient.GetSingleUser(paramConvert!);
+                    var user = await ManagerHttp.UserHttpClient.GetSingleUser(ConvertToDictionary(() => Login, () => Password));
                     await Task.Delay(300);
 
                     if (user is null)
