@@ -56,18 +56,20 @@ namespace Library.Server.BL.Service
 
         #region AddReturnService
 
-        public async Task<bool> AddEntityAsync(TakeBookDto takeBook)
-        {
-            //RemoveCache(GenerateCacheKey(Prifix.Activity, param));
-            return await RepositoryManager.ModificationRepository.AddEntityAsync(_sqlProvider.Add, takeBook, true);
+        public async Task<bool> AddEntityAsync(TakeBookRequest takeBook)
+        {   
+            RemoveCache(Prefix.AllBooks);
+            RemoveCache(GenerateCacheKey(Prefix.Activity,takeBook.Param));
+            return await RepositoryManager.ModificationRepository.AddEntityAsync(_sqlProvider.Add, takeBook.TakeBookDto, true);
         }
 
-        public async Task<bool> AddEntityAsync(ReturnBookDto returnBook)
+        public async Task<bool> AddEntityAsync(ReturnBookRequest returnBook)
         { 
-            //RemoveCache(GenerateCacheKey(Prifix.Activity, param));
-            //(GenerateCacheKey(Prifix.History, param));
-            return await RepositoryManager.ModificationRepository.AddEntityAsync(_sqlProvider.ReturnBook, returnBook,true);
+            RemoveCache(GenerateCacheKey(Prefix.Activity, returnBook.Param));
+            RemoveCache(GenerateCacheKey(Prefix.History,returnBook.Param));
+            return await RepositoryManager.ModificationRepository.AddEntityAsync(_sqlProvider.ReturnBook, returnBook.ReturnBook,true);
         }
+
 
         #endregion
     }

@@ -31,9 +31,15 @@ namespace Library.Models.ModelsDTO
         }
     }
 
+    public class TakeBookRequest
+    {
+        public TakeBookDto TakeBookDto { get; set; }
+        public Dictionary<string, object> Param { get; set; }
+    }
+
     public class ReturnBookRequest
     {
         public ReturnBookDto ReturnBook { get; set; }
-        public Dictionary<string, JsonElement> Param { get; set; }
+        public Dictionary<string, object> Param { get; set; }
     }
 }

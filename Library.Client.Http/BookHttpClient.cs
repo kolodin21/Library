@@ -40,21 +40,22 @@ namespace Library.Client.Http
         public async Task<IEnumerable<Book>?> GetActualBooksLibrary() => await
             Client.GetFromJsonAsync<IEnumerable<Book>?>(GetActualBooksLibraryUri);
 
-
-        public async Task<bool> ReturnBookUser(ReturnBookDto returnBook)
+        ////===================//
+        
+        public async Task<bool> ReturnBookUser(ReturnBookRequest returnBook)
         {
             var response = await Client.PostAsJsonAsync(ReturnBookUserUri, returnBook);
 
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> TakeBookUser(TakeBookDto takeBookBook)
+        public async Task<bool> TakeBookUser(TakeBookRequest takeBook)
         {
-            var response = await Client.PostAsJsonAsync(TakeBookUserUri, takeBookBook);
+            var response = await Client.PostAsJsonAsync(TakeBookUserUri, takeBook);
 
             return response.IsSuccessStatusCode;
         }
-
+        
         #endregion
     }
 }

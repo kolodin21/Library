@@ -26,7 +26,7 @@ namespace Library.Server.BL.Service
         public async Task<IEnumerable<Book>?> GetAllEntitiesAsync() => await
             GetSetCache<Book>
             (
-                Prifix.AllBooks,
+                Prefix.AllBooks,
                 () => RepositoryManager.GetDataRepository.GetAllEntityAsync<Book>(_sqlProvider.GetAll)
             );
 
@@ -42,7 +42,7 @@ namespace Library.Server.BL.Service
             Dictionary<string, object> param) => await 
             GetSetCache<BookUserActivityViewDto>
             (
-                GenerateCacheKey(Prifix.Activity,param),
+                GenerateCacheKey(Prefix.Activity,param),
                 ()=> RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserActivityViewDto>(_sqlProvider.GetActivityBook, param)
             );
 
@@ -50,7 +50,7 @@ namespace Library.Server.BL.Service
             Dictionary<string, object> param) => await
             GetSetCache
             (
-               GenerateCacheKey(Prifix.History,param),
+               GenerateCacheKey(Prefix.History,param),
                 () => RepositoryManager.GetDataRepository.GetEntitiesByParamAsync<BookUserHistoryViewDto>(_sqlProvider.GetHistoryBook, param)
             );
 
@@ -60,7 +60,7 @@ namespace Library.Server.BL.Service
         #region IAddService
 
         public async Task<bool> AddEntityAsync(BookAddDto bookAddDto) => await
-        RepositoryManager.ModificationRepository.AddEntityAsync<BookAddDto>(_sqlProvider.Add, bookAddDto, true);
+            RepositoryManager.ModificationRepository.AddEntityAsync<BookAddDto>(_sqlProvider.Add, bookAddDto, true);
 
     #endregion
 

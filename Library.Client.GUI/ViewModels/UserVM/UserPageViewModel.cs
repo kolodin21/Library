@@ -76,7 +76,6 @@ namespace Library.Client.GUI.ViewModels.UserVM
         }
 
         //Todo: Добавить проверки; Реализовать другие кнопки и функционал.
-        //Todo 1. Реализовать функцию взятия книги в руки и обновления UI после.
         //Todo 2. Личный кабинет
         //Todo 3. Настройки 
 
@@ -170,8 +169,9 @@ namespace Library.Client.GUI.ViewModels.UserVM
             var book = (BookUserActivityViewDto)SelectedBook;
 
             var returnBook = new ReturnBookDto(UserId,book.Id,DateTime.Now);
+            var returnBookRequest = new ReturnBookRequest() { ReturnBook = returnBook, Param = param };
 
-            if (await ManagerHttp.BookHttpClient.ReturnBookUser(returnBook))
+            if (await ManagerHttp.BookHttpClient.ReturnBookUser(returnBookRequest))
             {
                 MessageBox.Show("Книга возвращена");
 
@@ -188,8 +188,9 @@ namespace Library.Client.GUI.ViewModels.UserVM
 
             var book = (Book)SelectedBook;
             var takeBook = new TakeBookDto(UserId,book.Id,DateTime.Now);
+            var takeBookRequest = new TakeBookRequest() { TakeBookDto = takeBook, Param = param };
 
-            if (await ManagerHttp.BookHttpClient.TakeBookUser(takeBook))
+            if (await ManagerHttp.BookHttpClient.TakeBookUser(takeBookRequest))
             {
                 MessageBox.Show("Книга взята");
 
