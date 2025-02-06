@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 namespace Library.Server.BL.Service
 {
 
-    public static class Prifix
+    public static class Prefix
     {
         public static string History => "HistoryBookUser";
         public static string Activity => "BookActivityUser";
@@ -48,7 +48,7 @@ namespace Library.Server.BL.Service
         protected async Task<IEnumerable<T>?> GetSetCache<T>(
             string cacheKey,
             Func<Task<IEnumerable<T>?>> getEntity,
-            int timeCache = 5)
+            int timeCache = 2)
         {
             if (Cache.TryGetValue(cacheKey, out IEnumerable<T>? entity))
                 return entity;
@@ -57,7 +57,7 @@ namespace Library.Server.BL.Service
             entity = (await getEntity())?.ToList() ?? [];
 
             var options = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromSeconds(timeCache));
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(timeCache));
 
             Cache.Set(cacheKey, entity, options);
 

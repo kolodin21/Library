@@ -45,10 +45,10 @@ namespace Library.Server.BL.Service
     //Todo Изменить интерфейсы для сервисов,чтобы передавать параметры для обновления кэша. Переделать
     public interface ITakeReturnBookService : 
         IGetService<TakeReturnBooks>,
-        IAddService<TakeBookDto>,
-        IAddService<ReturnBookDto>{}
+        IAddService<TakeBookRequest>,
+        IAddService<ReturnBookRequest>{}
         //ICustomTakeReturnService<TakeBookDto>,
-        //ICustomTakeReturnService<ReturnBookDto>{}
+        //ICustomTakeReturnService<ReturnBookRequest>{}
 
     public interface IAuthorService : IEntityService<Author>, IAddService<AuthorDto>;
 
