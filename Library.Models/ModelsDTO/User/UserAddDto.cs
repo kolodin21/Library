@@ -1,6 +1,6 @@
 ﻿namespace Library.Models.ModelsDTO
 {
-    public class UserAddDto(string surname, string name, string? patronymic, string login, string password, string email, string phone)
+    public class UserAddDto(string surname, string name, string? patronymic, string login, string password, string phone, string email)
     {
         public string Surname { get; set; } = surname;
         public string Name { get; set; } = name;

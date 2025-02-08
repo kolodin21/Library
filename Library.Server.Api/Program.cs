@@ -3,6 +3,7 @@ using Library.Server.BL.Service;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using System.Text.Json;
+using Library.Models.ModelsDTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +25,10 @@ var serviceManager = serviceProvider.GetRequiredService<ServiceManager>();
 #endregion
 
 //Ëמדדונ
- Logger Logger = LogManager.GetCurrentClassLogger();
+ var Logger = LogManager.GetCurrentClassLogger();
 
+
+#region User
 
 app.MapGet("/AllUsers",async () =>
 {
@@ -33,17 +36,43 @@ app.MapGet("/AllUsers",async () =>
     return await serviceManager.UserService.GetAllEntitiesAsync();
 });
 
+app.MapPost("/SingleUser", async (Dictionary<string, JsonElement> param) =>
+    await serviceManager.UserService.GetSingleEntityByParamAsync(ParsedParam(param)));
 
-app.MapPost("/SingleUser", async ([FromBody] Dictionary<string, JsonElement> param) =>
-{
-    var parsedParams = param.ToDictionary(
-        kvp => kvp.Key,
-        kvp => JsonElementToObject(kvp.Value)
-    );
-    return await serviceManager.UserService.GetSingleEntityByParamAsync(parsedParams);
-});
 
- static object JsonElementToObject(JsonElement element)
+app.MapPost("/AddUser", async (UserAddDto userAddDto) =>
+    await serviceManager.UserService.AddEntityAsync(userAddDto));
+
+#endregion
+
+#region Book
+
+app.MapPost("/ActivityUserBooks", async (Dictionary<string, JsonElement> param) =>
+    await serviceManager.BookService.GetBookActivityUserAsync(ParsedParam(param)));
+
+app.MapPost("/HistoryUserBooks", async (Dictionary<string, JsonElement> param) =>
+    await serviceManager.BookService.GetBookHistoryUserAsync(ParsedParam(param)));
+
+app.MapGet("/ActualBooksLibrary", async () => 
+    await serviceManager.BookService.GetAllEntitiesAsync());
+
+
+////===================//
+
+app.MapPost("/ReturnBook", async (ReturnBookRequest returnBook) =>
+    await serviceManager.TakeReturnBookService.AddEntityAsync(returnBook));
+
+
+app.MapPost("/TakeBook",async (TakeBookRequest takeBook) => 
+    await serviceManager.TakeReturnBookService.AddEntityAsync(takeBook));
+
+
+#endregion
+
+
+#region Methods
+
+static object JsonElementToObject(JsonElement element)
 {
     return element.ValueKind switch
     {
@@ -56,5 +85,15 @@ app.MapPost("/SingleUser", async ([FromBody] Dictionary<string, JsonElement> par
     };
 }
 
+static Dictionary<string, object> ParsedParam(Dictionary<string, JsonElement> param)
+{
+    var parsedParams = param.ToDictionary(
+        kvp => kvp.Key,
+        kvp => JsonElementToObject(kvp.Value)
+    );
+    return parsedParams;
+}
+
+#endregion
 
 app.Run();

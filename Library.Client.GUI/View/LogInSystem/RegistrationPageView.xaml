@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="Library.Client.GUI.View.LogInSystem.RegistrationPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:userVm="clr-namespace:Library.Client.GUI.ViewModels.LogInSystemVM"
+             xmlns:cmp="clr-namespace:Library.Client.GUI.Components"
+             Height="550" 
+             Width="400">
+
+    <UserControl.DataContext>
+        <userVm:RegistrationPageViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="20">
+            <Label Content="Регистрация в системе" 
+                   Style="{StaticResource LabelMenuStyle}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="20">
+            <cmp:InputControl
+                Label="Фамилия"
+                InputText="{Binding Surname}"/>
+
+            <cmp:InputControl
+                Label="Имя"
+                InputText="{Binding Name}"/>
+
+            <cmp:InputControl
+                Label="Отчество"
+                InputText="{Binding Patronymic}"/>
+
+            <cmp:InputControl
+                Label="Логин"
+                InputText="{Binding Login}"/>
+
+            <cmp:InputPasswordControl
+                Label="Пароль"
+                InputPassword="{Binding OnePassword,Mode=TwoWay}"/>
+
+            <cmp:InputPasswordControl
+                Label="Повторите пароль"
+                InputPassword="{Binding TwoPassword,Mode=TwoWay}"/>
+
+            <cmp:InputControl
+                Label="Телефон"
+                InputText="{Binding Phone}"/>
+
+            <cmp:InputControl
+                Label="Email"
+                InputText="{Binding Email}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center" 
+                    Margin="20">
+
+            <Button Content="Зарегистрироваться"
+                    Command="{Binding RegistrationCommand}"
+                    Style="{StaticResource ButtonMenuStyle}"/>
+
+            <Button Content="Назад" 
+                    Command="{Binding BackCommand}"
+                    Style="{StaticResource ButtonMenuStyle}"/>
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>
